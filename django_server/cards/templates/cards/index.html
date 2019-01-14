@@ -1,0 +1,18 @@
+<style>
+        table, th, td {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+</style>
+{% if tags_list %}
+    <table>
+        <tr><th>Name of tag</th><th>Number of cards in tag</th><th>Previous success</th></tr>
+        {% for tag in tags_list %}
+            <tr><td><a href="/cards/{{ tag.id }}/">{{ tag.get_name }}</a></td><td>{{ tag.get_card_count }}</td><td>{{ tag.get_success }}</td></tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No tags are available yet.</p>
+{% endif %}
