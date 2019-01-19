@@ -1,0 +1,15 @@
+{
+  "name": "user_interface",
+  "version": "1.0.0",
+  "description": "user interface for cards app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jakub Rada",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^4.0.1"
+  }
+}
