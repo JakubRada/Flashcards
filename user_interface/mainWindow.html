@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
     <head>
         <title>AppName</title>
         <meta charset="utf-8"/>
@@ -12,17 +12,17 @@
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
         -->
         <!-- loading bootstrap and jquery -->
-        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-        <link rel="stylesheet" type='text/css' href='bootstrap.min.css'/>
+        <script>if (typeof module === "object") {window.module = module; module = undefined;}</script>
+        <link rel="stylesheet" type="text/css" href="./bootstrap.min.css"/>
         <script src="./jquery-3.3.1.slim.min.js"></script>
         <script src="./bootstrap.min.js"></script>
         <script src="./popper.min.js"></script>
         <script>if (window.module) module = window.module;</script>
     </head>
-    <body>
+    <body style="background-color: #eeeeee; color: #37474f;">
         <!-- navigation bar on top of the page -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-            <div class='container-fluid'>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="#">AppName</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -38,8 +38,6 @@
                                 <a class="dropdown-item" href="#">Create card</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Edit card</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Remove card</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -48,8 +46,6 @@
                                 <a class="dropdown-item" href="#">Create tag</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Edit tag</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Remove tag</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -76,8 +72,42 @@
                 </div>
             </div>
         </nav>
-        <div class='container'>
-            <h1>App with menu</h1>
+        <!-- title page -->
+        <div id="title_page" hidden>
+            <div class="container mt-5">
+                <h1 class="display-1">AppName</h1>
+            </div>
+        </div>
+        <!-- listing all cards -->
+        <div id="card_list" hidden>
+            <div class="container mt-5">
+                <h1>List of all cards</h1>
+                <table class="table table-hover mt-5" id="table_of_cards">
+                    <thead class="thead-dark">
+                        <th scope="col">#</th>
+                        <th scope="col">Front side</th>
+                        <th scope="col">Back side</th>
+                        <th scope="col">No. of tags</th>
+                        <th scope="col">Action</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Hello</td>
+                            <td>Ahoj</td>
+                            <td><kbd>3</kbd></td>
+                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Foreshadowing</td>
+                            <td>Predzvesti</td>
+                            <td><kbd>13</kbd></td>
+                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </body>
 </html>
