@@ -11,14 +11,14 @@ let mainWindow;
 app.on('ready', function() {
     // creating main window
     mainWindow = new BrowserWindow({
-        width: 1000,
+        width: 1200,
         minWidth: 800,
         height: 800,
         minHeight: 600,
         title: 'Cards',
     });
     // removes the upper menu bar
-    mainWindow.setMenu(null);
+    // mainWindow.setMenu(null);
     // loading mainWindow.html with correct path
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainWindow.html'),

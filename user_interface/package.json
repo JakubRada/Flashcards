@@ -4,12 +4,12 @@
   "description": "user interface for cards app",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "author": "Jakub Rada",
   "license": "ISC",
   "devDependencies": {
     "electron": "^4.0.1"
-  }
+  },
+  "dependencies": {}
 }
