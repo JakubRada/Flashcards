@@ -41,11 +41,19 @@ class Card(models.Model):
         related_name='cards',
         related_query_name='card',
     )
+    tag_count = models.IntegerField(
+        'number of tags',
+        default=0,
+    )
     def set_front(self, new_front):
         self.card_front = new_front
     def set_back(self, new_back):
         self.card_back = new_back
+    def add_tag(self):
+        self.tag_count += 1
     def get_back(self):
         return self.card_back
     def get_front(self):
         return self.card_front
+    def get_tag_count(self):
+        return self.tag_count
