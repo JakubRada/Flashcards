@@ -35,27 +35,27 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cards</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Create card</a>
+                                <a class="dropdown-item" href="#" id="create_card_button">Create card</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Edit card</a>
+                                <a class="dropdown-item" href="#" id="edit_card_button">Edit card</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Create tag</a>
+                                <a class="dropdown-item" href="#" id="create_tag_button">Create tag</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Edit tag</a>
+                                <a class="dropdown-item" href="#" id="edit_tag_button">Edit tag</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tests</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Browse cards</a>
+                                <a class="dropdown-item" href="#" id="test_browse_button">Browse cards</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Write</a>
+                                <a class="dropdown-item" href="#" id="test_write_button">Write</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Choices</a>
+                                <a class="dropdown-item" href="#" id="test_choices_button">Choices</a>
                             </div>
                         </li>
                     </ul>
@@ -66,9 +66,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">File</a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Import</a>
+                                <a class="dropdown-item" href="#" id="import_button">Import</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Export</a>
+                                <a class="dropdown-item" href="#" id="export_button">Export</a>
                             </div>
                         </li>
                     </ul>
@@ -82,7 +82,7 @@
             </div>
         </div>
         <!-- listing all cards -->
-        <div id="card_list" hidden >
+        <div id="card_list" hidden>
             <div class="container mt-5">
                 <h1>List of all cards</h1>
                 <table class="table table-hover mt-5" id="table_of_cards">
@@ -305,31 +305,76 @@
             </div>
         </div>
         <!-- test (choices) -->
-        <div id="test_choices" hidden>
+        <div id="test_choices" >
+            <div class="container">
+                <div class="jumbotron mt-5">
+                    <h1 class="display-4">Hello</h1>
+                    <hr class="my-4">
+                    <p class="lead">Choose one from these options:</p>
+                    <div class="list-group">
+                        <li class="list-group-item list-group-item-action" id="option_1">Option 1</li>
+                        <li class="list-group-item list-group-item-action" id="option_2">Option 2</li>
+                        <li class="list-group-item list-group-item-action active" id="option_3">Option 3</li>
+                        <li class="list-group-item list-group-item-action" id="option_4">Option 4</li>
+                    </div>
+                    <button role="button" class="btn btn-primary mt-5" href="#" id="choices_check_answer">Check answer</button>
+                </div>
+            </div>
         </div>
         <!-- test (write) -->
         <div id="test_write" hidden>
         </div>
         <!-- import -->
         <div id="import" hidden>
+            <div class="container mt-5">
+                <h1>Import cards from file</h1>
+                <div class="mt-5">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="input_group_text">Import</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="input_file">
+                            <label class="custom-file-label" for="input_file">Choose a file to import</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5">
+                    <button type="button" class="btn btn-primary" id="confirm_import">Confirm import</button>
+                </div>
+            </div>
         </div>
         <!-- export -->
         <div id="export" hidden>
+            <div class="container mt-5">
+                <h1>Export cards into file</h1>
+                <div class="mt-5">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">File name</span>
+                        </div>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="mt-5">
+                    <button type="button" class="btn btn-primary">Confirm export</button>
+                </div>
+            </div>
         </div>
         <!-- help -->
         <div id="helpModal"><!-- add help text -->
-            <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
+            <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="help">Help</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria-="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
                             <p>hello there</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
