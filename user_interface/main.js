@@ -6,7 +6,6 @@ const path = require('path');
 const { app, BrowserWindow } = electron;
 
 let mainWindow;
-
 // waiting for the app to be ready
 app.on('ready', function() {
     // creating main window
