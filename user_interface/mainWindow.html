@@ -107,14 +107,14 @@
                             <td>Hello</td>
                             <td>Ahoj</td>
                             <td><span class="badge badge-dark">3</span></td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
                             <td>Foreshadowing</td>
                             <td>Predzvesti</td>
                             <td><span class="badge badge-dark">13</span></td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -138,14 +138,14 @@
                             <td>English words</td>
                             <td><span class="badge badge-dark">3</span></td>
                             <td>69%</td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
                             <td>Spanish words</td>
                             <td><span class="badge badge-dark">13</span></td>
                             <td>88%</td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -479,18 +479,38 @@
         </div>
         <!-- help -->
         <div id="help_modal"><!-- add help text -->
-            <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-="true">
+            <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="help">Help</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria-="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
                             <p>hello there</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- delete confirmation -->
+        <div id="delete_confirmation">
+            <div class="modal fade" id="delete_conf" tabindex="-1" role="dialog" aria-labelledby="delete_conf" aria="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="delete_conf">Confirm deletion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this item?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" href="#">Yes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>
