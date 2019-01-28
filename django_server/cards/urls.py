@@ -3,5 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('<int:tag_id>/', views.tags, name='tag'),
+    path('tags/', views.tags, name='tags'),
+    path('tags/<int:tag_id>/', views.tag, name='tag'),
+    path('cards/', views.cards, name='cards'),
+    path('cards/<int:card_id>/', views.card, name='card'),
 ]
