@@ -42,9 +42,7 @@ function oneChoice(choice_num) {
     };
 };
 
-$(document).ready(function() {
-    reset();
-    // initializing clicks on navigation bar
+function mainMenuButtons() {
     $('#home_button').click( function(event) {
         event.preventDefault();
         reset();
@@ -74,6 +72,7 @@ $(document).ready(function() {
         $('#start_browse_button').click( function(event) {
             event.preventDefault();
             $('#start_browse').hide();
+            $('#progress_bar').show();
             $('#browse_window').show();
         });
         $('#start_browse').show();
@@ -125,4 +124,10 @@ $(document).ready(function() {
         $(this).closest('.flip-card').toggleClass('hover');
         $(this).css('transform, rotateX(180deg)');
     });
+}
+
+$(document).ready(function() {
+    reset();
+    // initializing clicks on navigation bar
+    mainMenuButtons();
 });
