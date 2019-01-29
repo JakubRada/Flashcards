@@ -109,6 +109,19 @@ function edit_cards() {
     showOneItem('card_list');
 };
 
+function edit_tags() {
+    $("#table_of_tags tbody").empty();
+    load_information("tags").done(function(tag_list) {
+        for (var index in tag_list) {
+            load_information("tags/" + tag_list[index].id).done(function(tag_info) {
+                $(
+                    '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '</td><td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                ).appendTo("#table_of_tags tbody");
+            });
+        };
+    });
+    showOneItem('tag_list');
+};
 
 function load_information(suffix) {
     return $.ajax({
@@ -139,7 +152,7 @@ $(document).ready(function() {
     });
     $('#edit_tag_button').click( function(event) {
         event.preventDefault();
-        showOneItem('tag_list');
+        edit_tags();
     });
     $('#test_browse_button').click( function(event) {
         event.preventDefault();
