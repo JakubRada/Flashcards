@@ -10,7 +10,7 @@ def card(request, card_id):
     card = Card.objects.get(pk=card_id)
     return JsonResponse(
         {
-            'id': card.id,
+            'id': str(card.id),
             'card_front': card.get_front(),
             'card_back': card.get_back(),
             'tag_count': card.get_tag_count(),
@@ -23,7 +23,7 @@ def tag(request, tag_id):
     tag = Tag.objects.get(pk=tag_id)
     return JsonResponse(
         {
-            'id': tag.id,
+            'id': str(tag.id),
             'tag_name': tag.get_name(),
             'success_rate': tag.get_success(),
             'card_count': tag.get_card_count(),
@@ -38,7 +38,7 @@ def cards(request):
     for card in cards_list:
         content.append(
             {
-                'id': card.id,
+                'id': str(card.id),
                 'card_front': card.get_front()
             }
         )
@@ -50,7 +50,7 @@ def tags(request):
     for tag in tags_list:
         content.append(
             {
-                'id': tag.id,
+                'id': str(tag.id),
                 'tag_name': tag.get_name()
             }
         )
