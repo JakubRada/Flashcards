@@ -18,7 +18,7 @@
         <script src="./jquery.min.js"></script>
         <script src="./bootstrap.min.js"></script>
         <script src="./popper.min.js"></script>
-        <script src="./actions.js"></script>
+        <script src="./main.js"></script>
         <script>if (window.module) module = window.module;</script>
     </head>
     <body style="background-color: #eeeeee; color: #37474f;">
@@ -161,7 +161,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="front_side"><h5>Front side</h5></label>
-                                    <input type="text" class="form-control" id="front_side" required>
+                                    <input type="text" class="form-control" id="front_side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the front side of the card (max 200 characters)</small>
                                 </div>
                                 <div class="invalid-feedback">
@@ -171,7 +171,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="back_side"><h5>Back side</h5></label>
-                                    <input type="text" class="form-control" id="back_side" required>
+                                    <input type="text" class="form-control" id="back_side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the back side of the card (max 200 characters)</small>
                                 </div>
                                 <div class="invalid-feedback">
@@ -212,7 +212,7 @@
                     <div class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="tag_name"><h5>Front side</h5></label>
-                            <input type="text" class="form-control" id="tag_name" required>
+                            <input type="text" class="form-control" id="tag_name" maxlength="100" required>
                             <small class="form-text text-muted" id="tag_name_help">Enter a name of a tag (max 100 characters)</small>
                             <small class="form-text text-muted" id="tag_name_help">Two tags cannot have the same name</small>
                         </div>
@@ -239,7 +239,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="front_side"><h5>Front side</h5></label>
-                                    <input type="text" class="form-control" id="front_side" placeholder="Front side" required>
+                                    <input type="text" class="form-control" id="front_side" placeholder="Front side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the front side of the card (max 200 characters)</small>
                                 </div>
                                 <div class="invalid-feedback">
@@ -249,7 +249,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="back_side"><h5>Back side</h5></label>
-                                    <input type="text" class="form-control" id="back_side" placeholder="Back side" required>
+                                    <input type="text" class="form-control" id="back_side" placeholder="Back side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the back side of the card (max 200 characters)</small>
                                 </div>
                                 <div class="invalid-feedback">
@@ -290,7 +290,7 @@
                     <div class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="tag_name"><h5>Front side</h5></label>
-                            <input type="text" class="form-control" id="tag_name" placeholder="Tag name" required>
+                            <input type="text" class="form-control" id="tag_name" placeholder="Tag name" maxlength="100" required>
                             <small class="form-text text-muted" id="tag_name_help">Enter a name of a tag (max 100 characters)</small>
                             <small class="form-text text-muted" id="tag_name_help">Two tags cannot have the same name</small>
                         </div>
@@ -319,14 +319,14 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="english_words_choices" value="english_words">
-                                    <label class="custom-control-label ml-5" for="english_words_choices">English words</label>
+                                    <input class="custom-control-input" type="checkbox" id="english_words_browse" value="english_words">
+                                    <label class="custom-control-label ml-5" for="english_words_browse">English words</label>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="spanish_words_choices" value="spanish_words">
-                                    <label class="custom-control-label ml-5" for="spanish_words_choices">Spanish words</label>
+                                    <input class="custom-control-input" type="checkbox" id="spanish_words_browse" value="spanish_words">
+                                    <label class="custom-control-label ml-5" for="spanish_words_browse">Spanish words</label>
                                 </div>
                             </div>
                         </div>

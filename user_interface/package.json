@@ -2,7 +2,7 @@
   "name": "user_interface",
   "version": "1.0.0",
   "description": "user interface for cards app",
-  "main": "main.js",
+  "main": "render.js",
   "scripts": {
     "start": "electron ."
   },
