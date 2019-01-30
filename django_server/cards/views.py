@@ -14,7 +14,7 @@ def card(request, card_id):
             'card_front': card.get_front(),
             'card_back': card.get_back(),
             'tag_count': card.get_tag_count(),
-            'tags': [x.id for x in card.tags.all()]
+            'tags': [str(x.id) for x in card.tags.all()]
         },
         safe=False
     )
@@ -27,7 +27,7 @@ def tag(request, tag_id):
             'tag_name': tag.get_name(),
             'success_rate': tag.get_success(),
             'card_count': tag.get_card_count(),
-            'cards': [x.id for x in tag.cards.all()]
+            'cards': [str(x.id) for x in tag.cards.all()]
         },
         safe=False
     )
