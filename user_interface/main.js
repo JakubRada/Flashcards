@@ -1,3 +1,4 @@
+// all divs to hide on the beggining
 var controlButtons = new Array(
     'progress_bar',
     'title_page',
@@ -16,32 +17,71 @@ var controlButtons = new Array(
     'wrong_answer',
 );
 
+// basic url where django database is running
+var database_path = "http://127.0.0.1:8000/cards/";
+
+// hides everything
 function hideAll() {
     for (var i = 0; i < controlButtons.length; i += 1) {
         $('#' + controlButtons[i]).hide();
-    };
-};
+    }
+}
 
+// showing title page
 function reset() {
     hideAll();
     $('#title_page').show();
-};
+}
 
+// showing one item based on passed argument
 function showOneItem(item) {
     hideAll();
     $('#' + item).show();
-};
+}
 
+// highlighting selected choice in choice-based test
 function oneChoice(choice_num) {
     for (var i = 1; i <= 4; i += 1) {
         if (i == choice_num) {
             $('#option_' + i).addClass('active');
         } else {
             $('#option_' + i).removeClass('active');
-        };
-    };
-};
+        }
+    }
+}
 
+// loading JSONs from django
+function load_information(suffix) {
+    return $.ajax({
+        url: database_path + suffix,
+        type: 'GET',
+        dataType: 'json',
+    });
+}
+
+// creates JSON card object for sending to database
+function create_card_object(id, card_front, card_back, tags) {
+    return {
+        "id" : id,
+        "card_front": card_front,
+        "card_back": card_back,
+        "tag_count": tags.length,
+        "tags": tags
+    };
+}
+
+// creates JSON tag object for sending to database
+function create_tag_object(id, tag_name, success_rate, cards) {
+    return {
+        "id": id,
+        "tag_name": tag_name,
+        "success_rate": success_rate,
+        "card_count": cards.length,
+        "cards": cards
+    };
+}
+
+// content of browse test
 function browse() {
     showOneItem('test_browse');
     $('#browse_window').hide();
@@ -57,8 +97,9 @@ function browse() {
         });
     });
     $('#start_browse').show();
-};
+}
 
+// content of choices test
 function choices() {
     showOneItem('test_choices');
     $('#choices_window').hide();
@@ -81,8 +122,9 @@ function choices() {
         });
     });
     $('#start_choices').show();
-};
+}
 
+// content of write test
 function write() {
     showOneItem('test_write');
     $('#write_window').hide();
@@ -93,42 +135,89 @@ function write() {
         $('#write_window').show();
     });
     $('#start_write').show();
-};
+}
 
-function edit_cards() {
+// listing and editing/deleting cards
+function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
     load_information("cards").done(function(card_list) {
         for (var index in card_list) {
-            load_information("cards/" + card_list[index].id).done(function(card_info){
+            load_information("cards/" + card_list[index].id).done(function(card_info) {
                 $(
-                    '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                    '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_cards tbody");
+                $("#edit_card_" + card_info.id).click(function() {
+                    edit_card(card_info);
+                });
             });
-        };
+        }
     });
     showOneItem('card_list');
-};
+}
 
-function edit_tags() {
+// handles edit of a card
+function edit_card(card) {
+    $("#card_list").hide();
+    $("#front_side_edit").attr("placeholder", card.card_front);
+    $("#back_side_edit").attr("placeholder", card.card_back);
+    $("#edit_card_tags").empty();
+    // prepares html div for selected card
+    load_information("tags").done(function(all_tags) {
+        var tag;
+        all_tags_list = all_tags;
+        for (var index in all_tags) {
+            tag = all_tags[index];
+            $(
+                '<div class="col"><div class="form-check form-check-inline ml-5"><input class="custom-control-input" type="checkbox" id="' + tag.id + '_edit"><label class="custom-control-label" for="' + tag.id + '_edit">' + tag.tag_name + '</label></div></div>'
+            ).appendTo("#edit_card_tags");
+            if (card.tags.includes(tag.id)) {
+                $("#" + tag.id + "_edit").prop("checked", true);
+            }
+        }
+    });
+    $("#card_edited").hide();
+    $("#edit_card").show();
+    // gets input information
+    $("#save_card_changes").click(function(event) {
+        var front_input = $("#front_side_edit").val();
+        var back_input = $("#back_side_edit").val();
+        var checked = new Array();
+        var count = 0;
+        // inputs cannot be blank
+        if (front_input !== "" && back_input !== "") {
+            event.preventDefault();
+            // gets which checkboxes are checked when pressing the button
+            $("#edit_card_tags input:checkbox:checked").each(function() {
+                checked[count] = $(this).attr("id").split("_")[0];
+                count += 1;
+            });
+            // creates JSON object
+            var card_object = create_card_object(card.id, front_input, back_input, checked);
+            console.log(card_object);
+        }
+    });
+}
+
+// listing and editing/deleting tags
+function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
     load_information("tags").done(function(tag_list) {
         for (var index in tag_list) {
             load_information("tags/" + tag_list[index].id).done(function(tag_info) {
                 $(
-                    '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '</td><td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                    '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
+                $("#edit_tag_" + tag_info.id).click(function() {
+                    console.log("editing " + tag_info.id);
+                });
             });
-        };
+        }
     });
     showOneItem('tag_list');
-};
+}
 
-function load_information(suffix) {
-    return $.ajax({
-        url: "http://127.0.0.1:8000/cards/" + suffix,
-    });
-};
 
+// main
 $(document).ready(function() {
     reset();
     // clicks on navigation bar
@@ -143,7 +232,7 @@ $(document).ready(function() {
     });
     $('#edit_card_button').click( function(event) {
         event.preventDefault();
-        edit_cards();
+        list_cards_to_edit();
     });
     $('#create_tag_button').click( function(event) {
         event.preventDefault();
@@ -152,7 +241,7 @@ $(document).ready(function() {
     });
     $('#edit_tag_button').click( function(event) {
         event.preventDefault();
-        edit_tags();
+        list_tags_to_edit();
     });
     $('#test_browse_button').click( function(event) {
         event.preventDefault();
