@@ -164,9 +164,6 @@
                                     <input type="text" class="form-control" id="front_side_create" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the front side of the card (max 200 characters)</small>
                                 </div>
-                                <div class="invalid-feedback">
-                                    You have to fill this field!
-                                </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
@@ -174,13 +171,10 @@
                                     <input type="text" class="form-control" id="back_side_create" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the back side of the card (max 200 characters)</small>
                                 </div>
-                                <div class="invalid-feedback">
-                                    You have to fill this field!
-                                </div>
                             </div>
                         </div>
                         <label><h5>Select tags</h5></label>
-                        <div class="row mt-3">
+                        <div class="row mt-3" id="create_card_tags">
                             <div class="col">
                                 <div class="form-check form-check-inline">
                                     <input class="custom-control-input" type="checkbox" id="english_words" value="english_words">
@@ -196,10 +190,7 @@
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <button class="btn btn-primary" type="submit">Save</button>
-                        <div class="ml-5" id="card_created">
-                            <h5>Successfully created</h5>
-                        </div>
+                        <button class="btn btn-primary" type="submit" id="save_new_card">Save</button>
                     </div>
                 </form>
             </div>
@@ -211,20 +202,14 @@
                 <form class="mt-5">
                     <div class="needs-validation" novalidate>
                         <div class="form-group">
-                            <label for="tag_name"><h5>Front side</h5></label>
-                            <input type="text" class="form-control" id="tag_name" maxlength="100" required>
+                            <label for="tag_name_create"><h5>Front side</h5></label>
+                            <input type="text" class="form-control" id="tag_name_create" maxlength="100" required>
                             <small class="form-text text-muted" id="tag_name_help">Enter a name of a tag (max 100 characters)</small>
                             <small class="form-text text-muted" id="tag_name_help">Two tags cannot have the same name</small>
                         </div>
-                        <div class="invalid-feedback">
-                            You have to fill this field!
-                        </div>
                     </div>
                     <div class="row mt-5">
-                        <button class="btn btn-primary" type="submit">Save</button>
-                        <div class="ml-5" id="tag_created">
-                            <h5>Successfully created</h5>
-                        </div>
+                        <button class="btn btn-primary" type="submit" id="save_new_tag">Save</button>
                     </div>
                 </form>
             </div>
@@ -242,18 +227,12 @@
                                     <input type="text" class="form-control" id="front_side_edit" placeholder="Front side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the front side of the card (max 200 characters)</small>
                                 </div>
-                                <div class="invalid-feedback">
-                                    You have to fill this field!
-                                </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="back_side_edit"><h5>Back side</h5></label>
                                     <input type="text" class="form-control" id="back_side_edit" placeholder="Back side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the back side of the card (max 200 characters)</small>
-                                </div>
-                                <div class="invalid-feedback">
-                                    You have to fill this field!
                                 </div>
                             </div>
                         </div>
@@ -280,7 +259,7 @@
             </div>
         </div>
         <!-- edit tag -->
-        <div id="edit_tag"><!-- add server validation of duplicity -->
+        <div id="edit_tag">
             <div class="container mt-5">
                 <h1>Edit a tag</h1>
                 <form class="mt-5">
@@ -290,9 +269,6 @@
                             <input type="text" class="form-control" id="tag_name_edit" placeholder="Tag name" maxlength="100" required>
                             <small class="form-text text-muted" id="tag_name_help">Enter a name of a tag (max 100 characters)</small>
                             <small class="form-text text-muted" id="tag_name_help">Two tags cannot have the same name</small>
-                        </div>
-                        <div class="invalid-feedback">
-                            You have to fill this field!
                         </div>
                     </div>
                     <div class="row mt-5">
@@ -511,16 +487,34 @@
             </div>
         </div>
         <!-- message showed when entered already existing tag name -->
-        <div id="wrong_tag_edit_modal">
-            <div class="modal fade" id="wrong_tag_edit" tabindex="-1" role="dialog" aria-labelledby="wront_tag_edit" aria="true">
+        <div id="wrong_tag_modal">
+            <div class="modal fade" id="wrong_tag" tabindex="-1" role="dialog" aria-labelledby="wrong_tag" aria="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Tags with the same name</h5>
+                            <h5 class="modal-title">Tag already exists</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
                             <p>Two different tags cannot have the same names. You have to change it.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="created_modal">
+            <div class="modal fade" id="created" tabindex="-1" role="dialog" aria-labelledby="created" aria="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Success</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>It has been successfully saved.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>

@@ -140,24 +140,26 @@ function write() {
 // listing and editing/deleting cards
 function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
+    showOneItem("card_list");
     load_information("cards").done(function(card_list) {
-        for (var index in card_list) {
-            load_information("cards/" + card_list[index].id).done(function(card_info) {
+        for (var i in card_list) {
+            load_information("cards/" + card_list[i].id).done(function(card_info) {
                 $(
                     '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
-                ).appendTo("#table_of_cards tbody");
-                $("#edit_card_" + card_info.id).click(function() {
-                    edit_card(card_info);
+                    ).appendTo("#table_of_cards tbody");
+                    $("#edit_card_" + card_info.id).click(function() {
+                        edit_card(card_info);
+                    });
                 });
-            });
-        }
-    });
-    showOneItem('card_list');
+            }
+        });
 }
 
 // handles edit of a card
 function edit_card(card) {
     $("#card_list").hide();
+    $("#front_side_edit").val("");
+    $("#back_side_edit").val("");
     $("#front_side_edit").attr("placeholder", card.card_front);
     $("#back_side_edit").attr("placeholder", card.card_back);
     $("#edit_card_tags").empty();
@@ -165,8 +167,8 @@ function edit_card(card) {
     load_information("tags").done(function(all_tags) {
         var tag;
         all_tags_list = all_tags;
-        for (var index in all_tags) {
-            tag = all_tags[index];
+        for (var i in all_tags) {
+            tag = all_tags[i];
             $(
                 '<div class="col"><div class="form-check form-check-inline ml-5"><input class="custom-control-input" type="checkbox" id="' + tag.id + '_edit"><label class="custom-control-label" for="' + tag.id + '_edit">' + tag.tag_name + '</label></div></div>'
             ).appendTo("#edit_card_tags");
@@ -193,6 +195,8 @@ function edit_card(card) {
             // creates JSON object
             var card_object = create_card_object(card.id, front_input, back_input, checked);
             console.log(card_object);
+            showOneItem('card_list');
+            $("#created").modal("toggle");
         }
     });
 }
@@ -200,26 +204,29 @@ function edit_card(card) {
 // handles edit of a tag
 function edit_tag(tag) {
     $("#tag_list").hide();
+    $("#tag_name_edit").val("");
     $("#tag_name_edit").attr("placeholder", tag.tag_name);
     $("#edit_tag").show();
     $("#save_tag_changes").click(function(event) {
         var name_input = $("#tag_name_edit").val();
         var all_tags_names = new Array();
-        var count = 0;
+        var index = 0;
         if (name_input !== "") {
             event.preventDefault();
             load_information("tags/").done(function(all_tags) {
                 for (var i in all_tags) {
                     if (tag.tag_name !== all_tags[i].tag_name) {
-                        all_tags_names[count] = all_tags[i].tag_name;
-                        count += 1;
+                        all_tags_names[index] = all_tags[i].tag_name;
+                        index += 1;
                     }
                 }
                 if (all_tags_names.includes(name_input)) {
-                    $("#wrong_tag_edit").modal("toggle");
+                    $("#wrong_tag").modal("toggle");
                 } else {
                     var tag_object = create_tag_object(tag.id, name_input, tag.success_rate, tag.card_count, tag.cards);
                     console.log(tag_object);
+                    showOneItem("tag_list");
+                    $("#created").modal("toggle");
                 }
             });
         }
@@ -229,9 +236,10 @@ function edit_tag(tag) {
 // listing and editing/deleting tags
 function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
+    showOneItem('tag_list');
     load_information("tags").done(function(tag_list) {
-        for (var index in tag_list) {
-            load_information("tags/" + tag_list[index].id).done(function(tag_info) {
+        for (var i in tag_list) {
+            load_information("tags/" + tag_list[i].id).done(function(tag_info) {
                 $(
                     '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
@@ -241,9 +249,75 @@ function list_tags_to_edit() {
             });
         }
     });
-    showOneItem('tag_list');
 }
 
+function create_card() {
+    showOneItem('create_card');
+    $("#create_card_tags").empty();
+    $("#front_side_create").val("");
+    $("#back_side_create").val("");
+    // prepares html div for selected card
+    load_information("tags").done(function(all_tags) {
+        var tag;
+        all_tags_list = all_tags;
+        for (var i in all_tags) {
+            tag = all_tags[i];
+            $(
+                '<div class="col"><div class="form-check form-check-inline ml-5"><input class="custom-control-input" type="checkbox" id="' + tag.id + '_create"><label class="custom-control-label" for="' + tag.id + '_create">' + tag.tag_name + '</label></div></div>'
+            ).appendTo("#create_card_tags");
+        }
+    });
+    $("#create_card").show();
+    // gets input information
+    $("#save_new_card").click(function(event) {
+        var front_input = $("#front_side_create").val();
+        var back_input = $("#back_side_create").val();
+        var checked = new Array();
+        var index = 0;
+        // inputs cannot be blank
+        if (front_input !== "" && back_input !== "") {
+            event.preventDefault();
+            // gets which checkboxes are checked when pressing the button
+            $("#create_card_tags input:checkbox:checked").each(function() {
+                checked[index] = $(this).attr("id").split("_")[0];
+                index += 1;
+            });
+            // creates JSON object
+            var card_object = create_card_object("new", front_input, back_input, checked);
+            console.log(card_object);
+            card_object = null;
+            reset();
+            $("#created").modal("toggle");
+        }
+    });
+}
+
+function create_tag() {
+    showOneItem('create_tag');
+    $("tag_name_create").val("");
+    $("#save_new_tag").click(function(event) {
+        var name_input = $("#tag_name_create").val();
+        var all_tags_names = new Array();
+        var index = 0;
+        if (name_input !== "") {
+            event.preventDefault();
+            load_information("tags/").done(function(all_tags) {
+                for (var i in all_tags) {
+                    all_tags_names[index] = all_tags[i].tag_name;
+                    index += 1;
+                }
+                if (all_tags_names.includes(name_input)) {
+                    $("#wrong_tag").modal("toggle");
+                } else {
+                    var tag_object = create_tag_object("new", name_input, 0, 0, []);
+                    console.log(tag_object);
+                    reset();
+                    $("#created").modal("toggle");
+                }
+            });
+        }
+    });
+}
 
 // main
 $(document).ready(function() {
@@ -255,8 +329,7 @@ $(document).ready(function() {
     });
     $('#create_card_button').click( function(event) {
         event.preventDefault();
-        showOneItem('create_card');
-        $('#card_created').hide();
+        create_card();
     });
     $('#edit_card_button').click( function(event) {
         event.preventDefault();
@@ -264,8 +337,7 @@ $(document).ready(function() {
     });
     $('#create_tag_button').click( function(event) {
         event.preventDefault();
-        showOneItem('create_tag');
-        $('#tag_created').hide();
+        create_tag();
     });
     $('#edit_tag_button').click( function(event) {
         event.preventDefault();
