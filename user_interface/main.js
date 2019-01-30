@@ -146,13 +146,13 @@ function list_cards_to_edit() {
             load_information("cards/" + card_list[i].id).done(function(card_info) {
                 $(
                     '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
-                    ).appendTo("#table_of_cards tbody");
-                    $("#edit_card_" + card_info.id).click(function() {
-                        edit_card(card_info);
-                    });
+                ).appendTo("#table_of_cards tbody");
+                $("#edit_card_" + card_info.id).click(function() {
+                    edit_card(card_info);
                 });
-            }
-        });
+            });
+        }
+    });
 }
 
 // handles edit of a card
@@ -166,7 +166,6 @@ function edit_card(card) {
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
         var tag;
-        all_tags_list = all_tags;
         for (var i in all_tags) {
             tag = all_tags[i];
             $(
@@ -176,27 +175,45 @@ function edit_card(card) {
                 $("#" + tag.id + "_edit").prop("checked", true);
             }
         }
+        $("#edit_card").show();
+        // gets input information
+        $("#save_card_changes").click(function(event) {
+            var front_input = $("#front_side_edit").val();
+            var back_input = $("#back_side_edit").val();
+            var checked = new Array();
+            var index = 0;
+            // inputs cannot be blank
+            if (front_input !== "" && back_input !== "") {
+                event.preventDefault();
+                // gets which checkboxes are checked when pressing the button
+                $("#edit_card_tags input:checkbox:checked").each(function() {
+                    checked[index] = $(this).attr("id").split("_")[0];
+                    index += 1;
+                });
+                // creates JSON object
+                var card_object = create_card_object(card.id, front_input, back_input, checked);
+                console.log(card_object);
+                $("#created").modal("toggle");
+                showOneItem("card_list");
+            }
+        });
     });
-    $("#edit_card").show();
-    // gets input information
-    $("#save_card_changes").click(function(event) {
-        var front_input = $("#front_side_edit").val();
-        var back_input = $("#back_side_edit").val();
-        var checked = new Array();
-        var count = 0;
-        // inputs cannot be blank
-        if (front_input !== "" && back_input !== "") {
-            event.preventDefault();
-            // gets which checkboxes are checked when pressing the button
-            $("#edit_card_tags input:checkbox:checked").each(function() {
-                checked[count] = $(this).attr("id").split("_")[0];
-                count += 1;
+}
+
+// listing and editing/deleting tags
+function list_tags_to_edit() {
+    $("#table_of_tags tbody").empty();
+    showOneItem('tag_list');
+    load_information("tags").done(function(tag_list) {
+        for (var i in tag_list) {
+            load_information("tags/" + tag_list[i].id).done(function(tag_info) {
+                $(
+                    '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                ).appendTo("#table_of_tags tbody");
+                $("#edit_tag_" + tag_info.id).click(function() {
+                    edit_tag(tag_info);
+                });
             });
-            // creates JSON object
-            var card_object = create_card_object(card.id, front_input, back_input, checked);
-            console.log(card_object);
-            showOneItem('card_list');
-            $("#created").modal("toggle");
         }
     });
 }
@@ -233,24 +250,6 @@ function edit_tag(tag) {
     });
 }
 
-// listing and editing/deleting tags
-function list_tags_to_edit() {
-    $("#table_of_tags tbody").empty();
-    showOneItem('tag_list');
-    load_information("tags").done(function(tag_list) {
-        for (var i in tag_list) {
-            load_information("tags/" + tag_list[i].id).done(function(tag_info) {
-                $(
-                    '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
-                ).appendTo("#table_of_tags tbody");
-                $("#edit_tag_" + tag_info.id).click(function() {
-                    edit_tag(tag_info);
-                });
-            });
-        }
-    });
-}
-
 function create_card() {
     showOneItem('create_card');
     $("#create_card_tags").empty();
@@ -259,7 +258,6 @@ function create_card() {
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
         var tag;
-        all_tags_list = all_tags;
         for (var i in all_tags) {
             tag = all_tags[i];
             $(
