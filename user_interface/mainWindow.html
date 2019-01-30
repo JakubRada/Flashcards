@@ -238,7 +238,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="front_side"><h5>Front side</h5></label>
+                                    <label for="front_side_edit"><h5>Front side</h5></label>
                                     <input type="text" class="form-control" id="front_side_edit" placeholder="Front side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the front side of the card (max 200 characters)</small>
                                 </div>
@@ -248,7 +248,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="back_side"><h5>Back side</h5></label>
+                                    <label for="back_side_edit"><h5>Back side</h5></label>
                                     <input type="text" class="form-control" id="back_side_edit" placeholder="Back side" maxlength="200" required>
                                     <small class="form-text text-muted" id="front_side_help">Enter text shown on the back side of the card (max 200 characters)</small>
                                 </div>
@@ -286,8 +286,8 @@
                 <form class="mt-5">
                     <div class="needs-validation" novalidate>
                         <div class="form-group">
-                            <label for="tag_name"><h5>Front side</h5></label>
-                            <input type="text" class="form-control" id="tag_name" placeholder="Tag name" maxlength="100" required>
+                            <label for="tag_name_edit"><h5>Front side</h5></label>
+                            <input type="text" class="form-control" id="tag_name_edit" placeholder="Tag name" maxlength="100" required>
                             <small class="form-text text-muted" id="tag_name_help">Enter a name of a tag (max 100 characters)</small>
                             <small class="form-text text-muted" id="tag_name_help">Two tags cannot have the same name</small>
                         </div>
@@ -296,7 +296,7 @@
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <button class="btn btn-primary" type="submit">Save</button>
+                        <button class="btn btn-primary" type="submit" id="save_tag_changes">Save</button>
                     </div>
                 </form>
             </div>
@@ -505,6 +505,25 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" href="#">Yes</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- message showed when entered already existing tag name -->
+        <div id="wrong_tag_edit_modal">
+            <div class="modal fade" id="wrong_tag_edit" tabindex="-1" role="dialog" aria-labelledby="wront_tag_edit" aria="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Tags with the same name</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-labelledby="Close"><span aria="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Two different tags cannot have the same names. You have to change it.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>

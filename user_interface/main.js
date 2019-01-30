@@ -71,12 +71,12 @@ function create_card_object(id, card_front, card_back, tags) {
 }
 
 // creates JSON tag object for sending to database
-function create_tag_object(id, tag_name, success_rate, cards) {
+function create_tag_object(id, tag_name, success_rate, card_count, cards) {
     return {
         "id": id,
         "tag_name": tag_name,
         "success_rate": success_rate,
-        "card_count": cards.length,
+        "card_count": card_count,
         "cards": cards
     };
 }
@@ -175,7 +175,6 @@ function edit_card(card) {
             }
         }
     });
-    $("#card_edited").hide();
     $("#edit_card").show();
     // gets input information
     $("#save_card_changes").click(function(event) {
@@ -198,6 +197,35 @@ function edit_card(card) {
     });
 }
 
+// handles edit of a tag
+function edit_tag(tag) {
+    $("#tag_list").hide();
+    $("#tag_name_edit").attr("placeholder", tag.tag_name);
+    $("#edit_tag").show();
+    $("#save_tag_changes").click(function(event) {
+        var name_input = $("#tag_name_edit").val();
+        var all_tags_names = new Array();
+        var count = 0;
+        if (name_input !== "") {
+            event.preventDefault();
+            load_information("tags/").done(function(all_tags) {
+                for (var i in all_tags) {
+                    if (tag.tag_name !== all_tags[i].tag_name) {
+                        all_tags_names[count] = all_tags[i].tag_name;
+                        count += 1;
+                    }
+                }
+                if (all_tags_names.includes(name_input)) {
+                    $("#wrong_tag_edit").modal("toggle");
+                } else {
+                    var tag_object = create_tag_object(tag.id, name_input, tag.success_rate, tag.card_count, tag.cards);
+                    console.log(tag_object);
+                }
+            });
+        }
+    });
+}
+
 // listing and editing/deleting tags
 function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
@@ -208,7 +236,7 @@ function list_tags_to_edit() {
                     '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
                 $("#edit_tag_" + tag_info.id).click(function() {
-                    console.log("editing " + tag_info.id);
+                    edit_tag(tag_info);
                 });
             });
         }
