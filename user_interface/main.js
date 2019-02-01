@@ -1,5 +1,5 @@
 // all divs to hide on the beggining
-var controlButtons = new Array(
+var controlButtons = [
     'progress_bar',
     'title_page',
     'card_list',
@@ -8,6 +8,8 @@ var controlButtons = new Array(
     'create_tag',
     'edit_card',
     'edit_tag',
+    'test_main',
+    'test_type',
     'test_browse',
     'test_choices',
     'test_write',
@@ -15,7 +17,7 @@ var controlButtons = new Array(
     'export',
     'correct_answer',
     'wrong_answer',
-);
+];
 
 // basic url where django database is running
 var database_path = "http://127.0.0.1:8000/cards/";
@@ -81,43 +83,87 @@ function create_tag_object(id, tag_name, success_rate, card_count, cards) {
     };
 }
 
-// content of browse test
-function browse() {
-    showOneItem('test_browse');
-    $('#browse_window').hide();
-    $('#start_browse_button').click( function(event) {
-        event.preventDefault();
-        $('#start_browse').hide();
-        $('#progress_bar').show();
-        $('#browse_window').show();
-        // fliping card on click
-        $('.flip-card .flip-card-inner').click( function() {
-            $(this).closest('.flip-card').toggleClass('hover');
-            $(this).css('transform, rotateX(180deg)');
-        });
+function test_main() {
+    $("#test_tags_buttons").empty();
+    load_information("tags").done(function(all_tags) {
+        for (var i in all_tags) {
+            $(
+                '<button type="button" class="btn btn-dark btn-lg btn-block">' + all_tags[i].tag_name + '</button>'
+            ).unbind().click(all_tags[i].id, function(event) {
+                test_type(event.data);
+            }).appendTo("#test_tags_buttons");
+        }
     });
-    $('#start_browse').show();
+    showOneItem("test_main");
+}
+
+function test_type(tag_id) {
+    showOneItem("test_type");
+    $("#browse_button").unbind().click(function() {
+        load_browse(tag_id);
+    });
+    $("#choices_button").unbind().click(function() {
+        choices(tag_id);
+    });
+    $("#write_button").unbind().click(function() {
+        write(tag_id);
+    });
+}
+
+function update_progress_bar(current, max) {
+    var perc = Number(Math.round((current / max) * 100));
+    $("#positive_progress").attr("style", "width: " + perc + "%");
+    $("#positive_progress").text(current + " / " + max);
+}
+
+function browse(all_cards) {
+    console.log(all_cards);
+    var count = all_cards.length;
+    var current_index = 0;
+    update_progress_bar(current_index ,count);
+    showOneItem("test_browse");
+    $("#progress_bar").show();
+    $('.flip-card .flip-card-inner').unbind().click( function() {
+        $(this).closest('.flip-card').toggleClass('hover');
+        $(this).css('transform, rotateX(180deg)');
+    });
+}
+
+function load_browse(tag_id) {
+    var all_cards = new Array();
+    var index = 0;
+    load_information("tags/" + tag_id).done(function(tag_info) {
+        var all_card_ids = tag_info.cards;
+        for (var i in all_card_ids) {
+            load_information("cards/" + all_card_ids[i]).done(function(card_info) {
+                all_cards[index] = card_info;
+                index += 1;
+                if ((index + 1) == all_card_ids.length) {
+                    browse(all_cards);
+                }
+            });
+        }
+    });
 }
 
 // content of choices test
-function choices() {
+function choices(tag_id) {
     showOneItem('test_choices');
-    $('#choices_window').hide();
-    $('#start_choices_button').click( function(event) {
+    $('#start_choices_button').unbind().click( function(event) {
         event.preventDefault();
         $('#start_choices').hide();
         $('#progress_bar').show();
         $('#choices_window').show();
-        $('#option_1').click( function() {
+        $('#option_1').unbind().click( function() {
             oneChoice(1);
         });
-        $('#option_2').click( function() {
+        $('#option_2').unbind().click( function() {
             oneChoice(2);
         });
-        $('#option_3').click( function() {
+        $('#option_3').unbind().click( function() {
             oneChoice(3);
         });
-        $('#option_4').click( function() {
+        $('#option_4').unbind().click( function() {
             oneChoice(4);
         });
     });
@@ -125,10 +171,10 @@ function choices() {
 }
 
 // content of write test
-function write() {
+function write(tag_id) {
     showOneItem('test_write');
     $('#write_window').hide();
-    $('#start_write_button').click( function(event) {
+    $('#start_write_button').unbind().click( function(event) {
         event.preventDefault();
         $('#start_write').hide();
         $('#progress_bar').show();
@@ -147,7 +193,7 @@ function list_cards_to_edit() {
                 $(
                     '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_cards tbody");
-                $("#edit_card_" + card_info.id).click(function() {
+                $("#edit_card_" + card_info.id).unbind().click(function() {
                     edit_card(card_info);
                 });
             });
@@ -177,7 +223,7 @@ function edit_card(card) {
         }
         $("#edit_card").show();
         // gets input information
-        $("#save_card_changes").click(function(event) {
+        $("#save_card_changes").unbind().click(function(event) {
             var front_input = $("#front_side_edit").val();
             var back_input = $("#back_side_edit").val();
             var checked = new Array();
@@ -210,7 +256,7 @@ function list_tags_to_edit() {
                 $(
                     '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
-                $("#edit_tag_" + tag_info.id).click(function() {
+                $("#edit_tag_" + tag_info.id).unbind().click(function() {
                     edit_tag(tag_info);
                 });
             });
@@ -224,7 +270,7 @@ function edit_tag(tag) {
     $("#tag_name_edit").val("");
     $("#tag_name_edit").attr("placeholder", tag.tag_name);
     $("#edit_tag").show();
-    $("#save_tag_changes").click(function(event) {
+    $("#save_tag_changes").unbind().click(function(event) {
         var name_input = $("#tag_name_edit").val();
         var all_tags_names = new Array();
         var index = 0;
@@ -239,6 +285,7 @@ function edit_tag(tag) {
                 }
                 if (all_tags_names.includes(name_input)) {
                     $("#wrong_tag").modal("toggle");
+                    $("#tag_name_create").val("");
                 } else {
                     var tag_object = create_tag_object(tag.id, name_input, tag.success_rate, tag.card_count, tag.cards);
                     console.log(tag_object);
@@ -251,10 +298,10 @@ function edit_tag(tag) {
 }
 
 function create_card() {
-    showOneItem('create_card');
     $("#create_card_tags").empty();
     $("#front_side_create").val("");
     $("#back_side_create").val("");
+    showOneItem('create_card');
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
         var tag;
@@ -267,7 +314,7 @@ function create_card() {
     });
     $("#create_card").show();
     // gets input information
-    $("#save_new_card").click(function(event) {
+    $("#save_new_card").unbind().click(function(event) {
         var front_input = $("#front_side_create").val();
         var back_input = $("#back_side_create").val();
         var checked = new Array();
@@ -291,9 +338,9 @@ function create_card() {
 }
 
 function create_tag() {
+    $("#tag_name_create").val("");
     showOneItem('create_tag');
-    $("tag_name_create").val("");
-    $("#save_new_tag").click(function(event) {
+    $("#save_new_tag").unbind().click(function(event) {
         var name_input = $("#tag_name_create").val();
         var all_tags_names = new Array();
         var index = 0;
@@ -306,6 +353,7 @@ function create_tag() {
                 }
                 if (all_tags_names.includes(name_input)) {
                     $("#wrong_tag").modal("toggle");
+                    $("#tag_name_create").val("");
                 } else {
                     var tag_object = create_tag_object("new", name_input, 0, 0, []);
                     console.log(tag_object);
@@ -321,43 +369,35 @@ function create_tag() {
 $(document).ready(function() {
     reset();
     // clicks on navigation bar
-    $('#home_button').click( function(event) {
+    $('#home_button').unbind().click( function(event) {
         event.preventDefault();
         reset();
     });
-    $('#create_card_button').click( function(event) {
+    $('#create_card_button').unbind().click( function(event) {
         event.preventDefault();
         create_card();
     });
-    $('#edit_card_button').click( function(event) {
+    $('#edit_card_button').unbind().click( function(event) {
         event.preventDefault();
         list_cards_to_edit();
     });
-    $('#create_tag_button').click( function(event) {
+    $('#create_tag_button').unbind().click( function(event) {
         event.preventDefault();
         create_tag();
     });
-    $('#edit_tag_button').click( function(event) {
+    $('#edit_tag_button').unbind().click( function(event) {
         event.preventDefault();
         list_tags_to_edit();
     });
-    $('#test_browse_button').click( function(event) {
+    $('#test_button').unbind().click( function(event) {
         event.preventDefault();
-        browse();
+        test_main();
     });
-    $('#test_choices_button').click( function(event) {
-        event.preventDefault();
-        choices();
-    });
-    $('#test_write_button').click( function(event) {
-        event.preventDefault();
-        write();
-    });
-    $('#import_button').click( function(event) {
+    $('#import_button').unbind().click( function(event) {
         event.preventDefault();
         showOneItem('import');
     });
-    $('#export_button').click( function(event) {
+    $('#export_button').unbind().click( function(event) {
         event.preventDefault();
         showOneItem('export');
     });

@@ -47,15 +47,8 @@
                                 <a class="dropdown-item" href="#" id="edit_tag_button">Edit tag</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tests</a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#" id="test_browse_button">Browse cards</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" id="test_write_button">Write</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" id="test_choices_button">Choices</a>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" role="button" id="test_button">Test</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -79,7 +72,7 @@
             <div class="container mt-5">
                 <h5 class="text-center">Progress</h5>
                 <div class="progress" style="height: 20px;">
-                    <div class="progress_bar bg-primary" role="progressbar" style="width: 69%;" aria-valuenow="69" aria-valuemin="0" aria-valuemax="100">69/100</div>
+                    <div id="positive_progress" class="progress_bar bg-primary" role="progressbar" style="width: 69%;" aria-valuenow="69" aria-valuemin="0" aria-valuemax="100">69/100</div>
                 </div>
             </div>
         </div>
@@ -196,13 +189,13 @@
             </div>
         </div>
         <!-- create tag -->
-        <div id="create_tag"><!-- add server validation of duplicity -->
+        <div id="create_tag">
             <div class="container mt-5">
                 <h1>Create a tag</h1>
                 <form class="mt-5">
                     <div class="needs-validation" novalidate>
                         <div class="form-group">
-                            <label for="tag_name_create"><h5>Front side</h5></label>
+                            <label for="tag_name_create"><h5>Tag name</h5></label>
                             <input type="text" class="form-control" id="tag_name_create" maxlength="100" required>
                             <small class="form-text text-muted" id="tag_name_help">Enter a name of a tag (max 100 characters)</small>
                             <small class="form-text text-muted" id="tag_name_help">Two tags cannot have the same name</small>
@@ -277,33 +270,41 @@
                 </form>
             </div>
         </div>
+        <div id="test_main">
+            <div class="container">
+                <div class="jumbotron mt-5" id="choose_tag">
+                    <h1 class="display-4">Choose tag to test</h1>
+                    <hr class="my-4">
+                    <div id="test_tags_buttons">
+                        <button type="button" class="btn btn-dark btn-lg btn-block">Hello there</button>
+                        <button type="button" class="btn btn-dark btn-lg btn-block">General Kenobi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="test_type">
+            <div class="container">
+                <div class="jumbotron mt-5" id="choose_type">
+                    <h1 class="display-4">Choose type of test</h1>
+                    <hr class="my-4">
+                    <div class="row" id="test_type_buttons">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="browse_button"><h1>Browse</h1></button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="choices_button"><h1>Choices</h1></button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;"id="write_button"><h1>Write</h1></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- test (browsing) -->
         <div id="test_browse">
             <div class="container">
-                <div class="jumbotron mt-5" id="start_browse">
-                    <h1 class="display-4">Browse cards</h1>
-                    <p class="lead">In this test you will browse cards. Front side is shown by default. If you click on the card, it flips and shows its back side.</p>
-                    <hr class="my-4">
-                    <p class="lead">Choose which tags you want to test:</p>
-                    <form class="mt-3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="english_words_browse" value="english_words">
-                                    <label class="custom-control-label ml-5" for="english_words_browse">English words</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="spanish_words_browse" value="spanish_words">
-                                    <label class="custom-control-label ml-5" for="spanish_words_browse">Spanish words</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button role="button" class="btn btn-primary mt-5" href="#" id="start_browse_button">Start test</button>
-                    </form>
-                </div>
-                <div class="jumbotron mt-5" id="browse_window">
+                <div class="jumbotron mt-5">
                     <div class="card">
                         <div class="card-body" style="height: 300px;">
                             <div class="flip-card">
@@ -334,30 +335,7 @@
         <!-- test (choices) -->
         <div id="test_choices">
             <div class="container">
-                <div class="jumbotron mt-5" id="start_choices">
-                    <h1 class="display-4">Choices</h1>
-                    <p class="lead">In this test you will have 4 choices from which you have to choose the correct one.</p>
-                    <hr class="my-4">
-                    <p class="lead">Choose which tags you want to test:</p>
-                    <form class="mt-3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="english_words_choices" value="english_words">
-                                    <label class="custom-control-label ml-5" for="english_words_choices">English words</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="spanish_words_choices" value="spanish_words">
-                                    <label class="custom-control-label ml-5" for="spanish_words_choices">Spanish words</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button role="button" class="btn btn-primary mt-5" href="#" id="start_choices_button">Start test</button>
-                    </form>
-                </div>
-                <div class="jumbotron mt-5" id="choices_window">
+                <div class="jumbotron mt-5">
                     <h1 class="display-4">Hello</h1>
                     <hr class="my-4">
                     <p class="lead">Choose one from these options:</p>
@@ -374,30 +352,7 @@
         <!-- test (write) -->
         <div id="test_write">
             <div class="container">
-                <div class="jumbotron mt-5" id="start_write">
-                    <h1 class="display-4">Write</h1>
-                    <p class="lead">In this test you have to write the correct pair.</p>
-                    <hr class="my-4">
-                    <p class="lead">Choose which tags you want to test:</p>
-                    <form class="mt-3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="english_words_write" value="english_words">
-                                    <label class="custom-control-label ml-5" for="english_words_write">English words</label>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-check form-check-inline">
-                                    <input class="custom-control-input" type="checkbox" id="spanish_words_write" value="spanish_words">
-                                    <label class="custom-control-label ml-5" for="spanish_words_write">Spanish words</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button role="button" class="btn btn-primary mt-5" href="#" id="start_write_button">Start test</button>
-                    </form>
-                </div>
-                <div class="jumbotron mt-5" id="write_window">
+                <div class="jumbotron mt-5">
                     <h1 class="display-4">Hello</h1>
                     <hr class="my-4">
                     <form>
