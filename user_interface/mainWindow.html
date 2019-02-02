@@ -67,14 +67,6 @@
                 </div>
             </div>
         </nav>
-        <!-- progress bar -->
-        <div id="progress_bar">
-            <div class="container mt-5">
-                <div class="progress" style="height: 20px;">
-                    <div id="positive_progress" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                </div>
-            </div>
-        </div>
         <!-- title page -->
         <div id="title_page"><!-- add titlepage text-->
             <div class="container mt-5">
@@ -288,18 +280,18 @@
                     <hr class="my-4">
                     <div class="row" id="test_type_buttons">
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="browse_button"><h1>Browse</h1></button>
+                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="browse_button"><h5>Browse</h5></button>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="choices_button"><h1>Choices</h1></button>
+                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="choices_button"><h5>Choices</h5></button>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;"id="write_button"><h1>Write</h1></button>
+                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;"id="write_button"><h5>Write</h5></button>
                         </div>
                     </div>
                     <div class="row mt-5 justify-content-md-center">
                         <div class="custom-control custom-switch" id="reversed">
-                            <input type="checkbox" class="custom-control-input" id="switch_reversed">
+                            <input type="checkbox" class="custom-control-input w-100" data-size="lg" id="switch_reversed">
                             <label class="custom-control-label" for="switch_reversed">Reverse</label>
                         </div>
                     </div>
@@ -309,6 +301,11 @@
         <!-- test (browsing) -->
         <div id="test_browse">
             <div class="container">
+                <div class="container mt-5">
+                    <div class="progress" style="height: 20px;">
+                        <div id="positive_progress" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    </div>
+                </div>
                 <div class="jumbotron mt-3">
                     <div class="row">
                         <h1 class="display-4">Flip a card</h1>
@@ -349,14 +346,32 @@
                 <div class="jumbotron mt-5">
                     <h1 class="display-4">Hello</h1>
                     <hr class="my-4">
-                    <p class="lead">Choose one from these options:</p>
-                    <div class="list-group">
-                        <li class="list-group-item list-group-item-action" id="option_1">Option 1</li>
-                        <li class="list-group-item list-group-item-action" id="option_2">Option 2</li>
-                        <li class="list-group-item list-group-item-action active" id="option_3">Option 3</li>
-                        <li class="list-group-item list-group-item-action" id="option_4">Option 4</li>
+                    <div class="row">
+                        <div class="col-8">
+                            <p class="lead">Choose one from these options:</p>
+                            <div class="list-group">
+                                <li class="list-group-item list-group-item-action" id="option_1">Option 1</li>
+                                <li class="list-group-item list-group-item-action" id="option_2">Option 2</li>
+                                <li class="list-group-item list-group-item-action active" id="option_3">Option 3</li>
+                                <li class="list-group-item list-group-item-action" id="option_4">Option 4</li>
+                            </div>
+                            <button role="button" class="btn btn-primary mt-5" href="#" id="choices_check_answer">Check answer</button>
+                        </div>
+                        <div class="col-4">
+                            <p class="mt-2">Correct</p>
+                            <div class="progress mt-2" style="height: 20px;">
+                                <div id="choices_correct" class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10">5</div>
+                            </div>
+                            <p class="mt-2">Wrong</p>
+                            <div class="progress mt-2" style="height: 20px;">
+                                <div id="choices_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 90%;" aria-valuenow="9" aria-valuemin="0" aria-valuemax="10">9</div>
+                            </div>
+                            <p class="mt-2">Answered</p>
+                            <div class="progress mt-2" style="height: 20px;">
+                                <div id="choices_count" class="progress-bar bg-dark" role="progressbar" style="width: 30%;" aria-valuenow="3" aria-valuemin="0" aria-valuemax="10">3 / 10</div>
+                            </div>
+                        </div>
                     </div>
-                    <button role="button" class="btn btn-primary mt-5" href="#" id="choices_check_answer">Check answer</button>
                 </div>
             </div>
         </div>
@@ -366,13 +381,31 @@
                 <div class="jumbotron mt-5">
                     <h1 class="display-4">Hello</h1>
                     <hr class="my-4">
-                    <form>
-                        <div class="form-group">
-                            <label for="write_answer">Write the correct answer:</label>
-                            <input type="text" class="form-control" id="write_answer">
+                    <div class="row">
+                        <div class="col-8">
+                            <form>
+                                <div class="form-group">
+                                    <label for="write_answer">Write the correct answer:</label>
+                                    <input type="text" class="form-control" id="write_answer">
+                                </div>
+                                <button type="submit" class="btn btn-primary" href="#" id="check_write_answer">Check answer</button>
+                            </form>
                         </div>
-                        <button type="submit" class="btn btn-primary" href="#" id="check_write_answer">Check answer</button>
-                    </form>
+                        <div class="col-4">
+                            <p class="mt-2">Correct</p>
+                            <div class="progress mt-2" style="height: 20px;">
+                                <div id="write_correct" class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10">5</div>
+                            </div>
+                            <p class="mt-2">Wrong</p>
+                            <div class="progress mt-2" style="height: 20px;">
+                                <div id="write_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 90%;" aria-valuenow="9" aria-valuemin="0" aria-valuemax="10">9</div>
+                            </div>
+                            <p class="mt-2">Answered</p>
+                            <div class="progress mt-2" style="height: 20px;">
+                                <div id="write_count" class="progress-bar bg-dark" role="progressbar" style="width: 30%;" aria-valuenow="3" aria-valuemin="0" aria-valuemax="10">3 / 10</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -521,6 +554,23 @@
                     </div>
                     <hr class="my-4">
                     <button type="button" class="btn btn-primary" id="dismiss_alert">Next question</button>
+                </div>
+            </div>
+        </div>
+        <div id="tag_summary">
+            <div class="container">
+                <div class="jumbotron mt-5">
+                    <div class="row">
+                        <h1 class="display-4" id="tag_summary_headline">TagName</h1>
+                        <button type="button" class="btn btn-primary btn-lg ml-auto" id="browse_back">Continue to test selection</button>
+                    </div>
+                    <p class="lead mt-3">Here is a summary of your answers: </p>
+                    <hr class="my-4">
+                    <h1>You got <span id="correct_summary">3</span> out of <span id="wrong_summary">5</span> correctly.</h1>
+                    <div class="row ml-1 mt-5">
+                            <h1 id="success_rate">Overall progress: 69%</h1><span class="badge badge-pill badge-success ml-3"><h1 id="improvement">+15%</h1></span>
+                            <span class="badge badge-pill badge-danger ml-3"><h1 id="impairment">-20%</h1></span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,5 @@
 // all divs to hide on the beggining
 var controlButtons = [
-    'progress_bar',
     'title_page',
     'card_list',
     'tag_list',
@@ -17,6 +16,7 @@ var controlButtons = [
     'export',
     'correct_answer',
     'wrong_answer',
+    'tag_summary',
 ];
 
 // basic url where django database is running
@@ -144,16 +144,16 @@ function change_flipcard(front, back, is_reversed) {
     }, delay);
 }
 
-function showNextPrevious(type, current_index, max) {
+function showNextPrevious(current_index, max) {
     if (current_index == 0) {
-        $("#" + type + "_previous").hide();
-        $("#" + type + "_next").show();
+        $("#browse_previous").hide();
+        $("#browse_next").show();
     } else if (current_index == max) {
-        $("#" + type + "_next").hide();
-        $("#" + type + "_previous").show();
+        $("#browse_next").hide();
+        $("#browse_previous").show();
     } else {
-        $("#" + type + "_next").show();
-        $("#" + type + "_previous").show();
+        $("#browse_next").show();
+        $("#browse_previous").show();
     }
 }
 
@@ -173,7 +173,7 @@ function browse(all_cards, is_reversed) {
             change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
             update_progress_bar(current_index, count);
         }
-        showNextPrevious("browse", current_index, count);
+        showNextPrevious(current_index, count);
     });
     $("#browse_previous").unbind().click(function() {
         if (current_index > 0) {
@@ -181,7 +181,7 @@ function browse(all_cards, is_reversed) {
             change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
             update_progress_bar(current_index, count);
         }
-        showNextPrevious("browse", current_index, count);
+        showNextPrevious(current_index, count);
     });
     $("#browse_back").unbind().click(function() {
         test_main();
