@@ -97,39 +97,102 @@ function test_main() {
     showOneItem("test_main");
 }
 
+function is_reversed() {
+    if ($("#reversed input:checkbox:checked").length == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function test_type(tag_id) {
     showOneItem("test_type");
     $("#browse_button").unbind().click(function() {
-        load_browse(tag_id);
+        load_browse(tag_id, is_reversed());
     });
     $("#choices_button").unbind().click(function() {
-        choices(tag_id);
+        choices(tag_id, is_reversed());
     });
     $("#write_button").unbind().click(function() {
-        write(tag_id);
+        write(tag_id, is_reversed());
     });
 }
 
 function update_progress_bar(current, max) {
+    current += 1;
+    max += 1;
     var perc = Number(Math.round((current / max) * 100));
     $("#positive_progress").attr("style", "width: " + perc + "%");
+    $("#positive_progress").attr("aria-valuenow", current);
     $("#positive_progress").text(current + " / " + max);
 }
 
-function browse(all_cards) {
-    console.log(all_cards);
+function change_flipcard(front, back, is_reversed) {
+    var delay = 0;
+    if ($("#is_flipped").hasClass("hover")) {
+        $("#is_flipped").toggleClass("hover");
+        delay = 400;
+    }
+    setTimeout(function () {
+        if (is_reversed) {
+            $("#front_text").text(back);
+            $("#back_text").text(front);
+        } else {
+            $("#front_text").text(front);
+            $("#back_text").text(back);
+        }
+    }, delay);
+}
+
+function showNextPrevious(type, current_index, max) {
+    if (current_index == 0) {
+        $("#" + type + "_previous").hide();
+        $("#" + type + "_next").show();
+    } else if (current_index == max) {
+        $("#" + type + "_next").hide();
+        $("#" + type + "_previous").show();
+    } else {
+        $("#" + type + "_next").show();
+        $("#" + type + "_previous").show();
+    }
+}
+
+function browse(all_cards, is_reversed) {
     var count = all_cards.length;
     var current_index = 0;
+    $("#positive_progress").attr("aria-valuemax", count);
     update_progress_bar(current_index ,count);
+    change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
     showOneItem("test_browse");
+    $("#browse_next").show();
+    $("#browse_previous").hide();
     $("#progress_bar").show();
+    $("#browse_next").unbind().click(function() {
+        if (current_index < count){
+            current_index += 1;
+            change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
+            update_progress_bar(current_index, count);
+        }
+        showNextPrevious("browse", current_index, count);
+    });
+    $("#browse_previous").unbind().click(function() {
+        if (current_index > 0) {
+            current_index -= 1;
+            change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
+            update_progress_bar(current_index, count);
+        }
+        showNextPrevious("browse", current_index, count);
+    });
+    $("#browse_back").unbind().click(function() {
+        test_main();
+    });
     $('.flip-card .flip-card-inner').unbind().click( function() {
         $(this).closest('.flip-card').toggleClass('hover');
-        $(this).css('transform, rotateX(180deg)');
+
     });
 }
 
-function load_browse(tag_id) {
+function load_browse(tag_id, is_reversed) {
     var all_cards = new Array();
     var index = 0;
     load_information("tags/" + tag_id).done(function(tag_info) {
@@ -139,7 +202,7 @@ function load_browse(tag_id) {
                 all_cards[index] = card_info;
                 index += 1;
                 if ((index + 1) == all_card_ids.length) {
-                    browse(all_cards);
+                    browse(all_cards, is_reversed);
                 }
             });
         }
