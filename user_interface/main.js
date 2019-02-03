@@ -294,9 +294,11 @@ function show_all_choices() {
 // activates one on the beggining
 function activate_one() {
     for (var i = 1; i < 5; i += 1) {
-        if ($("#option_" + i).is("visible")) {
-            $(this).addClass("active");
-            console.log(i + true);
+        $("#option_" + i).removeClass("active");
+    }
+    for (var i = 1; i < 5; i += 1) {
+        if ($("#option_" + i).is(":visible")) {
+            $("#option_" + i).addClass("active");
             return;
         }
     }
