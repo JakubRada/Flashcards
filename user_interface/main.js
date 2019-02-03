@@ -83,6 +83,7 @@ function create_tag_object(id, tag_name, success_rate, card_count, cards) {
     };
 }
 
+// choose tag to test
 function test_main() {
     $("#test_tags_buttons").empty();
     load_information("tags").done(function(all_tags) {
@@ -97,6 +98,7 @@ function test_main() {
     show_one_item("test_main");
 }
 
+// handles the reversed card switch
 function is_reversed() {
     if ($("#reversed input:checkbox:checked").length == 1) {
         return true;
@@ -105,6 +107,7 @@ function is_reversed() {
     }
 }
 
+// choose type of test
 function test_type(tag_id) {
     show_one_item("test_type");
     $("#browse_button").unbind().click(function() {
@@ -118,6 +121,7 @@ function test_type(tag_id) {
     });
 }
 
+// updates progress bar for browse test type
 function update_browse_progress_bar(current, max) {
     current += 1;
     max += 1;
@@ -126,28 +130,25 @@ function update_browse_progress_bar(current, max) {
     $("#positive_progress").text(current + " / " + max);
 }
 
-function change_flipcard(front, back, is_reversed) {
+// flips card back before changing words
+function change_flipcard(front, back) {
     var delay = 0;
     if ($("#is_flipped").hasClass("hover")) {
         $("#is_flipped").toggleClass("hover");
         delay = 400;
     }
     setTimeout(function () {
-        if (is_reversed) {
-            $("#front_text").text(back);
-            $("#back_text").text(front);
-        } else {
-            $("#front_text").text(front);
-            $("#back_text").text(back);
-        }
+        $("#front_text").text(front);
+        $("#back_text").text(back);
     }, delay);
 }
 
+// handles visibility of next and previous button in browse test type
 function show_next_previous(current_index, max) {
     if (current_index == 0) {
         $("#browse_previous").hide();
         $("#browse_next").show();
-    } else if (current_index == max) {
+    } else if (current_index + 1 == max) {
         $("#browse_next").hide();
         $("#browse_previous").show();
     } else {
@@ -156,12 +157,13 @@ function show_next_previous(current_index, max) {
     }
 }
 
-function browse(all_cards, is_reversed) {
+// handles browse test type
+function browse(all_cards) {
     var count = all_cards.length;
     var current_index = 0;
     $("#positive_progress").attr("aria-valuemax", count);
     update_browse_progress_bar(current_index ,count);
-    change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
+    change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back);
     show_one_item("test_browse");
     $("#browse_next").show();
     $("#browse_previous").hide();
@@ -169,7 +171,7 @@ function browse(all_cards, is_reversed) {
     $("#browse_next").unbind().click(function() {
         if (current_index < count){
             current_index += 1;
-            change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
+            change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back);
             update_browse_progress_bar(current_index, count);
         }
         show_next_previous(current_index, count);
@@ -177,7 +179,7 @@ function browse(all_cards, is_reversed) {
     $("#browse_previous").unbind().click(function() {
         if (current_index > 0) {
             current_index -= 1;
-            change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
+            change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back);
             update_browse_progress_bar(current_index, count);
         }
         show_next_previous(current_index, count);
@@ -191,22 +193,29 @@ function browse(all_cards, is_reversed) {
     });
 }
 
+// loads all cards from specified tag
 function load_cards(type, tag_id, is_reversed) {
     var all_cards = new Array();
     var index = 0;
+    var meta;
     load_information("tags/" + tag_id).done(function(tag_info) {
         var all_card_ids = tag_info.cards;
         for (var i in all_card_ids) {
             load_information("cards/" + all_card_ids[i]).done(function(card_info) {
+                if (is_reversed) {
+                    meta = card_info.card_front;
+                    card_info.card_front = card_info.card_back;
+                    card_info.card_back = meta;
+                }
                 all_cards[index] = card_info;
                 index += 1;
-                if ((index + 1) == all_card_ids.length) {
+                if (index == all_card_ids.length) {
                     if (type == "browse"){
-                        browse(all_cards, is_reversed);
+                        browse(all_cards);
                     } else if (type == "choices") {
-                        choices(all_cards, is_reversed);
+                        choices(all_cards.length, 0, 0, 0, all_cards, tag_info);
                     } else {
-                        write(all_cards, is_reversed);
+                        write(all_cards);
                     }
                 }
             });
@@ -214,23 +223,17 @@ function load_cards(type, tag_id, is_reversed) {
     });
 }
 
+// updates progress bars in write and choices test types
 function update_write_choices_progress_bar(type, correct, wrong, max) {
     $("#" + type + "_correct").attr("style", "width: " + (correct / max) * 100 + "%;");
     $("#" + type + "_wrong").attr("style", "width: " + (wrong / max) * 100 + "%;");
-    $("#" + type + "_count").attr("style", "width: " + ((correct + wrong) / max) * 100 + "%;");
+    $("#" + type + "_count").attr("style", "width: " + (1 - (correct + wrong) / max) * 100 + "%;");
     $("#" + type + "_correct").text(correct);
     $("#" + type + "_wrong").text(wrong);
-    $("#" + type + "_count").text(correct + wrong);
+    $("#" + type + "_count").text(max - (correct + wrong));
 }
 
-// content of choices test
-function choices(all_cards, is_reversed) {
-    show_one_item('test_choices');
-    var count = all_cards.length;
-    var correct = 0;
-    var wrong = 0;
-    var current_word_index = 0;
-    update_write_choices_progress_bar("choices", correct, wrong, count);
+function choose() {
     $('#option_1').unbind().click( function() {
         one_choice(1);
     });
@@ -243,7 +246,134 @@ function choices(all_cards, is_reversed) {
     $('#option_4').unbind().click( function() {
         one_choice(4);
     });
-    $('#start_choices').show();
+}
+
+function get_random_choices(max, without) {
+    var value;
+    var impossible = [without];
+    var return_list = [null, null, null];
+    var cycles = 3;
+    if (max < 4) {
+        cycles = max - 1;
+    }
+    for (var i = 0; i < cycles; i += 1) {
+        value = without;
+        while (impossible.includes(value)) {
+            value = Math.floor(Math.random() * Math.floor(max));
+        }
+        return_list[i] = value;
+        impossible[i + 1] = value;
+    }
+    return return_list;
+}
+
+function get_random_index() {
+    var return_list = new Array(4);
+    var used = [null];
+    var value = null;
+    for (var i = 0; i < 4; i += 1) {
+        while (used.includes(value)) {
+            value = Math.floor(Math.random() * Math.floor(4));
+        }
+        return_list[i] = value;
+        used[i] = value;
+    }
+    return return_list;
+}
+
+function show_all_choices() {
+    for (var i = 1; i <= 4; i += 1) {
+        $("#option_" + i).show();
+    }
+}
+
+function activate_one() {
+    for (var i = 1; i < 5; i += 1) {
+        if ($("#option_" + i).is("visible")) {
+            $(this).addClass("active");
+            console.log(i + true);
+            return;
+        }
+    }
+}
+
+function choices(count, correct, wrong, current_word_index, all_cards, tag_info) {
+    update_write_choices_progress_bar("choices", correct, wrong, count);
+    current_card = all_cards[current_word_index];
+    $("#choices_headline").text(current_card.card_front)
+    show_all_choices();
+    show_one_item('test_choices');
+    var other_choices_indexes = get_random_choices(count, current_word_index);
+    var options = get_random_index();
+    var selected;
+    for (var i = 0; i < 4; i += 1) {
+        if (options[i] == 0) {
+            $("#option_" + (i + 1)).text(current_card.card_back);
+        } else {
+            if (other_choices_indexes[options[i] - 1] == null) {
+                $("#option_" + (i + 1)).hide();
+            } else {
+                $("#option_" + (i + 1)).text(all_cards[other_choices_indexes[options[i] - 1]].card_back);
+            }
+        }
+    }
+    activate_one();
+    choose();
+    $("#choices_check_answer").unbind().click(function() {
+        selected = selected_choice();
+        $("#test_choices").hide();
+        if (selected == options.indexOf(0)) {
+            correct += 1;
+            $("#correct_headline").text(current_card.card_front);
+            $("#correct_correct_answer").text(current_card.card_back);
+            $("#correct_answer").show();
+        } else {
+            wrong += 1;
+            $("#wrong_headline").text(current_card.card_front);
+            $("#wrong_correct_answer").text(current_card.card_back);
+            $("#wrong_wrong_answer").text(all_cards[other_choices_indexes[options[selected] - 1]].card_back);
+            $("#wrong_answer").show();
+        }
+        current_word_index += 1;
+        $(".dismiss").unbind().click(function() {
+            if (current_word_index == count) {
+                summary(tag_info, correct, count);
+            } else {
+                choices(count, correct, wrong, current_word_index, all_cards, tag_info);
+            }
+        });
+    });
+}
+
+function summary(tag_info, correct, count) {
+    var success_rate = Math.round((correct / count) * 100);
+    show_one_item("tag_summary");
+    $("#tag_summary_headline").text(tag_info.tag_name);
+    $("#success_rate").text(success_rate + "%");
+    $("#total_summary").text(count);
+    $("#correct_summary").text(correct);
+    var difference = success_rate - tag_info.success_rate;
+    if (difference < 0) {
+        $("#improvement").hide();
+        $("#impairment").text(difference + "%");
+        $("#impairment").show();
+    } else {
+        $("#impairment").hide();
+        $("#improvement").text("+" + difference + "%");
+        $("#improvement").show();
+    }
+    $("#summary_back").unbind().click(function() {
+        show_one_item("test_main");
+    });
+}
+
+function selected_choice() {
+    for (var i = 1; i < 5; i += 1) {
+        if ($("#option_" + i).hasClass("active")) {
+            return i - 1;
+        }
+    }
+    return null;
 }
 
 // content of write test
@@ -373,6 +503,7 @@ function edit_tag(tag) {
     });
 }
 
+// handles create card function
 function create_card() {
     $("#create_card_tags").empty();
     $("#front_side_create").val("");
@@ -413,6 +544,7 @@ function create_card() {
     });
 }
 
+// handels create tag function
 function create_tag() {
     $("#tag_name_create").val("");
     show_one_item('create_tag');

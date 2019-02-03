@@ -346,18 +346,20 @@
         <div id="test_choices">
             <div class="container">
                 <div class="jumbotron mt-5">
-                    <h1 class="display-4">Hello</h1>
+                    <h1 class="display-4" id="choices_headline">Hello</h1>
                     <hr class="my-4">
                     <div class="row">
                         <div class="col-8">
                             <p class="lead">Choose one from these options:</p>
-                            <div class="list-group">
-                                <li class="list-group-item list-group-item-action active" id="option_1">Option 1</li>
+                            <div class="list-group" id="choices_list">
+                                <li class="list-group-item" hidden></li>
+                                <li class="list-group-item list-group-item-action" id="option_1">Option 1</li>
                                 <li class="list-group-item list-group-item-action" id="option_2">Option 2</li>
                                 <li class="list-group-item list-group-item-action" id="option_3">Option 3</li>
                                 <li class="list-group-item list-group-item-action" id="option_4">Option 4</li>
+                                <li class="list-group-item" hidden></li>
                             </div>
-                            <button role="button" class="btn btn-primary mt-5" href="#" id="choices_check_answer">Check answer</button>
+                            <button role="button" class="btn btn-primary mt-5" id="choices_check_answer">Check answer</button>
                         </div>
                         <div class="col-4">
                             <p class="mt-2">Correct</p>
@@ -368,7 +370,7 @@
                             <div class="progress mt-2" style="height: 20px;">
                                 <div id="choices_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 90%;">9</div>
                             </div>
-                            <p class="mt-2">Answered</p>
+                            <p class="mt-2">Remaining</p>
                             <div class="progress mt-2" style="height: 20px;">
                                 <div id="choices_count" class="progress-bar bg-dark" role="progressbar" style="width: 30%;">3 / 10</div>
                             </div>
@@ -531,7 +533,14 @@
                     <h4 class="alert-heading">Well done!</h4>
                     <p>Your answer is correct!</p>
                     <hr class="my-4">
-                    <button type="button" class="btn btn-primary" id="dismiss_alert">Next question</button>
+                    <h5 class="alert-heading" id="correct_headline">CardFront</h5>
+                    <div class="card text-success">
+                        <div class="card-body" id="correct_correct_answer">
+                            /correct answer/
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <button type="button" class="btn btn-primary dismiss">Next question</button>
                 </div>
             </div>
         </div>
@@ -539,23 +548,24 @@
         <div id="wrong_answer">
             <div class="container mt-5">
                 <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-heading">Better luck next time!</h4>
-                    <p>Your answer is incorrect!</p>
+                    <h2 class="alert-heading">Better luck next time!</h2>
+                    <p class="lead">Your answer is incorrect!</p>
                     <hr class="my-4">
-                    <p>Your answer:</p>
-                    <div class="card">
-                        <div class="card-body" id="wrong_answer">
+                    <h4 class="alert-heading" id="wrong_headline">CardFront</h4>
+                    <p class="lead mt-3">Your answer:</p>
+                    <div class="card text-danger">
+                        <div class="card-body" id="wrong_wrong_answer">
                             /written answer/
                         </div>
                     </div>
-                    <p>correct answer:</p>
-                    <div class="card">
-                        <div class="card-body" id="correct_answer">
+                    <p class="lead mt-3">Correct answer:</p>
+                    <div class="card text-success">
+                        <div class="card-body" id="wrong_correct_answer">
                             /correct answer/
                         </div>
                     </div>
                     <hr class="my-4">
-                    <button type="button" class="btn btn-primary" id="dismiss_alert">Next question</button>
+                    <button type="button" class="btn btn-primary dismiss">Next question</button>
                 </div>
             </div>
         </div>
@@ -565,14 +575,14 @@
                 <div class="jumbotron mt-5">
                     <div class="row">
                         <h1 class="display-4" id="tag_summary_headline">TagName</h1>
-                        <button type="button" class="btn btn-primary btn-lg ml-auto" id="browse_back">Continue to test selection</button>
+                        <button type="button" class="btn btn-primary btn-lg ml-auto" id="summary_back">Continue to test selection</button>
                     </div>
                     <p class="lead mt-3">Here is a summary of your answers: </p>
                     <hr class="my-4">
-                    <h1>You got <span id="correct_summary">3</span> out of <span id="wrong_summary">5</span> correctly.</h1>
+                    <h1>You got <span id="correct_summary">3</span> out of <span id="total_summary">5</span> correctly.</h1>
                     <div class="row ml-1 mt-5">
-                            <h1 id="success_rate">Overall progress: 69%</h1><span class="badge badge-pill badge-success ml-3"><h1 id="improvement">+15%</h1></span>
-                            <span class="badge badge-pill badge-danger ml-3"><h1 id="impairment">-20%</h1></span>
+                            <h1>Overall progress: <span id="success_rate">69%</span></h1><h1><span class="badge badge-pill badge-success ml-3" id="improvement">+15%</span></h1>
+                            <h1><span class="badge badge-pill badge-danger ml-3" id="impairment">-20%</span></h1>
                     </div>
                 </div>
             </div>
