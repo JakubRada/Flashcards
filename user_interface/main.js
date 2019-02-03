@@ -23,7 +23,7 @@ var controlButtons = [
 var database_path = "http://127.0.0.1:8000/cards/";
 
 // hides everything
-function hideAll() {
+function hide_all() {
     for (var i = 0; i < controlButtons.length; i += 1) {
         $('#' + controlButtons[i]).hide();
     }
@@ -31,18 +31,18 @@ function hideAll() {
 
 // showing title page
 function reset() {
-    hideAll();
+    hide_all();
     $('#title_page').show();
 }
 
 // showing one item based on passed argument
-function showOneItem(item) {
-    hideAll();
+function show_one_item(item) {
+    hide_all();
     $('#' + item).show();
 }
 
 // highlighting selected choice in choice-based test
-function oneChoice(choice_num) {
+function one_choice(choice_num) {
     for (var i = 1; i <= 4; i += 1) {
         if (i == choice_num) {
             $('#option_' + i).addClass('active');
@@ -94,7 +94,7 @@ function test_main() {
             }).appendTo("#test_tags_buttons");
         }
     });
-    showOneItem("test_main");
+    show_one_item("test_main");
 }
 
 function is_reversed() {
@@ -106,24 +106,23 @@ function is_reversed() {
 }
 
 function test_type(tag_id) {
-    showOneItem("test_type");
+    show_one_item("test_type");
     $("#browse_button").unbind().click(function() {
-        load_browse(tag_id, is_reversed());
+        load_cards("browse", tag_id, is_reversed());
     });
     $("#choices_button").unbind().click(function() {
-        choices(tag_id, is_reversed());
+        load_cards("choices", tag_id, is_reversed());
     });
     $("#write_button").unbind().click(function() {
-        write(tag_id, is_reversed());
+        load_cards("write", tag_id, is_reversed());
     });
 }
 
-function update_progress_bar(current, max) {
+function update_browse_progress_bar(current, max) {
     current += 1;
     max += 1;
     var perc = Number(Math.round((current / max) * 100));
     $("#positive_progress").attr("style", "width: " + perc + "%");
-    $("#positive_progress").attr("aria-valuenow", current);
     $("#positive_progress").text(current + " / " + max);
 }
 
@@ -144,7 +143,7 @@ function change_flipcard(front, back, is_reversed) {
     }, delay);
 }
 
-function showNextPrevious(current_index, max) {
+function show_next_previous(current_index, max) {
     if (current_index == 0) {
         $("#browse_previous").hide();
         $("#browse_next").show();
@@ -161,9 +160,9 @@ function browse(all_cards, is_reversed) {
     var count = all_cards.length;
     var current_index = 0;
     $("#positive_progress").attr("aria-valuemax", count);
-    update_progress_bar(current_index ,count);
+    update_browse_progress_bar(current_index ,count);
     change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
-    showOneItem("test_browse");
+    show_one_item("test_browse");
     $("#browse_next").show();
     $("#browse_previous").hide();
     $("#progress_bar").show();
@@ -171,17 +170,17 @@ function browse(all_cards, is_reversed) {
         if (current_index < count){
             current_index += 1;
             change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
-            update_progress_bar(current_index, count);
+            update_browse_progress_bar(current_index, count);
         }
-        showNextPrevious(current_index, count);
+        show_next_previous(current_index, count);
     });
     $("#browse_previous").unbind().click(function() {
         if (current_index > 0) {
             current_index -= 1;
             change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back, is_reversed);
-            update_progress_bar(current_index, count);
+            update_browse_progress_bar(current_index, count);
         }
-        showNextPrevious(current_index, count);
+        show_next_previous(current_index, count);
     });
     $("#browse_back").unbind().click(function() {
         test_main();
@@ -192,7 +191,7 @@ function browse(all_cards, is_reversed) {
     });
 }
 
-function load_browse(tag_id, is_reversed) {
+function load_cards(type, tag_id, is_reversed) {
     var all_cards = new Array();
     var index = 0;
     load_information("tags/" + tag_id).done(function(tag_info) {
@@ -202,40 +201,54 @@ function load_browse(tag_id, is_reversed) {
                 all_cards[index] = card_info;
                 index += 1;
                 if ((index + 1) == all_card_ids.length) {
-                    browse(all_cards, is_reversed);
+                    if (type == "browse"){
+                        browse(all_cards, is_reversed);
+                    } else if (type == "choices") {
+                        choices(all_cards, is_reversed);
+                    } else {
+                        write(all_cards, is_reversed);
+                    }
                 }
             });
         }
     });
 }
 
+function update_write_choices_progress_bar(type, correct, wrong, max) {
+    $("#" + type + "_correct").attr("style", "width: " + (correct / max) * 100 + "%;");
+    $("#" + type + "_wrong").attr("style", "width: " + (wrong / max) * 100 + "%;");
+    $("#" + type + "_count").attr("style", "width: " + ((correct + wrong) / max) * 100 + "%;");
+    $("#" + type + "_correct").text(correct);
+    $("#" + type + "_wrong").text(wrong);
+    $("#" + type + "_count").text(correct + wrong);
+}
+
 // content of choices test
-function choices(tag_id) {
-    showOneItem('test_choices');
-    $('#start_choices_button').unbind().click( function(event) {
-        event.preventDefault();
-        $('#start_choices').hide();
-        $('#progress_bar').show();
-        $('#choices_window').show();
-        $('#option_1').unbind().click( function() {
-            oneChoice(1);
-        });
-        $('#option_2').unbind().click( function() {
-            oneChoice(2);
-        });
-        $('#option_3').unbind().click( function() {
-            oneChoice(3);
-        });
-        $('#option_4').unbind().click( function() {
-            oneChoice(4);
-        });
+function choices(all_cards, is_reversed) {
+    show_one_item('test_choices');
+    var count = all_cards.length;
+    var correct = 0;
+    var wrong = 0;
+    var current_word_index = 0;
+    update_write_choices_progress_bar("choices", correct, wrong, count);
+    $('#option_1').unbind().click( function() {
+        one_choice(1);
+    });
+    $('#option_2').unbind().click( function() {
+        one_choice(2);
+    });
+    $('#option_3').unbind().click( function() {
+        one_choice(3);
+    });
+    $('#option_4').unbind().click( function() {
+        one_choice(4);
     });
     $('#start_choices').show();
 }
 
 // content of write test
 function write(tag_id) {
-    showOneItem('test_write');
+    show_one_item('test_write');
     $('#write_window').hide();
     $('#start_write_button').unbind().click( function(event) {
         event.preventDefault();
@@ -249,7 +262,7 @@ function write(tag_id) {
 // listing and editing/deleting cards
 function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
-    showOneItem("card_list");
+    show_one_item("card_list");
     load_information("cards").done(function(card_list) {
         for (var i in card_list) {
             load_information("cards/" + card_list[i].id).done(function(card_info) {
@@ -303,7 +316,7 @@ function edit_card(card) {
                 var card_object = create_card_object(card.id, front_input, back_input, checked);
                 console.log(card_object);
                 $("#created").modal("toggle");
-                showOneItem("card_list");
+                show_one_item("card_list");
             }
         });
     });
@@ -312,7 +325,7 @@ function edit_card(card) {
 // listing and editing/deleting tags
 function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
-    showOneItem('tag_list');
+    show_one_item('tag_list');
     load_information("tags").done(function(tag_list) {
         for (var i in tag_list) {
             load_information("tags/" + tag_list[i].id).done(function(tag_info) {
@@ -352,7 +365,7 @@ function edit_tag(tag) {
                 } else {
                     var tag_object = create_tag_object(tag.id, name_input, tag.success_rate, tag.card_count, tag.cards);
                     console.log(tag_object);
-                    showOneItem("tag_list");
+                    show_one_item("tag_list");
                     $("#created").modal("toggle");
                 }
             });
@@ -364,7 +377,7 @@ function create_card() {
     $("#create_card_tags").empty();
     $("#front_side_create").val("");
     $("#back_side_create").val("");
-    showOneItem('create_card');
+    show_one_item('create_card');
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
         var tag;
@@ -402,7 +415,7 @@ function create_card() {
 
 function create_tag() {
     $("#tag_name_create").val("");
-    showOneItem('create_tag');
+    show_one_item('create_tag');
     $("#save_new_tag").unbind().click(function(event) {
         var name_input = $("#tag_name_create").val();
         var all_tags_names = new Array();
@@ -458,10 +471,10 @@ $(document).ready(function() {
     });
     $('#import_button').unbind().click( function(event) {
         event.preventDefault();
-        showOneItem('import');
+        show_one_item('import');
     });
     $('#export_button').unbind().click( function(event) {
         event.preventDefault();
-        showOneItem('export');
+        show_one_item('export');
     });
 });
