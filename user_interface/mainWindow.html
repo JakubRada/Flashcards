@@ -383,7 +383,7 @@
         <div id="test_write">
             <div class="container">
                 <div class="jumbotron mt-5">
-                    <h1 class="display-4">Hello</h1>
+                    <h1 class="display-4" id="write_headline">Hello</h1>
                     <hr class="my-4">
                     <div class="row">
                         <div class="col-8">
@@ -392,7 +392,7 @@
                                     <label for="write_answer">Write the correct answer:</label>
                                     <input type="text" class="form-control" id="write_answer">
                                 </div>
-                                <button type="submit" class="btn btn-primary" href="#" id="check_write_answer">Check answer</button>
+                                <button role="button" class="btn btn-primary" id="check_write_answer">Check answer</button>
                             </form>
                         </div>
                         <div class="col-4">
@@ -404,7 +404,7 @@
                             <div class="progress mt-2" style="height: 20px;">
                                 <div id="write_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 90%;">9</div>
                             </div>
-                            <p class="mt-2">Answered</p>
+                            <p class="mt-2">Remaining</p>
                             <div class="progress mt-2" style="height: 20px;">
                                 <div id="write_count" class="progress-bar bg-dark" role="progressbar" style="width: 30%;">3 / 10</div>
                             </div>
@@ -489,7 +489,7 @@
                 </div>
             </div>
         </div>
-        <!-- message showed when entered already existing tag name -->
+        <!-- message shown when entered already existing tag name -->
         <div id="wrong_tag_modal">
             <div class="modal fade" id="wrong_tag" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -508,6 +508,7 @@
                 </div>
             </div>
         </div>
+        <!-- message shown after successful creation -->
         <div id="created_modal">
             <div class="modal fade" id="created" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">

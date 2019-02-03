@@ -215,7 +215,7 @@ function load_cards(type, tag_id, is_reversed) {
                     } else if (type == "choices") {
                         choices(all_cards.length, 0, 0, 0, all_cards, tag_info);
                     } else {
-                        write(all_cards);
+                        write(all_cards.length, 0, 0, 0, all_cards, tag_info);
                     }
                 }
             });
@@ -233,6 +233,7 @@ function update_write_choices_progress_bar(type, correct, wrong, max) {
     $("#" + type + "_count").text(max - (correct + wrong));
 }
 
+// change items to active if selected
 function choose() {
     $('#option_1').unbind().click( function() {
         one_choice(1);
@@ -248,6 +249,7 @@ function choose() {
     });
 }
 
+// random selection of answers for choose test type
 function get_random_choices(max, without) {
     var value;
     var impossible = [without];
@@ -267,6 +269,7 @@ function get_random_choices(max, without) {
     return return_list;
 }
 
+// random placement of answers for choose test type
 function get_random_index() {
     var return_list = new Array(4);
     var used = [null];
@@ -281,12 +284,14 @@ function get_random_index() {
     return return_list;
 }
 
+// show all choices if there are less than 4 cards
 function show_all_choices() {
     for (var i = 1; i <= 4; i += 1) {
         $("#option_" + i).show();
     }
 }
 
+// activates one on the beggining
 function activate_one() {
     for (var i = 1; i < 5; i += 1) {
         if ($("#option_" + i).is("visible")) {
@@ -297,9 +302,10 @@ function activate_one() {
     }
 }
 
+// handles change of choices in choose test type
 function choices(count, correct, wrong, current_word_index, all_cards, tag_info) {
     update_write_choices_progress_bar("choices", correct, wrong, count);
-    current_card = all_cards[current_word_index];
+    var current_card = all_cards[current_word_index];
     $("#choices_headline").text(current_card.card_front)
     show_all_choices();
     show_one_item('test_choices');
@@ -345,6 +351,7 @@ function choices(count, correct, wrong, current_word_index, all_cards, tag_info)
     });
 }
 
+// show summary of tested  tag
 function summary(tag_info, correct, count) {
     var success_rate = Math.round((correct / count) * 100);
     show_one_item("tag_summary");
@@ -362,11 +369,13 @@ function summary(tag_info, correct, count) {
         $("#improvement").text("+" + difference + "%");
         $("#improvement").show();
     }
+    console.log(create_tag_object(tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
         show_one_item("test_main");
     });
 }
 
+// finds what item was selected last
 function selected_choice() {
     for (var i = 1; i < 5; i += 1) {
         if ($("#option_" + i).hasClass("active")) {
@@ -377,16 +386,45 @@ function selected_choice() {
 }
 
 // content of write test
-function write(tag_id) {
+function write(count, correct, wrong, current_word_index, all_cards, tag_info) {
+    update_write_choices_progress_bar("write", correct, wrong, count);
+    var current_card = all_cards[current_word_index];
+    $("#write_headline").text(current_card.card_front);
+    $("#write_answer").val("");
     show_one_item('test_write');
-    $('#write_window').hide();
-    $('#start_write_button').unbind().click( function(event) {
+    $("#check_write_answer").unbind().click(function(event) {
         event.preventDefault();
-        $('#start_write').hide();
-        $('#progress_bar').show();
-        $('#write_window').show();
+        var raw_answer = $("#write_answer").val();
+        current_word_index += 1;
+        $("#test_write").hide();
+        if (check_magic(raw_answer, current_card.card_back)) {
+            correct += 1;
+            $("#correct_headline").text(current_card.card_front);
+            $("#correct_correct_answer").text(current_card.card_back);
+            $("#correct_answer").show();
+        } else {
+            wrong += 1;
+            $("#wrong_headline").text(current_card.card_front);
+            $("#wrong_wrong_answer").text(raw_answer);
+            $("#wrong_correct_answer").text(current_card.card_back);
+            $("#wrong_answer").show();
+        }
+        $(".dismiss").unbind().click(function() {
+            if (current_word_index == count) {
+                summary(tag_info, correct, count);
+            } else {
+                write(count, correct, wrong, current_word_index, all_cards, tag_info);
+            }
+        });
     });
-    $('#start_write').show();
+}
+
+function check_magic(raw_input, correct_answer) {
+    if (raw_input == correct_answer) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // listing and editing/deleting cards
