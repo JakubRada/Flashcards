@@ -17,6 +17,7 @@ const controlButtons = [
     'correct_answer',
     'wrong_answer',
     'tag_summary',
+    'loading',
 ];
 
 // basic url where django database is running
@@ -395,7 +396,7 @@ function write(count, correct, wrong, current_word_index, all_cards, tag_info) {
     show_one_item('test_write');
     $("#check_write_answer").unbind().click(function(event) {
         event.preventDefault();
-        var raw_answer = $("#write_answer").val();
+        var raw_answer = $("#write_answer").val().trim();
         current_word_index += 1;
         $("#test_write").hide();
         if (check_magic(raw_answer, current_card.card_back)) {
@@ -467,8 +468,8 @@ function edit_card(card) {
         $("#edit_card").show();
         // gets input information
         $("#save_card_changes").unbind().click(function(event) {
-            var front_input = $("#front_side_edit").val();
-            var back_input = $("#back_side_edit").val();
+            var front_input = $("#front_side_edit").val().trim();
+            var back_input = $("#back_side_edit").val().trim();
             var checked = new Array();
             var index = 0;
             // inputs cannot be blank
@@ -514,7 +515,7 @@ function edit_tag(tag) {
     $("#tag_name_edit").attr("placeholder", tag.tag_name);
     $("#edit_tag").show();
     $("#save_tag_changes").unbind().click(function(event) {
-        var name_input = $("#tag_name_edit").val();
+        var name_input = $("#tag_name_edit").val().trim();
         var all_tags_names = new Array();
         var index = 0;
         if (name_input !== "") {
@@ -557,8 +558,8 @@ function create_card() {
     $("#create_card").show();
     // gets input information
     $("#save_new_card").unbind().click(function(event) {
-        var front_input = $("#front_side_create").val();
-        var back_input = $("#back_side_create").val();
+        var front_input = $("#front_side_create").val().trim();
+        var back_input = $("#back_side_create").val().trim();
         var checked = new Array();
         var index = 0;
         // inputs cannot be blank
@@ -584,7 +585,7 @@ function create_tag() {
     $("#tag_name_create").val("");
     show_one_item('create_tag');
     $("#save_new_tag").unbind().click(function(event) {
-        var name_input = $("#tag_name_create").val();
+        var name_input = $("#tag_name_create").val().trim();
         var all_tags_names = new Array();
         var index = 0;
         if (name_input !== "") {
@@ -606,6 +607,48 @@ function create_tag() {
             });
         }
     });
+}
+
+// handles import of data into the application
+function import_data() {
+    show_one_item('import');
+}
+
+// handles export of data from the database
+function export_data() {
+    $("#export_input").val("");
+    show_one_item('export');
+    $("#confirm_export").unbind().click(function() {
+        $("#loading").show();
+        var filename = $("#export_input").val().trim();
+        if (filename == "") {
+            wrong_export_format("Filename cannot be an empty string!");
+        } else if (filename.includes(" ")) {
+            wrong_export_format("Filename cannot contain spaces!");
+        } else if (contains_special_symbols(filename)) {
+            wrong_export_format("Filename cannot contain special symbols");
+        } else {
+            console.log(filename + ".yml");
+            $("#loading").hide();
+        }
+    });
+}
+
+function contains_special_symbols(string) {
+    var charlist = '1234567890!@#$%^&*()=+[{}];:\'"\\|,<.>/?'.split("");
+    console.log(charlist);
+    for (let char of charlist) {
+        if (string.includes(char)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function wrong_export_format(string) {
+    $("#wrong_export_modal_content").text(string);
+    $("#wrong_export_modal").modal("toggle");
+    export_data();
 }
 
 // main
@@ -638,10 +681,10 @@ $(document).ready(function() {
     });
     $('#import_button').unbind().click( function(event) {
         event.preventDefault();
-        show_one_item('import');
+        import_data();
     });
     $('#export_button').unbind().click( function(event) {
         event.preventDefault();
-        show_one_item('export');
+        export_data();
     });
 });
