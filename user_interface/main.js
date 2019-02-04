@@ -1,5 +1,5 @@
 // all divs to hide on the beggining
-var controlButtons = [
+const controlButtons = [
     'title_page',
     'card_list',
     'tag_list',
@@ -20,11 +20,11 @@ var controlButtons = [
 ];
 
 // basic url where django database is running
-var database_path = "http://127.0.0.1:8000/cards/";
+const database_path = "http://127.0.0.1:8000/cards/";
 
 // hides everything
 function hide_all() {
-    for (var i = 0; i < controlButtons.length; i += 1) {
+    for (let i = 0; i < controlButtons.length; i += 1) {
         $('#' + controlButtons[i]).hide();
     }
 }
@@ -43,7 +43,7 @@ function show_one_item(item) {
 
 // highlighting selected choice in choice-based test
 function one_choice(choice_num) {
-    for (var i = 1; i <= 4; i += 1) {
+    for (let i = 1; i <= 4; i += 1) {
         if (i == choice_num) {
             $('#option_' + i).addClass('active');
         } else {
@@ -87,10 +87,10 @@ function create_tag_object(id, tag_name, success_rate, card_count, cards) {
 function test_main() {
     $("#test_tags_buttons").empty();
     load_information("tags").done(function(all_tags) {
-        for (var i in all_tags) {
+        for (let tag of all_tags) {
             $(
-                '<button type="button" class="btn btn-dark btn-lg btn-block">' + all_tags[i].tag_name + '</button>'
-            ).unbind().click(all_tags[i].id, function(event) {
+                '<button type="button" class="btn btn-dark btn-lg btn-block">' + tag.tag_name + '</button>'
+            ).unbind().click(tag.id, function(event) {
                 test_type(event.data);
             }).appendTo("#test_tags_buttons");
         }
@@ -125,7 +125,7 @@ function test_type(tag_id) {
 function update_browse_progress_bar(current, max) {
     current += 1;
     max += 1;
-    var perc = Number(Math.round((current / max) * 100));
+    let perc = Number(Math.round((current / max) * 100));
     $("#positive_progress").attr("style", "width: " + perc + "%");
     $("#positive_progress").text(current + " / " + max);
 }
@@ -189,7 +189,6 @@ function browse(all_cards) {
     });
     $('.flip-card .flip-card-inner').unbind().click( function() {
         $(this).closest('.flip-card').toggleClass('hover');
-
     });
 }
 
@@ -200,8 +199,8 @@ function load_cards(type, tag_id, is_reversed) {
     var meta;
     load_information("tags/" + tag_id).done(function(tag_info) {
         var all_card_ids = tag_info.cards;
-        for (var i in all_card_ids) {
-            load_information("cards/" + all_card_ids[i]).done(function(card_info) {
+        for (let card_id of all_card_ids) {
+            load_information("cards/" + card_id).done(function(card_info) {
                 if (is_reversed) {
                     meta = card_info.card_front;
                     card_info.card_front = card_info.card_back;
@@ -258,7 +257,7 @@ function get_random_choices(max, without) {
     if (max < 4) {
         cycles = max - 1;
     }
-    for (var i = 0; i < cycles; i += 1) {
+    for (let i = 0; i < cycles; i += 1) {
         value = without;
         while (impossible.includes(value)) {
             value = Math.floor(Math.random() * Math.floor(max));
@@ -274,7 +273,7 @@ function get_random_index() {
     var return_list = new Array(4);
     var used = [null];
     var value = null;
-    for (var i = 0; i < 4; i += 1) {
+    for (let i = 0; i < 4; i += 1) {
         while (used.includes(value)) {
             value = Math.floor(Math.random() * Math.floor(4));
         }
@@ -286,17 +285,17 @@ function get_random_index() {
 
 // show all choices if there are less than 4 cards
 function show_all_choices() {
-    for (var i = 1; i <= 4; i += 1) {
+    for (let i = 1; i <= 4; i += 1) {
         $("#option_" + i).show();
     }
 }
 
 // activates one on the beggining
 function activate_one() {
-    for (var i = 1; i < 5; i += 1) {
+    for (let i = 1; i < 5; i += 1) {
         $("#option_" + i).removeClass("active");
     }
-    for (var i = 1; i < 5; i += 1) {
+    for (let i = 1; i < 5; i += 1) {
         if ($("#option_" + i).is(":visible")) {
             $("#option_" + i).addClass("active");
             return;
@@ -314,7 +313,7 @@ function choices(count, correct, wrong, current_word_index, all_cards, tag_info)
     var other_choices_indexes = get_random_choices(count, current_word_index);
     var options = get_random_index();
     var selected;
-    for (var i = 0; i < 4; i += 1) {
+    for (let i = 0; i < 4; i += 1) {
         if (options[i] == 0) {
             $("#option_" + (i + 1)).text(current_card.card_back);
         } else {
@@ -379,7 +378,7 @@ function summary(tag_info, correct, count) {
 
 // finds what item was selected last
 function selected_choice() {
-    for (var i = 1; i < 5; i += 1) {
+    for (let i = 1; i < 5; i += 1) {
         if ($("#option_" + i).hasClass("active")) {
             return i - 1;
         }
@@ -434,8 +433,8 @@ function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
     show_one_item("card_list");
     load_information("cards").done(function(card_list) {
-        for (var i in card_list) {
-            load_information("cards/" + card_list[i].id).done(function(card_info) {
+        for (let card of card_list) {
+            load_information("cards/" + card.id).done(function(card_info) {
                 $(
                     '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_cards tbody");
@@ -457,9 +456,7 @@ function edit_card(card) {
     $("#edit_card_tags").empty();
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
-        var tag;
-        for (var i in all_tags) {
-            tag = all_tags[i];
+        for (let tag of all_tags) {
             $(
                 '<div class="col"><div class="form-check form-check-inline ml-5"><input class="custom-control-input" type="checkbox" id="' + tag.id + '_edit"><label class="custom-control-label" for="' + tag.id + '_edit">' + tag.tag_name + '</label></div></div>'
             ).appendTo("#edit_card_tags");
@@ -497,8 +494,8 @@ function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
     show_one_item('tag_list');
     load_information("tags").done(function(tag_list) {
-        for (var i in tag_list) {
-            load_information("tags/" + tag_list[i].id).done(function(tag_info) {
+        for (let tag of tag_list) {
+            load_information("tags/" + tag.id).done(function(tag_info) {
                 $(
                     '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
@@ -523,9 +520,9 @@ function edit_tag(tag) {
         if (name_input !== "") {
             event.preventDefault();
             load_information("tags/").done(function(all_tags) {
-                for (var i in all_tags) {
-                    if (tag.tag_name !== all_tags[i].tag_name) {
-                        all_tags_names[index] = all_tags[i].tag_name;
+                for (let tagg of all_tags) {
+                    if (tag.tag_name !== tagg.tag_name) {
+                        all_tags_names[index] = tagg.tag_name;
                         index += 1;
                     }
                 }
@@ -551,9 +548,7 @@ function create_card() {
     show_one_item('create_card');
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
-        var tag;
-        for (var i in all_tags) {
-            tag = all_tags[i];
+        for (let tag of all_tags) {
             $(
                 '<div class="col"><div class="form-check form-check-inline ml-5"><input class="custom-control-input" type="checkbox" id="' + tag.id + '_create"><label class="custom-control-label" for="' + tag.id + '_create">' + tag.tag_name + '</label></div></div>'
             ).appendTo("#create_card_tags");
@@ -595,8 +590,8 @@ function create_tag() {
         if (name_input !== "") {
             event.preventDefault();
             load_information("tags/").done(function(all_tags) {
-                for (var i in all_tags) {
-                    all_tags_names[index] = all_tags[i].tag_name;
+                for (let tag of all_tags) {
+                    all_tags_names[index] = tag.tag_name;
                     index += 1;
                 }
                 if (all_tags_names.includes(name_input)) {
