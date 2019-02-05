@@ -39,7 +39,8 @@ def cards(request):
         content.append(
             {
                 'id': str(card.id),
-                'card_front': card.get_front()
+                'card_front': card.get_front(),
+                'card_back': card.get_back()
             }
         )
     return JsonResponse(content, safe=False)
