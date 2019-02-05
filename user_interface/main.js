@@ -565,22 +565,39 @@ function create_card() {
         // inputs cannot be blank
         if (front_input !== "" && back_input !== "") {
             event.preventDefault();
-            // gets which checkboxes are checked when pressing the button
-            $("#create_card_tags input:checkbox:checked").each(function() {
-                checked[index] = $(this).attr("id").split("_")[0];
-                index += 1;
+            load_information("cards/").done(function(all_cards) {
+                if (card_is_unique(front_input, back_input, all_cards)) {
+                    // gets which checkboxes are checked when pressing the button
+                    $("#create_card_tags input:checkbox:checked").each(function() {
+                        checked[index] = $(this).attr("id").split("_")[0];
+                        index += 1;
+                    });
+                    // creates JSON object
+                    var card_object = create_card_object("new", front_input, back_input, checked);
+                    console.log(card_object);
+                    card_object = null;
+                    reset();
+                    $("#created").modal("toggle");
+                } else {
+                    $("#wrong_card").modal("toggle");
+                    $("#front_side_create").val("");
+                    $("#back_side_create").val("");
+                }
             });
-            // creates JSON object
-            var card_object = create_card_object("new", front_input, back_input, checked);
-            console.log(card_object);
-            card_object = null;
-            reset();
-            $("#created").modal("toggle");
         }
     });
 }
 
-// handels create tag function
+function card_is_unique(new_front, new_back, all_cards) {
+    for (let card of all_cards) {
+        if ((new_front == card.card_front) && (new_back == card.card_back)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// handles create tag function
 function create_tag() {
     $("#tag_name_create").val("");
     show_one_item('create_tag');
