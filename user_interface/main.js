@@ -213,9 +213,9 @@ function load_cards(type, tag_id, is_reversed) {
                     if (type == "browse"){
                         browse(all_cards);
                     } else if (type == "choices") {
-                        choices(all_cards.length, 0, 0, 0, all_cards, tag_info);
+                        choices(all_cards.length, 0, 0, [], 0, all_cards, tag_info);
                     } else {
-                        write(all_cards.length, 0, 0, 0, all_cards, tag_info);
+                        write(all_cards.length, 0, 0, [], 0, all_cards, tag_info);
                     }
                 }
             });
@@ -250,7 +250,7 @@ function choose() {
 }
 
 // random selection of answers for choose test type
-function get_random_choices(max, without) {
+function get_random_choices(max, without, all_cards) {
     var value;
     var impossible = [without];
     var return_list = [null, null, null];
@@ -305,13 +305,13 @@ function activate_one() {
 }
 
 // handles change of choices in choose test type
-function choices(count, correct, wrong, current_word_index, all_cards, tag_info) {
+function choices(count, correct, wrong, answers, current_word_index, all_cards, tag_info) {
     update_write_choices_progress_bar("choices", correct, wrong, count);
     var current_card = all_cards[current_word_index];
     $("#choices_headline").text(current_card.card_front)
     show_all_choices();
     show_one_item('test_choices');
-    var other_choices_indexes = get_random_choices(count, current_word_index);
+    var other_choices_indexes = get_random_choices(count, current_word_index, all_cards);
     var options = get_random_index();
     var selected;
     for (let i = 0; i < 4; i += 1) {
@@ -335,26 +335,38 @@ function choices(count, correct, wrong, current_word_index, all_cards, tag_info)
             $("#correct_headline").text(current_card.card_front);
             $("#correct_correct_answer").text(current_card.card_back);
             $("#correct_answer").show();
+            answers.push([
+                true,
+                current_card.card_front,
+                current_card.card_back,
+                current_card.card_back
+            ]);
         } else {
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_wrong_answer").text(all_cards[other_choices_indexes[options[selected] - 1]].card_back);
             $("#wrong_answer").show();
+            answers.push([
+                false,
+                current_card.card_front,
+                all_cards[other_choices_indexes[options[selected] - 1]].card_back,
+                current_card.card_back
+            ]);
         }
         current_word_index += 1;
         $(".dismiss").unbind().click(function() {
             if (current_word_index == count) {
-                summary(tag_info, correct, count);
+                summary(tag_info, correct, count, answers);
             } else {
-                choices(count, correct, wrong, current_word_index, all_cards, tag_info);
+                choices(count, correct, wrong, answers, current_word_index, all_cards, tag_info);
             }
         });
     });
 }
 
 // show summary of tested  tag
-function summary(tag_info, correct, count) {
+function summary(tag_info, correct, count, answers) {
     var success_rate = Math.round((correct / count) * 100);
     show_one_item("tag_summary");
     $("#tag_summary_headline").text(tag_info.tag_name);
@@ -371,6 +383,21 @@ function summary(tag_info, correct, count) {
         $("#improvement").text("+" + difference + "%");
         $("#improvement").show();
     }
+    $("#answers_button").unbind().click(function() {
+        let color;
+        $("#answers_table tbody").empty();
+        console.log(answers);
+        for (let answer of answers) {
+            if (answer[0]) {
+                color = "table-success";
+            } else {
+                color = "table-danger";
+            }
+            $(
+                '<tr class="' + color + '"><td>' + answer[1] + '</td><td>' + answer[2] + '</td><td>' + answer[3] + '</td></tr>'
+            ).appendTo("#answers_table tbody");
+        }
+    });
     console.log(create_tag_object(tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
         show_one_item("test_main");
@@ -388,7 +415,7 @@ function selected_choice() {
 }
 
 // content of write test
-function write(count, correct, wrong, current_word_index, all_cards, tag_info) {
+function write(count, correct, wrong, answers, current_word_index, all_cards, tag_info) {
     update_write_choices_progress_bar("write", correct, wrong, count);
     var current_card = all_cards[current_word_index];
     $("#write_headline").text(current_card.card_front);
@@ -404,18 +431,30 @@ function write(count, correct, wrong, current_word_index, all_cards, tag_info) {
             $("#correct_headline").text(current_card.card_front);
             $("#correct_correct_answer").text(current_card.card_back);
             $("#correct_answer").show();
+            answers.push([
+                true,
+                current_card.card_front,
+                raw_answer,
+                current_card.card_back
+            ]);
         } else {
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
             $("#wrong_wrong_answer").text(raw_answer);
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_answer").show();
+            answers.push([
+                false,
+                current_card.card_front,
+                raw_answer,
+                current_card.card_back
+            ]);
         }
         $(".dismiss").unbind().click(function() {
             if (current_word_index == count) {
-                summary(tag_info, correct, count);
+                summary(tag_info, correct, count, answers);
             } else {
-                write(count, correct, wrong, current_word_index, all_cards, tag_info);
+                write(count, correct, wrong, answers, current_word_index, all_cards, tag_info);
             }
         });
     });
@@ -565,7 +604,7 @@ function create_card() {
         // inputs cannot be blank
         if (front_input !== "" && back_input !== "") {
             event.preventDefault();
-            load_information("cards/").done(function(all_cards) {
+            load_information("cards").done(function(all_cards) {
                 if (card_is_unique(front_input, back_input, all_cards)) {
                     // gets which checkboxes are checked when pressing the button
                     $("#create_card_tags input:checkbox:checked").each(function() {
