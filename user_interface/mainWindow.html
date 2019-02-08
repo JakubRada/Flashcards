@@ -76,63 +76,39 @@
         <!-- listing all cards -->
         <div id="card_list">
             <div class="container mt-5">
-                <h1>List of all cards</h1>
-                <table class="table table-hover mt-5" id="table_of_cards">
-                    <thead class="thead-dark">
-                        <th scope="col">#</th>
-                        <th scope="col">Front side</th>
-                        <th scope="col">Back side</th>
-                        <th scope="col">No. of tags</th>
-                        <th scope="col">Action</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Hello</td>
-                            <td>Ahoj</td>
-                            <td><span class="badge badge-dark">3</span></td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Foreshadowing</td>
-                            <td>Predzvesti</td>
-                            <td><span class="badge badge-dark">13</span></td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="jumbotron shadow-lg rounded">
+                    <h1>List of all cards</h1>
+                    <table class="table table-hover mt-5" id="table_of_cards">
+                        <thead class="thead-dark">
+                            <th scope="col">#</th>
+                            <th scope="col">Front side</th>
+                            <th scope="col">Back side</th>
+                            <th scope="col">No. of tags</th>
+                            <th scope="col">Action</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- listing all tags -->
         <div id="tag_list">
             <div class="container mt-5">
-                <h1>List of all tags</h1>
-                <table class="table table-hover mt-5" id="table_of_tags">
-                    <thead class="thead-dark">
-                        <th scope="col">#</th>
-                        <th scope="col">Name of the tag</th>
-                        <th scope="col">No. of cards</th>
-                        <th scope="col">Learned</th>
-                        <th scope="col">Action</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>English words</td>
-                            <td><span class="badge badge-dark">3</span></td>
-                            <td>69%</td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Spanish words</td>
-                            <td><span class="badge badge-dark">13</span></td>
-                            <td>88%</td>
-                            <td><button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="jumbotron shadow-lg rounded">
+                    <h1>List of all tags</h1>
+                    <table class="table table-hover mt-5" id="table_of_tags">
+                        <thead class="thead-dark">
+                            <th scope="col">#</th>
+                            <th scope="col">Name of the tag</th>
+                            <th scope="col">No. of cards</th>
+                            <th scope="col">Learned</th>
+                            <th scope="col">Action</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- create card -->
@@ -160,18 +136,6 @@
                             </div>
                             <label><h5>Select tags</h5></label>
                             <div class="row mt-3" id="create_card_tags">
-                                <div class="col">
-                                    <div class="form-check form-check-inline">
-                                        <input class="custom-control-input" type="checkbox" id="english_words" value="english_words">
-                                        <label class="custom-control-label" for="english_words">English words</label>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-check form-check-inline">
-                                        <input class="custom-control-input" type="checkbox" id="spanish_words" value="spanish_words">
-                                        <label class="custom-control-label" for="spanish_words">Spanish words</label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="row mt-5">
@@ -227,18 +191,6 @@
                             </div>
                             <label><h5>Select tags</h5></label>
                             <div class="row mt-3" id="edit_card_tags">
-                                <div class="col">
-                                    <div class="form-check form-check-inline">
-                                        <input class="custom-control-input" type="checkbox" id="english_words_edit" value="english_words" checked>
-                                        <label class="custom-control-label" for="english_words_edit">English words</label>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-check form-check-inline">
-                                        <input class="custom-control-input" type="checkbox" id="spanish_words_edit" value="spanish_words">
-                                        <label class="custom-control-label" for="spanish_words_edit">Spanish words</label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="row mt-5">
@@ -276,8 +228,6 @@
                     <h1 class="display-4">Choose tag to test</h1>
                     <hr class="my-4">
                     <div id="test_tags_buttons">
-                        <button type="button" class="btn btn-dark btn-lg btn-block">Hello there</button>
-                        <button type="button" class="btn btn-dark btn-lg btn-block">General Kenobi</button>
                     </div>
                 </div>
             </div>
@@ -313,7 +263,7 @@
             <div class="container">
                 <div class="container mt-5">
                     <div class="progress" style="height: 20px;">
-                        <div id="positive_progress" class="progress-bar" role="progressbar" style="width: 25%;">25%</div>
+                        <div id="positive_progress" class="progress-bar" role="progressbar" style="width: 0%;"></div>
                     </div>
                 </div>
                 <div class="jumbotron mt-3 shadow-lg rounded">
@@ -328,10 +278,10 @@
                             <div class="flip-card" id="is_flipped">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front">
-                                        <h1 class="display-4" id="front_text">Hello there</h1>
+                                        <h1 class="display-4" id="front_text"></h1>
                                     </div>
                                     <div class="flip-card-back">
-                                        <h1 class="display-4" id="back_text">General Kenobi</h1>
+                                        <h1 class="display-4" id="back_text"></h1>
                                     </div>
                                 </div>
                             </div>
@@ -361,10 +311,10 @@
                             <p class="lead">Choose one from these options:</p>
                             <div class="list-group" id="choices_list">
                                 <li class="list-group-item" hidden></li>
-                                <li class="list-group-item list-group-item-action" id="option_1">Option 1</li>
-                                <li class="list-group-item list-group-item-action" id="option_2">Option 2</li>
-                                <li class="list-group-item list-group-item-action" id="option_3">Option 3</li>
-                                <li class="list-group-item list-group-item-action" id="option_4">Option 4</li>
+                                <li class="list-group-item list-group-item-action" id="option_1"></li>
+                                <li class="list-group-item list-group-item-action" id="option_2"></li>
+                                <li class="list-group-item list-group-item-action" id="option_3"></li>
+                                <li class="list-group-item list-group-item-action" id="option_4"></li>
                                 <li class="list-group-item" hidden></li>
                             </div>
                             <button role="button" class="btn btn-primary mt-5" id="choices_check_answer">Check answer</button>
@@ -372,15 +322,15 @@
                         <div class="col-4">
                             <p class="mt-2">Correct</p>
                             <div class="progress mt-2" style="height: 20px;">
-                                <div id="choices_correct" class="progress-bar bg-success" role="progressbar" style="width: 100%;">5</div>
+                                <div id="choices_correct" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
                             </div>
                             <p class="mt-2">Wrong</p>
                             <div class="progress mt-2" style="height: 20px;">
-                                <div id="choices_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 90%;">9</div>
+                                <div id="choices_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 0%;"></div>
                             </div>
                             <p class="mt-2">Remaining</p>
                             <div class="progress mt-2" style="height: 20px;">
-                                <div id="choices_count" class="progress-bar bg-dark" role="progressbar" style="width: 30%;">3 / 10</div>
+                                <div id="choices_count" class="progress-bar bg-dark" role="progressbar" style="width: 0%;"></div>
                             </div>
                         </div>
                     </div>
@@ -406,15 +356,15 @@
                         <div class="col-4">
                             <p class="mt-2">Correct</p>
                             <div class="progress mt-2" style="height: 20px;">
-                                <div id="write_correct" class="progress-bar bg-success" role="progressbar" style="width: 100%;">5</div>
+                                <div id="write_correct" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
                             </div>
                             <p class="mt-2">Wrong</p>
                             <div class="progress mt-2" style="height: 20px;">
-                                <div id="write_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 90%;">9</div>
+                                <div id="write_wrong" class="progress-bar bg-danger" role="progressbar" style="width: 0%;"></div>
                             </div>
                             <p class="mt-2">Remaining</p>
                             <div class="progress mt-2" style="height: 20px;">
-                                <div id="write_count" class="progress-bar bg-dark" role="progressbar" style="width: 30%;">3 / 10</div>
+                                <div id="write_count" class="progress-bar bg-dark" role="progressbar" style="width: 0%;"></div>
                             </div>
                         </div>
                     </div>
@@ -489,7 +439,7 @@
                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <p>hello there</p>
+                            <p></p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -581,11 +531,9 @@
                     <h4 class="alert-heading">Well done!</h4>
                     <p>Your answer is correct!</p>
                     <hr class="my-4">
-                    <h5 class="alert-heading" id="correct_headline">CardFront</h5>
+                    <h5 class="alert-heading" id="correct_headline"></h5>
                     <div class="card text-success">
-                        <div class="card-body" id="correct_correct_answer">
-                            /correct answer/
-                        </div>
+                        <div class="card-body" id="correct_correct_answer"></div>
                     </div>
                     <hr class="my-4">
                     <button type="button" class="btn btn-primary dismiss">Next question</button>
@@ -599,18 +547,14 @@
                     <h2 class="alert-heading">Better luck next time!</h2>
                     <p class="lead">Your answer is incorrect!</p>
                     <hr class="my-4">
-                    <h4 class="alert-heading" id="wrong_headline">CardFront</h4>
+                    <h4 class="alert-heading" id="wrong_headline"></h4>
                     <p class="lead mt-3">Your answer:</p>
                     <div class="card text-danger">
-                        <div class="card-body" id="wrong_wrong_answer">
-                            /written answer/
-                        </div>
+                        <div class="card-body" id="wrong_wrong_answer"></div>
                     </div>
                     <p class="lead mt-3">Correct answer:</p>
                     <div class="card text-success">
-                        <div class="card-body" id="wrong_correct_answer">
-                            /correct answer/
-                        </div>
+                        <div class="card-body" id="wrong_correct_answer"></div>
                     </div>
                     <hr class="my-4">
                     <button type="button" class="btn btn-primary dismiss">Next question</button>
@@ -622,15 +566,15 @@
             <div class="container">
                 <div class="jumbotron mt-5 shadow-lg rounded">
                     <div class="row">
-                        <h1 class="display-4 ml-3" id="tag_summary_headline">TagName</h1>
+                        <h1 class="display-4 ml-3" id="tag_summary_headline"></h1>
                         <button type="button" class="btn btn-primary btn-lg ml-auto" id="summary_back">Continue to test selection</button>
                     </div>
                     <p class="lead mt-3">Here is a summary of your answers: </p>
                     <hr class="my-4">
-                    <h1>You got <span id="correct_summary">3</span> out of <span id="total_summary">5</span> correctly.</h1>
+                    <h1>You got <span id="correct_summary"></span> out of <span id="total_summary"></span> correctly.</h1>
                     <div class="row ml-1 mt-5">
-                            <h1>Overall progress: <span id="success_rate">69%</span></h1><h1><span class="badge badge-pill badge-success ml-3" id="improvement">+15%</span></h1>
-                            <h1><span class="badge badge-pill badge-danger ml-3" id="impairment">-20%</span></h1>
+                            <h1>Overall progress: <span id="success_rate"></span></h1><h1><span class="badge badge-pill badge-success ml-3" id="improvement"></span></h1>
+                            <h1><span class="badge badge-pill badge-danger ml-3" id="impairment"></span></h1>
                     </div>
                     <button class="btn btn-primary mt-5" id="answers_button" type="button" data-toggle="collapse" data-target="#answers">Show answers</button>
                     <div class="collapse mt-3" id="answers">
