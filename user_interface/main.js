@@ -386,7 +386,6 @@ function summary(tag_info, correct, count, answers) {
     $("#answers_button").unbind().click(function() {
         let color;
         $("#answers_table tbody").empty();
-        console.log(answers);
         for (let answer of answers) {
             if (answer[0]) {
                 color = "table-success";
@@ -423,10 +422,11 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
     show_one_item('test_write');
     $("#check_write_answer").unbind().click(function(event) {
         event.preventDefault();
-        var raw_answer = $("#write_answer").val().trim();
+        var raw_answer = $("#write_answer").val().trim().toLowerCase();
         current_word_index += 1;
         $("#test_write").hide();
-        if (check_magic(raw_answer, current_card.card_back)) {
+        var checked = check_magic(raw_answer, current_card.card_back.toLowerCase());
+        if (checked[0]) {
             correct += 1;
             $("#correct_headline").text(current_card.card_front);
             $("#correct_correct_answer").text(current_card.card_back);
@@ -440,7 +440,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
         } else {
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
-            $("#wrong_wrong_answer").text(raw_answer);
+            $("#wrong_wrong_answer").text(checked[1]);
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_answer").show();
             answers.push([
@@ -461,11 +461,36 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
 }
 
 function check_magic(raw_input, correct_answer) {
+    console.log(raw_input, correct_answer);
     if (raw_input == correct_answer) {
-        return true;
+        return [true, highlight_mistakes(raw_input, correct_answer, true)];
     } else {
-        return false;
+        return [false, highlight_mistakes(raw_input, correct_answer, false)];
     }
+}
+
+function highlight_mistakes(raw_input, correct_answer, eval) {
+    raw_input = raw_input.split("");
+    correct_answer = correct_answer.split("");
+    var result = "<span class='text-success'>";
+    var highlight_color = "<span class='text-danger'>";
+    var cycles = correct_answer.length;
+    if (raw_input.length > correct_answer.length) {
+        cycles = raw_input.length;
+    }
+    var raw_index = 0;
+    var correct_index = 0;
+    for (let i = 0; i < cycles; i += 1) {
+        if (raw_input[raw_index] == correct_answer[correct_index]) {
+            result += raw_input[raw_index];
+            raw_index += 1;
+            correct_index += 1;
+        } else {
+            result += "x";
+        }
+    }
+    result += "</span>"
+    return result;
 }
 
 // listing and editing/deleting cards
@@ -692,7 +717,6 @@ function export_data() {
 
 function contains_special_symbols(string) {
     var charlist = '1234567890!@#$%^&*()=+[{}];:\'"\\|,<.>/?'.split("");
-    console.log(charlist);
     for (let char of charlist) {
         if (string.includes(char)) {
             return true;
