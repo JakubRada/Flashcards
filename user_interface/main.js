@@ -440,7 +440,8 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
         } else {
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
-            $("#wrong_wrong_answer").text(checked[1]);
+            $("#wrong_wrong_answer").empty();
+            $("#wrong_wrong_answer").append(checked[1]);
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_answer").show();
             answers.push([
@@ -462,18 +463,91 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
 
 function check_magic(raw_input, correct_answer) {
     console.log(raw_input, correct_answer);
+    var dist = levenshtein_distance(raw_input, correct_answer);
     if (raw_input == correct_answer) {
-        return [true, highlight_mistakes(raw_input, correct_answer, true)];
+        return [true, dist[1]];
     } else {
-        return [false, highlight_mistakes(raw_input, correct_answer, false)];
+        return [false, dist[1]];
     }
+}
+
+function levenshtein_distance(string_1, string_2) {
+    var str_1_len = string_1.length;
+    var str_2_len = string_2.length;
+    var cost;
+    var temp_str;
+    var temp_len;
+    var matrix = new Array();
+    var return_str = "";
+    var correct_span = "<span class='text-success'>";
+    var wrong_span = "<span class='text-danger'>";
+    var end_span = "</span>";
+    matrix[0] = new Array();
+    /*
+    if (str_1_len < str_2_len) {
+        temp_str = string_1;
+        string_1 = string_2;
+        string_2 = temp_str;
+        temp_len = str_1_len;
+        str_1_len = str_2_len;
+        str_2_len = temp_len;
+    }
+    */
+    for (let i = 0; i < str_2_len + 1; i += 1) {
+        matrix[0][i] = i;
+    }
+    for (let i = 1; i < str_1_len + 1; i += 1) {
+        matrix[i] = new Array();
+        matrix[i][0] = i;
+        for (let j = 1; j < str_2_len + 1; j += 1) {
+            cost = (string_1.charAt(i - 1) == string_2.charAt(j - 1)) ? 0: 1;
+            matrix[i][j] = Math.min(
+                matrix[i - 1][j] + 1, // deletion
+                Math.min(
+                    matrix[i][j - 1] + 1, // insertion
+                    matrix[i - 1][j - 1] + cost // substitution
+                )
+            );
+        }
+    }
+    var x = 0;
+    var y = 0;
+    var x_increment = 1;
+    var y_increment = 1;
+    for (let i = 0; i < Math.max(str_1_len, str_2_len); i += 1) {
+        if (i >= str_1_len) {
+            y_increment = 0;
+            x += 1;
+        } else if (i >= str_2_len) {
+            x_increment = 0;
+            y += 1;
+        } else {
+            x += 1;
+            y += 1;
+        }
+        console.log("[" + y + ", " + x + "] -- [" + (y - y_increment) + ", " + (x - x_increment) + "]");
+        if (matrix[y][x] == matrix[y - y_increment][x - x_increment]) {
+            return_str += (correct_span + string_2.charAt(x) + end_span);
+        } else {
+            return_str += wrong_span;
+            if (matrix[y][x] < matrix[y - y_increment][x - x_increment]) {
+                return_str += string_1[y];
+            } else if (matrix[y][x] > matrix[y - y_increment][x - x_increment]) {
+                return_str += string_1[y];
+            }
+            return_str += end_span;
+        }
+    }
+    console.table(matrix);
+    return [matrix[str_1_len][str_2_len], return_str];
 }
 
 function highlight_mistakes(raw_input, correct_answer, eval) {
     raw_input = raw_input.split("");
     correct_answer = correct_answer.split("");
-    var result = "<span class='text-success'>";
+    var result = '<span class="text-success">';
     var highlight_color = "<span class='text-danger'>";
+    var end_span = "</span>";
     var cycles = correct_answer.length;
     if (raw_input.length > correct_answer.length) {
         cycles = raw_input.length;
@@ -489,7 +563,7 @@ function highlight_mistakes(raw_input, correct_answer, eval) {
             result += "x";
         }
     }
-    result += "</span>"
+    result += end_span;
     return result;
 }
 
