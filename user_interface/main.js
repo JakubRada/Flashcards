@@ -475,24 +475,12 @@ function levenshtein_distance(string_1, string_2) {
     var str_1_len = string_1.length;
     var str_2_len = string_2.length;
     var cost;
-    var temp_str;
-    var temp_len;
     var matrix = new Array();
     var return_str = "";
     var correct_span = "<span class='text-success'>";
     var wrong_span = "<span class='text-danger'>";
     var end_span = "</span>";
     matrix[0] = new Array();
-    /*
-    if (str_1_len < str_2_len) {
-        temp_str = string_1;
-        string_1 = string_2;
-        string_2 = temp_str;
-        temp_len = str_1_len;
-        str_1_len = str_2_len;
-        str_2_len = temp_len;
-    }
-    */
     for (let i = 0; i < str_2_len + 1; i += 1) {
         matrix[0][i] = i;
     }
@@ -510,6 +498,7 @@ function levenshtein_distance(string_1, string_2) {
             );
         }
     }
+    /*
     var x = 0;
     var y = 0;
     var x_increment = 1;
@@ -525,46 +514,20 @@ function levenshtein_distance(string_1, string_2) {
             x += 1;
             y += 1;
         }
-        console.log("[" + y + ", " + x + "] -- [" + (y - y_increment) + ", " + (x - x_increment) + "]");
-        if (matrix[y][x] == matrix[y - y_increment][x - x_increment]) {
-            return_str += (correct_span + string_2.charAt(x) + end_span);
+        if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
+            console.log("[" + y + ", " + x + "] <= [" + (y - y_increment) + ", " + (x - x_increment) + "]");
+            return_str += (correct_span + string_1[y - 1] + end_span);
         } else {
-            return_str += wrong_span;
-            if (matrix[y][x] < matrix[y - y_increment][x - x_increment]) {
-                return_str += string_1[y];
-            } else if (matrix[y][x] > matrix[y - y_increment][x - x_increment]) {
-                return_str += string_1[y];
+            if (str_1_len < str_2_len) {
+                return_str += (wrong_span + string_2[x - 1] + end_span);
+            } else {
+                return_str += (wrong_span + string_1[y - 1] + end_span);
             }
-            return_str += end_span;
         }
     }
+    */
     console.table(matrix);
     return [matrix[str_1_len][str_2_len], return_str];
-}
-
-function highlight_mistakes(raw_input, correct_answer, eval) {
-    raw_input = raw_input.split("");
-    correct_answer = correct_answer.split("");
-    var result = '<span class="text-success">';
-    var highlight_color = "<span class='text-danger'>";
-    var end_span = "</span>";
-    var cycles = correct_answer.length;
-    if (raw_input.length > correct_answer.length) {
-        cycles = raw_input.length;
-    }
-    var raw_index = 0;
-    var correct_index = 0;
-    for (let i = 0; i < cycles; i += 1) {
-        if (raw_input[raw_index] == correct_answer[correct_index]) {
-            result += raw_input[raw_index];
-            raw_index += 1;
-            correct_index += 1;
-        } else {
-            result += "x";
-        }
-    }
-    result += end_span;
-    return result;
 }
 
 // listing and editing/deleting cards
