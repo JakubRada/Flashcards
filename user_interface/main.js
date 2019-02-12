@@ -399,6 +399,7 @@ function summary(tag_info, correct, count, answers) {
     });
     console.log(create_tag_object(tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
+        $("#answers").collapse("hide");
         show_one_item("test_main");
     });
 }
@@ -429,12 +430,14 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
         if (checked[0]) {
             correct += 1;
             $("#correct_headline").text(current_card.card_front);
+            $("#correct_wrong_answer").empty();
+            $("#correct_wrong_answer").append(checked[1]);
             $("#correct_correct_answer").text(current_card.card_back);
             $("#correct_answer").show();
             answers.push([
                 true,
                 current_card.card_front,
-                raw_answer,
+                checked[1],
                 current_card.card_back
             ]);
         } else {
@@ -447,7 +450,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
             answers.push([
                 false,
                 current_card.card_front,
-                raw_answer,
+                checked[1],
                 current_card.card_back
             ]);
         }
@@ -464,7 +467,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
 function check_magic(raw_input, correct_answer) {
     console.log(raw_input, correct_answer);
     var dist = levenshtein_distance(raw_input, correct_answer);
-    if (raw_input == correct_answer) {
+    if (dist[0]) {
         return [true, dist[1]];
     } else {
         return [false, dist[1]];
@@ -498,36 +501,40 @@ function levenshtein_distance(string_1, string_2) {
             );
         }
     }
-    /*
-    var x = 0;
-    var y = 0;
-    var x_increment = 1;
-    var y_increment = 1;
-    for (let i = 0; i < Math.max(str_1_len, str_2_len); i += 1) {
-        if (i >= str_1_len) {
-            y_increment = 0;
-            x += 1;
-        } else if (i >= str_2_len) {
-            x_increment = 0;
-            y += 1;
-        } else {
-            x += 1;
-            y += 1;
-        }
-        if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
-            console.log("[" + y + ", " + x + "] <= [" + (y - y_increment) + ", " + (x - x_increment) + "]");
-            return_str += (correct_span + string_1[y - 1] + end_span);
-        } else {
-            if (str_1_len < str_2_len) {
-                return_str += (wrong_span + string_2[x - 1] + end_span);
+    console.table(matrix);
+    var ratio = (str_1_len - matrix[str_1_len][str_2_len]) / str_1_len;
+    if (ratio > 0.5) {
+        var x = 0;
+        var y = 0;
+        var x_increment = 1;
+        var y_increment = 1;
+        for (let i = 0; i < Math.max(str_1_len, str_2_len); i += 1) {
+            if (i >= str_1_len) {
+                y_increment = 0;
+                x += 1;
+            } else if (i >= str_2_len) {
+                x_increment = 0;
+                y += 1;
             } else {
-                return_str += (wrong_span + string_1[y - 1] + end_span);
+                x += 1;
+                y += 1;
+            }
+            if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
+                console.log("[" + y + ", " + x + "] <= [" + (y - y_increment) + ", " + (x - x_increment) + "]");
+                return_str += (correct_span + string_2[x - 1] + end_span);
+            } else {
+                console.log("[" + y + ", " + x + "] >= [" + (y - y_increment) + ", " + (x - x_increment) + "]");
+                if (str_1_len < str_2_len) {
+                    return_str += (wrong_span + string_2[x - 1] + end_span);
+                } else {
+                    return_str += (wrong_span + string_1[y - 1] + end_span);
+                }
             }
         }
+        return [true, return_str];
+    } else {
+        return [false, wrong_span + string_1 + end_span];
     }
-    */
-    console.table(matrix);
-    return [matrix[str_1_len][str_2_len], return_str];
 }
 
 // listing and editing/deleting cards
