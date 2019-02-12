@@ -334,6 +334,8 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
             correct += 1;
             $("#correct_headline").text(current_card.card_front);
             $("#correct_correct_answer").text(current_card.card_back);
+            $("#correct_wrong_answer").empty();
+            $("#correct_wrong_answer").text(current_card.card_back);
             $("#correct_answer").show();
             answers.push([
                 true,
@@ -344,6 +346,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
         } else {
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
+            $("#wrong_wrong_answer").empty();
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_wrong_answer").text(all_cards[other_choices_indexes[options[selected] - 1]].card_back);
             $("#wrong_answer").show();
