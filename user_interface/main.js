@@ -136,7 +136,7 @@ function change_flipcard(front, back) {
     var delay = 0;
     if ($("#is_flipped").hasClass("hover")) {
         $("#is_flipped").toggleClass("hover");
-        delay = 400;
+        delay = 400; // change of words delayed so user cannot see a glimpse of the next card
     }
     setTimeout(function () {
         $("#front_text").text(front);
@@ -160,15 +160,16 @@ function show_next_previous(current_index, max) {
 
 // handles browse test type
 function browse(all_cards) {
+    // set initial values; reset flipcard and progressbar
     var count = all_cards.length;
     var current_index = 0;
-    $("#positive_progress").attr("aria-valuemax", count);
     update_browse_progress_bar(current_index ,count);
     change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back);
     show_one_item("test_browse");
     $("#browse_next").show();
     $("#browse_previous").hide();
     $("#progress_bar").show();
+    // next card
     $("#browse_next").unbind().click(function() {
         if (current_index < count){
             current_index += 1;
@@ -177,6 +178,7 @@ function browse(all_cards) {
         }
         show_next_previous(current_index, count);
     });
+    // previous card
     $("#browse_previous").unbind().click(function() {
         if (current_index > 0) {
             current_index -= 1;
@@ -188,6 +190,7 @@ function browse(all_cards) {
     $("#browse_back").unbind().click(function() {
         test_main();
     });
+    // flips card on click
     $('.flip-card .flip-card-inner').unbind().click( function() {
         $(this).closest('.flip-card').toggleClass('hover');
     });
@@ -202,6 +205,7 @@ function load_cards(type, tag_id, is_reversed) {
         var all_card_ids = tag_info.cards;
         for (let card_id of all_card_ids) {
             load_information("cards/" + card_id).done(function(card_info) {
+                // if is reversed, switch front and back (only in frontend, not in databse)
                 if (is_reversed) {
                     meta = card_info.card_front;
                     card_info.card_front = card_info.card_back;
@@ -210,6 +214,7 @@ function load_cards(type, tag_id, is_reversed) {
                 all_cards[index] = card_info;
                 index += 1;
                 if (index == all_card_ids.length) {
+                    // if all cards loaded, start selected test type
                     if (type == "browse"){
                         browse(all_cards);
                     } else if (type == "choices") {
@@ -249,7 +254,7 @@ function choose() {
     });
 }
 
-// random selection of answers for choose test type
+// random set of answers for choose test type
 function get_random_choices(max, without, all_cards) {
     var value;
     var impossible = [without];
@@ -293,9 +298,11 @@ function show_all_choices() {
 
 // activates one on the beggining
 function activate_one() {
+    // deactivates previous choices
     for (let i = 1; i < 5; i += 1) {
         $("#option_" + i).removeClass("active");
     }
+    // activating first choice from visible items
     for (let i = 1; i < 5; i += 1) {
         if ($("#option_" + i).is(":visible")) {
             $("#option_" + i).addClass("active");
@@ -306,11 +313,13 @@ function activate_one() {
 
 // handles change of choices in choose test type
 function choices(count, correct, wrong, answers, current_word_index, all_cards, tag_info) {
+    // update progress bars and reset window
     update_write_choices_progress_bar("choices", correct, wrong, count);
     var current_card = all_cards[current_word_index];
     $("#choices_headline").text(current_card.card_front)
     show_all_choices();
     show_one_item('test_choices');
+    // randomly choose other choices and place them in random order
     var other_choices_indexes = get_random_choices(count, current_word_index, all_cards);
     var options = get_random_index();
     var selected;
@@ -325,12 +334,15 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
             }
         }
     }
+    // selection
     activate_one();
     choose();
+    // evaluating answer and printing result
     $("#choices_check_answer").unbind().click(function() {
         selected = selected_choice();
         $("#test_choices").hide();
         if (selected == options.indexOf(0)) {
+            // correct choice
             correct += 1;
             $("#correct_headline").text(current_card.card_front);
             $("#correct_correct_answer").text(current_card.card_back);
@@ -344,6 +356,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
                 current_card.card_back
             ]);
         } else {
+            // wrong choice
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
             $("#wrong_wrong_answer").empty();
@@ -360,8 +373,10 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
         current_word_index += 1;
         $(".dismiss").unbind().click(function() {
             if (current_word_index == count) {
+                // if last question, show summary of the test
                 summary(tag_info, correct, count, answers);
             } else {
+                // else start choices with next word
                 choices(count, correct, wrong, answers, current_word_index, all_cards, tag_info);
             }
         });
@@ -419,18 +434,21 @@ function selected_choice() {
 
 // content of write test
 function write(count, correct, wrong, answers, current_word_index, all_cards, tag_info) {
+    // set progress bars and reset window
     update_write_choices_progress_bar("write", correct, wrong, count);
     var current_card = all_cards[current_word_index];
     $("#write_headline").text(current_card.card_front);
     $("#write_answer").val("");
     show_one_item('test_write');
     $("#check_write_answer").unbind().click(function(event) {
+        // evaluating answer
         event.preventDefault();
         var raw_answer = $("#write_answer").val().trim().toLowerCase();
         current_word_index += 1;
         $("#test_write").hide();
         var checked = check_magic(raw_answer, current_card.card_back.toLowerCase());
         if (checked[0]) {
+            // correct answer
             correct += 1;
             $("#correct_headline").text(current_card.card_front);
             $("#correct_wrong_answer").empty();
@@ -444,6 +462,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
                 current_card.card_back
             ]);
         } else {
+            // wrong answer
             wrong += 1;
             $("#wrong_headline").text(current_card.card_front);
             $("#wrong_wrong_answer").empty();
@@ -459,14 +478,17 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
         }
         $(".dismiss").unbind().click(function() {
             if (current_word_index == count) {
+                // if last word, show summary of test
                 summary(tag_info, correct, count, answers);
             } else {
+                // else start write with next word
                 write(count, correct, wrong, answers, current_word_index, all_cards, tag_info);
             }
         });
     });
 }
 
+// determines whether
 function check_magic(raw_input, correct_answer) {
     console.log(raw_input, correct_answer);
     var dist = levenshtein_distance(raw_input, correct_answer);
@@ -478,6 +500,7 @@ function check_magic(raw_input, correct_answer) {
 }
 
 function levenshtein_distance(string_1, string_2) {
+    // set up variables
     var str_1_len = string_1.length;
     var str_2_len = string_2.length;
     var cost;
@@ -486,6 +509,7 @@ function levenshtein_distance(string_1, string_2) {
     var correct_span = "<span class='text-success'>";
     var wrong_span = "<span class='text-danger'>";
     var end_span = "</span>";
+    // fill matrix with values for substitution, deletion, insertion
     matrix[0] = new Array();
     for (let i = 0; i < str_2_len + 1; i += 1) {
         matrix[0][i] = i;
@@ -505,6 +529,7 @@ function levenshtein_distance(string_1, string_2) {
         }
     }
     console.table(matrix);
+    // highlight wrong answer or typos in partly correct answer
     var ratio = (str_1_len - matrix[str_1_len][str_2_len]) / str_1_len;
     if (ratio > 0.5) {
         var x = 0;
@@ -546,6 +571,7 @@ function list_cards_to_edit() {
     show_one_item("card_list");
     load_information("cards").done(function(card_list) {
         for (let card of card_list) {
+            // for each card in database create line in table
             load_information("cards/" + card.id).done(function(card_info) {
                 $(
                     '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
@@ -699,6 +725,7 @@ function create_card() {
     });
 }
 
+// determine if card already exists in database
 function card_is_unique(new_front, new_back, all_cards) {
     for (let card of all_cards) {
         if ((new_front == card.card_front) && (new_back == card.card_back)) {
@@ -762,6 +789,7 @@ function export_data() {
     });
 }
 
+// determines if string contains special symbols and cannot be used for file name
 function contains_special_symbols(string) {
     var charlist = '1234567890!@#$%^&*()=+[{}];:\'"\\|,<.>/?'.split("");
     for (let char of charlist) {
@@ -772,6 +800,7 @@ function contains_special_symbols(string) {
     return false;
 }
 
+// let user know that inputted filename is not correct
 function wrong_export_format(string) {
     $("#wrong_export_modal_content").text(string);
     $("#wrong_export_modal").modal("toggle");
