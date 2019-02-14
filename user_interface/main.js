@@ -215,6 +215,7 @@ function load_cards(type, tag_id, is_reversed) {
                 if (index == all_card_ids.length) {
                     // if all cards loaded, start selected test type
                     all_cards = group_similar_cards(all_cards);
+                    console.log(all_cards);
                     if (type == "browse"){
                         browse(all_cards);
                     } else if (type == "choices") {
@@ -230,7 +231,42 @@ function load_cards(type, tag_id, is_reversed) {
 
 // unites cards with similar card fronts OR card backs into one element
 function group_similar_cards(all_cards) {
-    return all_cards;
+    var return_card_list = [];
+    for (let card of all_cards) {
+        let contains_back = contains_similar_back(return_card_list, card.card_back);
+        let contains_front = contains_similar_front(return_card_list, card.card_front);
+        console.log(contains_back, contains_front);
+        if (contains_back[0]) {
+            return_card_list[contains_back[1]].card_front += (", " + card.card_front);
+        } else if(contains_front[0]) {
+            return_card_list[contains_front[1]].card_back += (", " + card.card_back);
+        } else {
+            return_card_list.push(card);
+        }
+    }
+    return return_card_list;
+}
+
+function contains_similar_front(card_list, card_front) {
+    var i = 0;
+    for (let card of card_list) {
+        if (card.card_front == card_front) {
+            return [true, i];
+        }
+        i += 1;
+    }
+    return [false, null];
+}
+
+function contains_similar_back(card_list, card_back) {
+    var i = 0;
+    for (let card of card_list) {
+        if (card.card_back == card_back) {
+            return [true, i];
+        }
+        i += 1;
+    }
+    return [false, null];
 }
 
 // updates progress bars in write and choices test types
