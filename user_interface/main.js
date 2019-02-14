@@ -125,7 +125,6 @@ function test_type(tag_id) {
 // updates progress bar for browse test type
 function update_browse_progress_bar(current, max) {
     current += 1;
-    max += 1;
     let perc = Number(Math.round((current / max) * 100));
     $("#positive_progress").attr("style", "width: " + perc + "%");
     $("#positive_progress").text(current + " / " + max);
@@ -215,6 +214,7 @@ function load_cards(type, tag_id, is_reversed) {
                 index += 1;
                 if (index == all_card_ids.length) {
                     // if all cards loaded, start selected test type
+                    all_cards = group_similar_cards(all_cards);
                     if (type == "browse"){
                         browse(all_cards);
                     } else if (type == "choices") {
@@ -226,6 +226,11 @@ function load_cards(type, tag_id, is_reversed) {
             });
         }
     });
+}
+
+// unites cards with similar card fronts OR card backs into one element
+function group_similar_cards(all_cards) {
+    return all_cards;
 }
 
 // updates progress bars in write and choices test types
