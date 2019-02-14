@@ -235,10 +235,11 @@ function group_similar_cards(all_cards) {
     for (let card of all_cards) {
         let contains_back = contains_similar_back(return_card_list, card.card_back);
         let contains_front = contains_similar_front(return_card_list, card.card_front);
-        console.log(contains_back, contains_front);
         if (contains_back[0]) {
+            // if they have same back, it groups their fronts
             return_card_list[contains_back[1]].card_front += (", " + card.card_front);
         } else if(contains_front[0]) {
+            // if they have same front, it groups their backs
             return_card_list[contains_front[1]].card_back += (", " + card.card_back);
         } else {
             return_card_list.push(card);
@@ -247,6 +248,7 @@ function group_similar_cards(all_cards) {
     return return_card_list;
 }
 
+// checks if list of cards contains card with same front as second argument
 function contains_similar_front(card_list, card_front) {
     var i = 0;
     for (let card of card_list) {
@@ -258,6 +260,7 @@ function contains_similar_front(card_list, card_front) {
     return [false, null];
 }
 
+// checks if list of cards contains card with same back as second argument
 function contains_similar_back(card_list, card_back) {
     var i = 0;
     for (let card of card_list) {
@@ -531,13 +534,23 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
 
 // determines whether
 function check_magic(raw_input, correct_answer) {
-    console.log(raw_input, correct_answer);
-    var dist = levenshtein_distance(raw_input, correct_answer);
-    if (dist[0]) {
-        return [true, dist[1]];
-    } else {
-        return [false, dist[1]];
+    var possible_answers = correct_answer.split(", ");
+    console.log(raw_input + " --> " + possible_answers);
+    var dist;
+    // for multiple answer question, if user enters one of possibilities
+    for (let answer of possible_answers) {
+        dist = levenshtein_distance(raw_input, answer);
+        console.log()
+        if (dist[0]) {
+            return [true, dist[1]];
+        }
     }
+    // if user tries to answer with all answers
+    dist = levenshtein_distance(raw_input, correct_answer);
+    if (dist[0]) {
+        return [true, dist[1]]
+    }
+    return [false, dist[1]];
 }
 
 function levenshtein_distance(string_1, string_2) {
