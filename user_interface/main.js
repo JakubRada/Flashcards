@@ -233,12 +233,8 @@ function load_cards(type, tag_id, is_reversed) {
 function group_similar_cards(all_cards) {
     var return_card_list = [];
     for (let card of all_cards) {
-        let contains_back = contains_similar_back(return_card_list, card.card_back);
         let contains_front = contains_similar_front(return_card_list, card.card_front);
-        if (contains_back[0]) {
-            // if they have same back, it groups their fronts
-            return_card_list[contains_back[1]].card_front += (", " + card.card_front);
-        } else if(contains_front[0]) {
+        if(contains_front[0]) {
             // if they have same front, it groups their backs
             return_card_list[contains_front[1]].card_back += (", " + card.card_back);
         } else {
@@ -253,18 +249,6 @@ function contains_similar_front(card_list, card_front) {
     var i = 0;
     for (let card of card_list) {
         if (card.card_front == card_front) {
-            return [true, i];
-        }
-        i += 1;
-    }
-    return [false, null];
-}
-
-// checks if list of cards contains card with same back as second argument
-function contains_similar_back(card_list, card_back) {
-    var i = 0;
-    for (let card of card_list) {
-        if (card.card_back == card_back) {
             return [true, i];
         }
         i += 1;
