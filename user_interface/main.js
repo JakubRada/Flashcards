@@ -297,11 +297,26 @@ function get_random_choices(max, without, all_cards) {
         value = without;
         while (impossible.includes(value)) {
             value = Math.floor(Math.random() * Math.floor(max));
+            if (is_in_generated_list(impossible, value, all_cards)) {
+                value = without;
+            } else {
+                break;
+            }
         }
         return_list[i] = value;
         impossible[i + 1] = value;
     }
     return return_list;
+}
+
+// if new randomly generated word has been aleready chosen -> there should not be any duplicate answers in choices
+function is_in_generated_list(index_list, new_word_index, all_cards) {
+    for (let index of index_list) {
+        if (all_cards[index].card_back == all_cards[new_word_index].card_back) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // counts cards with same backs as current_card
