@@ -287,9 +287,11 @@ function get_random_choices(max, without, all_cards) {
     var value;
     var impossible = [without];
     var return_list = [null, null, null];
+    var same_back = count_same_backs(all_cards);
     var cycles = 3;
-    if (max < 4) {
+    if ((max - same_back) < 4) {
         cycles = max - 1;
+        cycles -= same_back;
     }
     for (let i = 0; i < cycles; i += 1) {
         value = without;
@@ -300,6 +302,39 @@ function get_random_choices(max, without, all_cards) {
         impossible[i + 1] = value;
     }
     return return_list;
+}
+
+// counts cards with same backs as current_card
+function count_same_backs(all_cards) {
+    var same = 0;
+    for (let i = 0; i < all_cards.length; i += 1) {
+        for (let n = 0; n < all_cards.length; n += 1) {
+            if (n != i) {
+                if (all_cards[i].card_back == all_cards[n].card_back) {
+                    same += 1;
+                }
+            }
+        }
+    }
+    if (same == 0) {
+        return 0;
+    } else if (same == 2) {
+        return 1;
+    } else {
+        return same / 2 - 1;
+    }
+/*
+    for (let i = 0; i < all_cards.length; i += 1) {
+        if (i != current_card_index) {
+            if (all_cards[i].card_back == all_cards[current_card_index].card_back) {
+                same += 1;
+                console.log(all_cards[i].card_back + " == " + all_cards[current_card_index].card_back + "; + 1");
+            } else {
+                console.log(all_cards[i].card_back + " != " + all_cards[current_card_index].card_back + "; + 0");
+            }
+        }
+    }
+*/
 }
 
 // random placement of answers for choose test type
@@ -314,6 +349,7 @@ function get_random_index() {
         return_list[i] = value;
         used[i] = value;
     }
+    console.log(return_list);
     return return_list;
 }
 
@@ -369,7 +405,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
     $("#choices_check_answer").unbind().click(function() {
         selected = selected_choice();
         $("#test_choices").hide();
-        if (selected == options.indexOf(0)) {
+        if (selected == current_card.card_back) {
             // correct choice
             correct += 1;
             $("#correct_headline").text(current_card.card_front);
@@ -389,12 +425,12 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
             $("#wrong_headline").text(current_card.card_front);
             $("#wrong_wrong_answer").empty();
             $("#wrong_correct_answer").text(current_card.card_back);
-            $("#wrong_wrong_answer").text(all_cards[other_choices_indexes[options[selected] - 1]].card_back);
+            $("#wrong_wrong_answer").text(selected);
             $("#wrong_answer").show();
             answers.push([
                 false,
                 current_card.card_front,
-                all_cards[other_choices_indexes[options[selected] - 1]].card_back,
+                selected,
                 current_card.card_back
             ]);
         }
@@ -454,10 +490,9 @@ function summary(tag_info, correct, count, answers) {
 function selected_choice() {
     for (let i = 1; i < 5; i += 1) {
         if ($("#option_" + i).hasClass("active")) {
-            return i - 1;
+            return $("#option_" + i).text();
         }
     }
-    return null;
 }
 
 // content of write test
