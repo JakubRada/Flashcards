@@ -25,7 +25,8 @@ const database_path = "http://127.0.0.1:8000/cards/";
 
 // hides everything
 function hide_all() {
-    for (let i = 0; i < controlButtons.length; i += 1) {
+    let length = controlButtons.length
+    for (let i = 0; i < length; i += 1) {
         $('#' + controlButtons[i]).hide();
     }
 }
@@ -322,8 +323,9 @@ function is_in_generated_list(index_list, new_word_index, all_cards) {
 // counts cards with same backs as current_card
 function count_same_backs(all_cards) {
     var same = 0;
-    for (let i = 0; i < all_cards.length; i += 1) {
-        for (let n = 0; n < all_cards.length; n += 1) {
+    let length = all_cards.length;
+    for (let i = 0; i < length; i += 1) {
+        for (let n = 0; n < length; n += 1) {
             if (n != i) {
                 if (all_cards[i].card_back == all_cards[n].card_back) {
                     same += 1;
@@ -338,18 +340,6 @@ function count_same_backs(all_cards) {
     } else {
         return same / 2 - 1;
     }
-/*
-    for (let i = 0; i < all_cards.length; i += 1) {
-        if (i != current_card_index) {
-            if (all_cards[i].card_back == all_cards[current_card_index].card_back) {
-                same += 1;
-                console.log(all_cards[i].card_back + " == " + all_cards[current_card_index].card_back + "; + 1");
-            } else {
-                console.log(all_cards[i].card_back + " != " + all_cards[current_card_index].card_back + "; + 0");
-            }
-        }
-    }
-*/
 }
 
 // random placement of answers for choose test type
@@ -624,7 +614,8 @@ function levenshtein_distance(string_1, string_2) {
         var y = 0;
         var x_increment = 1;
         var y_increment = 1;
-        for (let i = 0; i < Math.max(str_1_len, str_2_len); i += 1) {
+        let max = Math.max(str_1_len, str_2_len)
+        for (let i = 0; i < max; i += 1) {
             if (i >= str_1_len) {
                 y_increment = 0;
                 x += 1;
@@ -855,6 +846,10 @@ function create_tag() {
 // handles import of data into the application
 function import_data() {
     show_one_item('import');
+    $("#confirm_import").unbind().click(function() {
+        var file_path = $("#import_input").val();
+        console.log(file_path);
+    });
 }
 
 // handles export of data from the database
@@ -862,7 +857,6 @@ function export_data() {
     $("#export_input").val("");
     show_one_item('export');
     $("#confirm_export").unbind().click(function() {
-        $("#loading").show();
         var filename = $("#export_input").val().trim();
         if (filename == "") {
             wrong_export_format("Filename cannot be an empty string!");
@@ -871,6 +865,7 @@ function export_data() {
         } else if (contains_special_symbols(filename)) {
             wrong_export_format("Filename cannot contain special symbols");
         } else {
+            $("#loading").show();
             console.log(filename + ".yml");
             $("#loading").hide();
         }
