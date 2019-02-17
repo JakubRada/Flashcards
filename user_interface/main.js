@@ -847,9 +847,20 @@ function create_tag() {
 function import_data() {
     show_one_item('import');
     $("#confirm_import").unbind().click(function() {
-        var file_path = $("#import_input").val();
-        console.log(file_path);
+        $("#loading").show();
+        const file = document.getElementById("import_input").files[0];
+        $("#import_input").val("");
+        const reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e) {
+            process_data(reader.result);
+        }
     });
+}
+
+function process_data(text) {
+    console.log(text);
+    $("#loading").hide();
 }
 
 // handles export of data from the database
