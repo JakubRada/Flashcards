@@ -848,18 +848,62 @@ function import_data() {
     show_one_item('import');
     $("#confirm_import").unbind().click(function() {
         $("#loading").show();
+        // get selected file for import
         const file = document.getElementById("import_input").files[0];
         $("#import_input").val("");
+        // reading file
         const reader = new FileReader();
         reader.readAsText(file);
         reader.onload = function(e) {
-            process_data(reader.result);
+            //processing data from file
+            var processed_data = process_data(reader.result);
+            //console.log(processed_data);
         }
     });
 }
 
+// handles processing of data
 function process_data(text) {
-    console.log(text);
+    var lines;
+    // splits text to lines
+    try {
+        lines = text.split("\r\n");
+    } catch(exception) {
+        lines = text.split("\n");
+    }
+    var length = lines.length;
+    var line;
+    var index = 0;
+    var card_count = -1;
+    var tag_count = -1;
+    var result = [[], []];
+    // processes all lines and creates list of json objects
+    while (index < length - 1) {
+        line = lines[index];
+        if (line.match(/card_[0-9]+:/)) {
+            card_count += 1;
+            result[0][card_count] = {id: 'new', card_front: null, card_back: null, tag_count: 0, tags: []};
+        } else if (line.match(/tag_[0-9]+:/)) {
+            tag_count += 1;
+            result[1][tag_count] = {id: 'new', tag_name: null, previous_success_rate: 0, card_count: 0};
+        } else if (line.match(/card_front: /)) {
+            result[0][card_count].card_front = line.split(": ")[1].trim();
+        } else if (line.match(/card_back: /)) {
+            result[0][card_count].card_back = line.split(": ")[1].trim();
+        } else if (line.match(/tag_count: /)) {
+            result[0][card_count].tag_count = Number(line.split(": ")[1].trim());
+        } else if (line.match(/[0-9]+: /)) {
+            result[0][card_count].tags.push(Number(line.split(": ")[1].trim()));
+        } else if (line.match(/tag_name: /)) {
+            result[1][tag_count].tag_name = line.split(": ")[1].trim();
+        } else if (line.match(/previous_success_rate: /)) {
+            result[1][tag_count].previous_success_rate = Number(line.split(": ")[1].trim());
+        } else if (line.match(/card_count: /)) {
+            result[1][tag_count].card_count = Number(line.split(": ")[1].trim());
+        }
+        index += 1;
+    }
+    console.log(result);
     $("#loading").hide();
 }
 
