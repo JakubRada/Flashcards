@@ -858,6 +858,7 @@ function import_data() {
             //processing data from file
             var processed_data = process_data(reader.result);
             //console.log(processed_data);
+            $("#loading").hide();
         }
     });
 }
@@ -876,35 +877,67 @@ function process_data(text) {
     var index = 0;
     var card_count = -1;
     var tag_count = -1;
+    var card_obj;
     var result = [[], []];
     // processes all lines and creates list of json objects
     while (index < length - 1) {
         line = lines[index];
         if (line.match(/card_[0-9]+:/)) {
             card_count += 1;
-            result[0][card_count] = {id: 'new', card_front: null, card_back: null, tag_count: 0, tags: []};
+            card_obj = true;
+            result[0][card_count] = {id: 'new', card_front: '', card_back: '', tag_count: 0, tags: []};
         } else if (line.match(/tag_[0-9]+:/)) {
             tag_count += 1;
-            result[1][tag_count] = {id: 'new', tag_name: null, previous_success_rate: 0, card_count: 0};
-        } else if (line.match(/card_front: /)) {
-            result[0][card_count].card_front = line.split(": ")[1].trim();
-        } else if (line.match(/card_back: /)) {
-            result[0][card_count].card_back = line.split(": ")[1].trim();
-        } else if (line.match(/tag_count: /)) {
-            result[0][card_count].tag_count = Number(line.split(": ")[1].trim());
-        } else if (line.match(/[0-9]+: /)) {
-            result[0][card_count].tags.push(Number(line.split(": ")[1].trim()));
-        } else if (line.match(/tag_name: /)) {
-            result[1][tag_count].tag_name = line.split(": ")[1].trim();
-        } else if (line.match(/previous_success_rate: /)) {
-            result[1][tag_count].previous_success_rate = Number(line.split(": ")[1].trim());
-        } else if (line.match(/card_count: /)) {
-            result[1][tag_count].card_count = Number(line.split(": ")[1].trim());
+            card_obj = false;
+            result[1][tag_count] = {id: 'new', tag_name: '', previous_success_rate: 0, card_count: 0};
+        } else if (line.match(/card_front: /) && card_obj) {
+            result[0][card_count].card_front = line.split(":")[1].trim();
+        } else if (line.match(/card_back: /) && card_obj) {
+            result[0][card_count].card_back = line.split(":")[1].trim();
+        } else if (line.match(/tag_count: /) && card_obj) {
+            result[0][card_count].tag_count = Number(line.split(":")[1].trim());
+        } else if (line.match(/[0-9]+: /) && card_obj) {
+            result[0][card_count].tags.push(Number(line.split(":")[1].trim()));
+        } else if (line.match(/tag_name: /) && !card_obj) {
+            result[1][tag_count].tag_name = line.split(":")[1].trim();
+        } else if (line.match(/previous_success_rate: /) && !card_obj) {
+            result[1][tag_count].previous_success_rate = Number(line.split(":")[1].trim());
+        } else if (line.match(/card_count: /) && !card_obj) {
+            result[1][tag_count].card_count = Number(line.split(":")[1].trim());
         }
         index += 1;
     }
     console.log(result);
-    $("#loading").hide();
+    result = filter_json(result);
+    console.log(result);
+    return result;
+}
+
+function filter_json(json_list) {
+    let length = json_list[0].length;
+    let json;
+    let remove = [];
+    for (let i = 0; i < length; i += 1) {
+        json = json_list[0][i];
+        if ((json.card_front == '') || (json.card_back == '') || (json.tag_count != json.tags.length)) {
+            remove.push(i);
+        }
+    }
+    for (let i = remove.length - 1; i >= 0; i -= 1) {
+        json_list[0].splice(remove[i], 1);
+    }
+    length = json_list[1].length;
+    remove = [];
+    for (let i = 0; i < length; i += 1) {
+        json = json_list[1][i];
+        if ((json.tag_name == '') || (json.previous_success_rate > 100) || (json.previous_success_rate < 0)) {
+            remove.push(i);
+        }
+    }
+    for (let i = remove.length - 1; i >= 0; i -= 1) {
+        json_list[1].splice(remove[i], 1);
+    }
+    return json_list;
 }
 
 // handles export of data from the database
