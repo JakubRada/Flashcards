@@ -962,24 +962,25 @@ function export_data() {
 function write_file(filename, json_list) {
     var string = '';
     for (let json of json_list) {
-        string += json.id;
+        string += json.id + ":";
         string += "\n";
-        if (json.id.contains("tag")) {
-            string += ("\rtag_name: " + json.tag_name + "\n");
-            string += ("\rprevious_success_rate: " + json.previous_success_rate + "\n");
-            string += ("\rcard_count: " + json.card_count + "\n");
+        if (json.id.match(/tag_[0-9]+/)) {
+            string += ("  tag_name: " + json.tag_name + "\n");
+            string += ("  previous_success_rate: " + json.previous_success_rate + "\n");
+            string += ("  card_count: " + json.card_count + "\n");
         } else {
-            string += ("\rcard_front: " + json.card_front + "\n");
-            string += ("\rcard_back: " + json.card_back + "\n");
-            string += ("\rtag_count: " + json.tag_count + "\n");
+            string += ("  card_front: " + json.card_front + "\n");
+            string += ("  card_back: " + json.card_back + "\n");
+            string += ("  tag_count: " + json.tag_count + "\n");
             var length = json.tag_count;
             for (let i = 0; i < length; i += 1) {
-                string += ("\r\r" + i + ": " + json.tags[i] + "\n");
+                string += ("    " + i + ": " + json.tags[i] + "\n");
             }
         }
     }
-    var file = require('fs');
-    file.writeFile("../export/" + filename, string, function(e) {
+    console.log(string);
+    const file = require('fs');
+    file.writeFile("../export/" + filename + ".yml", string, function(e) {
         if (e) {
             console.log("success");
         }
