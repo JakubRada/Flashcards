@@ -857,7 +857,7 @@ function import_data() {
         reader.onload = function(e) {
             //processing data from file
             var processed_data = process_data(reader.result);
-            //console.log(processed_data);
+            console.log(processed_data);
             $("#loading").hide();
         }
     });
@@ -907,12 +907,12 @@ function process_data(text) {
         }
         index += 1;
     }
-    console.log(result);
     result = filter_json(result);
     console.log(result);
     return result;
 }
 
+// filters out jsons which contain invalid values
 function filter_json(json_list) {
     let length = json_list[0].length;
     let json;
@@ -945,6 +945,7 @@ function export_data() {
     $("#export_input").val("");
     show_one_item('export');
     $("#confirm_export").unbind().click(function() {
+        $("#loading").show();
         var filename = $("#export_input").val().trim();
         if (filename == "") {
             wrong_export_format("Filename cannot be an empty string!");
@@ -953,9 +954,75 @@ function export_data() {
         } else if (contains_special_symbols(filename)) {
             wrong_export_format("Filename cannot contain special symbols");
         } else {
-            $("#loading").show();
-            console.log(filename + ".yml");
-            $("#loading").hide();
+            prepare_data(filename);
+        }
+    });
+}
+
+function write_file(filename, json_list) {
+    var string = '';
+    for (let json of json_list) {
+        string += json.id;
+        string += "\n";
+        if (json.id.contains("tag")) {
+            string += ("\rtag_name: " + json.tag_name + "\n");
+            string += ("\rprevious_success_rate: " + json.previous_success_rate + "\n");
+            string += ("\rcard_count: " + json.card_count + "\n");
+        } else {
+            string += ("\rcard_front: " + json.card_front + "\n");
+            string += ("\rcard_back: " + json.card_back + "\n");
+            string += ("\rtag_count: " + json.tag_count + "\n");
+            var length = json.tag_count;
+            for (let i = 0; i < length; i += 1) {
+                string += ("\r\r" + i + ": " + json.tags[i] + "\n");
+            }
+        }
+    }
+    var file = require('fs');
+    file.writeFile("../export/" + filename, string, function(e) {
+        if (e) {
+            console.log("success");
+        }
+    });
+}
+
+function prepare_data(filename) {
+    load_information("tags").done(function(tag_list) {
+        var count = 0;
+        var json_list = [];
+        var length = tag_list.length;
+        for (let tag of tag_list) {
+            load_information("tags/" + tag.id).done(function(tag_info) {
+                json_list.push({
+                    "id": "tag_" + (count + 1),
+                    "tag_name": tag_info.tag_name,
+                    "previous_success_rate": tag_info.success_rate,
+                    "card_count": tag_info.card_count
+                });
+                count += 1;
+                if (count == length) {
+                    load_information("cards").done(function(card_list) {
+                        count = 0;
+                        length = card_list.length;
+                        for (let card of card_list) {
+                            load_information("cards/" + card.id).done(function(card_info) {
+                                json_list.push({
+                                    "id": "card_" + (count + 1),
+                                    "card_front": card_info.card_front,
+                                    "card_back": card_info.card_back,
+                                    "tag_count": card_info.tag_count,
+                                    "tags": card_info.tags
+                                });
+                                count += 1;
+                                if (count == length) {
+                                    write_file(filename, json_list);
+                                    $("#loading").hide();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         }
     });
 }
