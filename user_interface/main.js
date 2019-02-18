@@ -850,16 +850,21 @@ function import_data() {
         $("#loading").show();
         // get selected file for import
         const file = document.getElementById("import_input").files[0];
+        console.log(file);
         $("#import_input").val("");
-        // reading file
-        const reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = function(e) {
-            //processing data from file
-            var processed_data = process_data(reader.result);
-            console.log(processed_data);
-            $("#loading").hide();
+        if (file.name.endsWith(".yml")) {
+            // reading file
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function(e) {
+                //processing data from file
+                var processed_data = process_data(reader.result);
+                console.log(processed_data);
+            }
+        } else {
+            $("#wrong_import_modal").modal("toggle");
         }
+        $("#loading").hide();
     });
 }
 
@@ -908,7 +913,6 @@ function process_data(text) {
         index += 1;
     }
     result = filter_json(result);
-    console.log(result);
     return result;
 }
 
