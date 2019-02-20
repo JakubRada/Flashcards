@@ -976,7 +976,8 @@ function write_file(filename, json_list) {
             string += ("  card_front: " + json.card_front + "\n");
             string += ("  card_back: " + json.card_back + "\n");
             string += ("  tag_count: " + json.tag_count + "\n");
-            var length = json.tag_count;
+            var length = json.tags.length; // replace with json.tag_count
+            string += "  tags:\n";
             for (let i = 0; i < length; i += 1) {
                 string += ("    " + i + ": " + json.tags[i] + "\n");
             }
