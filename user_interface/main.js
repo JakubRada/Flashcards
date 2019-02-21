@@ -660,11 +660,14 @@ function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
     show_one_item("card_list");
     load_information("cards").done(function(card_list) {
-        for (let card of card_list) {
+        var count = 0;
+        for (let i = 0; i < card_list.length; i += 1) {
+            let card = card_list[i];
             // for each card in database create line in table
             load_information("cards/" + card.id).done(function(card_info) {
+                count += 1;
                 $(
-                    '<tr><th scope="row">' + card_info.id + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                    '<tr><th scope="row">' + count + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_cards tbody");
                 $("#edit_card_" + card_info.id).unbind().click(function() {
                     edit_card(card_info);
@@ -677,10 +680,8 @@ function list_cards_to_edit() {
 // handles edit of a card
 function edit_card(card) {
     $("#card_list").hide();
-    $("#front_side_edit").val("");
-    $("#back_side_edit").val("");
-    $("#front_side_edit").attr("placeholder", card.card_front);
-    $("#back_side_edit").attr("placeholder", card.card_back);
+    $("#front_side_edit").val(card.card_front);
+    $("#back_side_edit").val(card.card_back);
     $("#edit_card_tags").empty();
     // prepares html div for selected card
     load_information("tags").done(function(all_tags) {
@@ -693,6 +694,10 @@ function edit_card(card) {
             }
         }
         $("#edit_card").show();
+        $("#cancel_card").unbind().click(function(event) {
+            event.preventDefault();
+            list_cards_to_edit();
+        });
         // gets input information
         $("#save_card_changes").unbind().click(function(event) {
             var front_input = $("#front_side_edit").val().trim();
@@ -721,10 +726,12 @@ function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
     show_one_item('tag_list');
     load_information("tags").done(function(tag_list) {
+        var count = 0;
         for (let tag of tag_list) {
             load_information("tags/" + tag.id).done(function(tag_info) {
+                count += 1;
                 $(
-                    '<tr><th scope="row">' + tag_info.id + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                    '<tr><th scope="row">' + count + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
                 $("#edit_tag_" + tag_info.id).unbind().click(function() {
                     edit_tag(tag_info);
@@ -737,9 +744,12 @@ function list_tags_to_edit() {
 // handles edit of a tag
 function edit_tag(tag) {
     $("#tag_list").hide();
-    $("#tag_name_edit").val("");
-    $("#tag_name_edit").attr("placeholder", tag.tag_name);
+    $("#tag_name_edit").val(tag.tag_name);
     $("#edit_tag").show();
+    $("#cancel_tag").unbind().click(function(event) {
+        event.preventDefault();
+        list_tags_to_edit();
+    });
     $("#save_tag_changes").unbind().click(function(event) {
         var name_input = $("#tag_name_edit").val().trim();
         var all_tags_names = new Array();
@@ -781,6 +791,10 @@ function create_card() {
         }
     });
     $("#create_card").show();
+    $("#cancel").unbind().click(function(event) {
+        event.preventDefault();
+        reset();
+    });
     // gets input information
     $("#save_new_card").unbind().click(function(event) {
         var front_input = $("#front_side_create").val().trim();
@@ -826,6 +840,10 @@ function card_is_unique(new_front, new_back, all_cards) {
 function create_tag() {
     $("#tag_name_create").val("");
     show_one_item('create_tag');
+    $("#cancel").unbind().click(function(event) {
+        event.preventDefault();
+        reset();
+    });
     $("#save_new_tag").unbind().click(function(event) {
         var name_input = $("#tag_name_create").val().trim();
         var all_tags_names = new Array();
