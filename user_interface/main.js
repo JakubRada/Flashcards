@@ -73,26 +73,27 @@ function load_information(suffix) {
 }
 
 // creates JSON card object for sending to database
-function create_card_object(id, card_front, card_back, tags) {
-    return {
-        "id" : id,
+function create_card_object(type, id, card_front, card_back, tags) {
+    return JSON.stringify({
+        "type": type,
+        "id": id,
         "card_front": card_front,
         "card_back": card_back,
         "tag_count": tags.length,
         "tags": tags
-    };
+    });
 }
 
 // creates JSON tag object for sending to database
 function create_tag_object(type, id, tag_name, success_rate, card_count, cards) {
-    return {
+    return JSON.stringify({
         "type": type,
         "id": id,
         "tag_name": tag_name,
         "success_rate": success_rate,
         "card_count": card_count,
         "cards": cards
-    };
+    });
 }
 
 // choose tag to test
@@ -494,7 +495,7 @@ function summary(tag_info, correct, count, answers) {
             ).appendTo("#answers_table tbody");
         }
     });
-    console.log(create_tag_object("update", tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
+    post_information("add_tag/", create_tag_object("test", tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
         $("#answers").collapse("hide");
         show_one_item("test_main");
@@ -707,8 +708,7 @@ function edit_card(card) {
                     index += 1;
                 });
                 // creates JSON object
-                var card_object = create_card_object(card.id, front_input, back_input, checked);
-                console.log(card_object);
+                post_information("add_card/", create_card_object("update", card.id, front_input, back_input, checked));
                 $("#created").modal("toggle");
                 show_one_item("card_list");
             }
@@ -798,8 +798,7 @@ function create_card() {
                         index += 1;
                     });
                     // creates JSON object
-                    var card_object = create_card_object("new", front_input, back_input, checked);
-                    console.log(card_object);
+                    post_information("add_card/", create_card_object("new", "", front_input, back_input, checked));
                     card_object = null;
                     reset();
                     $("#created").modal("toggle");

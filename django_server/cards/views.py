@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import Tag, Card
+import json
 
 def index(request):
     return HttpResponse("Index of cards app")
@@ -59,7 +60,7 @@ def tags(request):
 
 def add_tag(request):
     if request.method == 'POST':
-        data = request.POST
+        data = json.loads(request.body)
         if data["type"] == "new":
             tag = Tag(tag_name=data["tag_name"])
             tag.save()
@@ -67,6 +68,26 @@ def add_tag(request):
             tag = Tag.objects.get(pk=data["id"])
             tag.set_name(data["tag_name"])
             tag.save()
+        elif data["type"] == "test":
+            tag = Tag.objects.get(pk=data["id"])
+            tag.set_success(data["success_rate"])
+            tag.save()
+        return HttpResponse("loaded")
+    else:
+        return HttpResponse("nothing")
+
+def add_card(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        if data['type'] == 'new':
+            card = Card(card_front=data['card_front'], card_back=data['card_back'], tag_count=data['tag_count'])
+            card.save()
+            for tag in data['tags']:
+                t = Tag.objects.get(pk=tag)
+                card.tags.add(t)
+                t.add_card()
+                t.save()
+            card.save()
         return HttpResponse("loaded")
     else:
         return HttpResponse("nothing")

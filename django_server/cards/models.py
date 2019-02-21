@@ -16,6 +16,8 @@ class Tag(models.Model):
     )
     def add_card(self):
         self.card_count += 1
+    def remove_card(self):
+        self.card_count -= 1
     def set_success(self, new_success):
         self.previous_success_rate = new_success
     def set_name(self, new_name):
@@ -49,8 +51,8 @@ class Card(models.Model):
         self.card_front = new_front
     def set_back(self, new_back):
         self.card_back = new_back
-    def add_tag(self):
-        self.tag_count += 1
+    def set_tag_count(self, new_tag_count):
+        self.tag_count = new_tag_count
     def get_back(self):
         return self.card_back
     def get_front(self):
