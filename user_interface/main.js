@@ -54,6 +54,15 @@ function one_choice(choice_num) {
     }
 }
 
+function post_information(suffix, data) {
+    $.ajax({
+        type: 'POST',
+        url: database_path + suffix,
+        dataType: 'json',
+        data: data,
+    });
+}
+
 // loading JSONs from django
 function load_information(suffix) {
     return $.ajax({
@@ -75,8 +84,9 @@ function create_card_object(id, card_front, card_back, tags) {
 }
 
 // creates JSON tag object for sending to database
-function create_tag_object(id, tag_name, success_rate, card_count, cards) {
+function create_tag_object(type, id, tag_name, success_rate, card_count, cards) {
     return {
+        "type": type,
         "id": id,
         "tag_name": tag_name,
         "success_rate": success_rate,
@@ -484,7 +494,7 @@ function summary(tag_info, correct, count, answers) {
             ).appendTo("#answers_table tbody");
         }
     });
-    console.log(create_tag_object(tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
+    console.log(create_tag_object("update", tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
         $("#answers").collapse("hide");
         show_one_item("test_main");
@@ -747,10 +757,9 @@ function edit_tag(tag) {
                     $("#wrong_tag").modal("toggle");
                     $("#tag_name_create").val("");
                 } else {
-                    var tag_object = create_tag_object(tag.id, name_input, tag.success_rate, tag.card_count, tag.cards);
-                    console.log(tag_object);
-                    show_one_item("tag_list");
+                    post_information("add_tag/", create_tag_object("update", tag.id, name_input, tag.success_rate, tag.card_count, tag.cards));
                     $("#created").modal("toggle");
+                    list_tags_to_edit();
                 }
             });
         }
@@ -833,8 +842,8 @@ function create_tag() {
                     $("#wrong_tag").modal("toggle");
                     $("#tag_name_create").val("");
                 } else {
-                    var tag_object = create_tag_object("new", name_input, 0, 0, []);
-                    console.log(tag_object);
+                    var tag_object = create_tag_object("new", "", name_input, 0, 0, []);
+                    post_information("add_tag/", tag_object);
                     reset();
                     $("#created").modal("toggle");
                 }

@@ -56,3 +56,17 @@ def tags(request):
             }
         )
     return JsonResponse(content, safe=False)
+
+def add_tag(request):
+    if request.method == 'POST':
+        data = request.POST
+        if data["type"] == "new":
+            tag = Tag(tag_name=data["tag_name"])
+            tag.save()
+        elif data["type"] == "update":
+            tag = Tag.objects.get(pk=data["id"])
+            tag.set_name(data["tag_name"])
+            tag.save()
+        return HttpResponse("loaded")
+    else:
+        return HttpResponse("nothing")
