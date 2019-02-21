@@ -88,6 +88,22 @@ def add_card(request):
                 t.add_card()
                 t.save()
             card.save()
+        elif data['type'] == 'update':
+            card = Card.objects.get(pk=data['id'])
+            card.set_front(data['card_front'])
+            card.set_back(data['card_back'])
+            card.set_tag_count(len(data['tags']))
+            pre_tags = card.tags.all()
+            for tag in Tag.objects.all():
+                if (tag in pre_tags) and (str(tag.id) not in data['tags']):
+                    card.tags.remove(tag)
+                    tag.remove_card()
+                    tag.save()
+                elif (tag not in pre_tags) and (str(tag.id) in data['tags']):
+                    card.tags.add(tag)
+                    tag.add_card()
+                    tag.save()
+            card.save()
         return HttpResponse("loaded")
     else:
         return HttpResponse("nothing")
