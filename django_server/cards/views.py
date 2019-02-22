@@ -72,6 +72,14 @@ def add_tag(request):
             tag = Tag.objects.get(pk=data["id"])
             tag.set_success(data["success_rate"])
             tag.save()
+        elif data["type"] == "delete":
+            tag = Tag.objects.get(pk=data['id'])
+            tag_cards = tag.cards.all()
+            for card in tag_cards:
+                card.remove_tag()
+                card.tags.remove(tag)
+                card.save()
+            tag.delete()
         return HttpResponse("loaded")
     else:
         return HttpResponse("nothing")

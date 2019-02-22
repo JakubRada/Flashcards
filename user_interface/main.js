@@ -672,10 +672,18 @@ function list_cards_to_edit() {
             load_information("cards/" + card.id).done(function(card_info) {
                 count += 1;
                 $(
-                    '<tr><th scope="row">' + count + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                    '<tr><th scope="row">' + count + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_card_' + card_info.id + '">Delete</button></td></tr>'
                 ).appendTo("#table_of_cards tbody");
                 $("#edit_card_" + card_info.id).unbind().click(function() {
                     edit_card(card_info);
+                });
+                $("#delete_card_" + card_info.id).unbind().click(function() {
+                    $("#delete_conf").modal("toggle");
+                    $("#yes").unbind().click(function() {
+                        $("#delete_conf").modal("toggle");
+                        post_information("add_card/", create_card_object("delete", card_info.id, card_info.card_front, card_info.card_back, card_info.tags));
+                        list_cards_to_edit();
+                    });
                 });
             });
         }
@@ -736,10 +744,18 @@ function list_tags_to_edit() {
             load_information("tags/" + tag.id).done(function(tag_info) {
                 count += 1;
                 $(
-                    '<tr><th scope="row">' + count + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_conf">Delete</button></td></tr>'
+                    '<tr><th scope="row">' + count + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_tag_' + tag_info.id + '">Delete</button></td></tr>'
                 ).appendTo("#table_of_tags tbody");
                 $("#edit_tag_" + tag_info.id).unbind().click(function() {
                     edit_tag(tag_info);
+                });
+                $("#delete_tag_" + tag_info.id).unbind().click(function() {
+                    $("#delete_conf").modal("toggle");
+                    $("#yes").unbind().click(function() {
+                        $("#delete_conf").modal("toggle");
+                        post_information("add_tag/", create_tag_object("delete", tag_info.id, tag_info.tag_name, tag_info.success_rate, tag_info.card_count, tag_info.cards));
+                        list_cards_to_edit();
+                    });
                 });
             });
         }

@@ -53,6 +53,10 @@ class Card(models.Model):
         self.card_back = new_back
     def set_tag_count(self, new_tag_count):
         self.tag_count = new_tag_count
+    def remove_tag(self):
+        self.tag_count -= 1
+    def add_tag(self):
+        self.tag_count += 1
     def get_back(self):
         return self.card_back
     def get_front(self):
