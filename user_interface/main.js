@@ -103,8 +103,9 @@ function test_main() {
         for (let tag of all_tags) {
             $(
                 '<button type="button" class="btn btn-dark btn-lg btn-block">' + tag.tag_name + '</button>'
-            ).unbind().click(tag.id, function(event) {
-                test_type(event.data);
+            ).unbind().click([tag.id, tag.tag_name], function(event) {
+                console.log(event);
+                test_type(event.data[0], event.data[1]);
             }).appendTo("#test_tags_buttons");
         }
     });
@@ -121,7 +122,8 @@ function is_reversed() {
 }
 
 // choose type of test
-function test_type(tag_id) {
+function test_type(tag_id, tag_name) {
+    $("#tag_test").text(tag_name);
     show_one_item("test_type");
     $("#browse_button").unbind().click(function() {
         load_cards("browse", tag_id, is_reversed());
@@ -131,6 +133,9 @@ function test_type(tag_id) {
     });
     $("#write_button").unbind().click(function() {
         load_cards("write", tag_id, is_reversed());
+    });
+    $("#test_type_back").unbind().click(function() {
+        test_main();
     });
 }
 
@@ -170,7 +175,7 @@ function show_next_previous(current_index, max) {
 }
 
 // handles browse test type
-function browse(all_cards) {
+function browse(all_cards, tag_id) {
     // set initial values; reset flipcard and progressbar
     var count = all_cards.length;
     var current_index = 0;
@@ -199,7 +204,7 @@ function browse(all_cards) {
         show_next_previous(current_index, count);
     });
     $("#browse_back").unbind().click(function() {
-        test_main();
+        test_type(tag_id);
     });
     // flips card on click
     $('.flip-card .flip-card-inner').unbind().click( function() {
@@ -229,7 +234,7 @@ function load_cards(type, tag_id, is_reversed) {
                     all_cards = group_similar_cards(all_cards);
                     console.log(all_cards);
                     if (type == "browse"){
-                        browse(all_cards);
+                        browse(all_cards, tag_id);
                     } else if (type == "choices") {
                         choices(all_cards.length, 0, 0, [], 0, all_cards, tag_info);
                     } else {
