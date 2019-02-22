@@ -893,25 +893,30 @@ function create_tag() {
 // handles import of data into the application
 function import_data() {
     show_one_item('import');
-    $("#confirm_import").unbind().click(function() {
+    $("#confirm_import").unbind().click(function(event) {
+        event.preventDefault();
         $("#loading").show();
         // get selected file for import
-        const file = document.getElementById("import_input").files[0];
-        console.log(file);
-        $("#import_input").val("");
-        if (file.name.endsWith(".yml")) {
-            // reading file
-            const reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function(e) {
-                //processing data from file
-                var processed_data = process_data(reader.result);
-                console.log(processed_data);
+        try {
+            const file = document.getElementById("import_input").files[0];
+            $("#import_input").val("");
+            if (file.name.endsWith(".yml")) {
+                // reading file
+                const reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function() {
+                    //processing data from file
+                    var processed_data = process_data(reader.result);
+                    console.log(processed_data);
+                    post_information('import/', processed_data);
+                    $("#loading").hide();
+                }
+            } else {
+                $("#wrong_import_modal").modal("toggle");
             }
-        } else {
-            $("#wrong_import_modal").modal("toggle");
+        } catch(e) {
+            $("#loading").hide();
         }
-        $("#loading").hide();
     });
 }
 
@@ -941,7 +946,7 @@ function process_data(text) {
         } else if (line.match(/tag_[0-9]+:/)) {
             tag_count += 1;
             card_obj = false;
-            result[1][tag_count] = {id: 'new', tag_name: '', previous_success_rate: 0, card_count: 0};
+            result[1][tag_count] = {id: 'new', tag_name: '', success_rate: 0, card_count: 0};
         } else if (line.match(/card_front: /) && card_obj) {
             result[0][card_count].card_front = line.split(":")[1].trim();
         } else if (line.match(/card_back: /) && card_obj) {
@@ -953,14 +958,13 @@ function process_data(text) {
         } else if (line.match(/tag_name: /) && !card_obj) {
             result[1][tag_count].tag_name = line.split(":")[1].trim();
         } else if (line.match(/previous_success_rate: /) && !card_obj) {
-            result[1][tag_count].previous_success_rate = Number(line.split(":")[1].trim());
+            result[1][tag_count].success_rate = Number(line.split(":")[1].trim());
         } else if (line.match(/card_count: /) && !card_obj) {
             result[1][tag_count].card_count = Number(line.split(":")[1].trim());
         }
         index += 1;
     }
-    result = filter_json(result);
-    return result;
+    return filter_json(result);
 }
 
 // filters out jsons which contain invalid values
@@ -981,14 +985,17 @@ function filter_json(json_list) {
     remove = [];
     for (let i = 0; i < length; i += 1) {
         json = json_list[1][i];
-        if ((json.tag_name == '') || (json.previous_success_rate > 100) || (json.previous_success_rate < 0)) {
+        if ((json.tag_name == '') || (json.success_rate > 100) || (json.success_rate < 0)) {
             remove.push(i);
         }
     }
     for (let i = remove.length - 1; i >= 0; i -= 1) {
         json_list[1].splice(remove[i], 1);
     }
-    return json_list;
+    return JSON.stringify({
+        tags: json_list[1],
+        cards: json_list[0]
+    });
 }
 
 // handles export of data from the database

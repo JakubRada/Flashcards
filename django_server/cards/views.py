@@ -112,6 +112,47 @@ def add_card(request):
                     tag.add_card()
                     tag.save()
             card.save()
+        elif data['type'] == 'delete':
+            card = Card.objects.get(pk=data['id'])
+            tags = card.tags.all()
+            for tag in tags:
+                tag.cards.remove(tag)
+                tag.remove_card()
+                tag.save()
+            card.delete()
+        return HttpResponse("loaded")
+    else:
+        return HttpResponse("nothing")
+
+def import_all(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        tags = data['tags']
+        cards = data['cards']
+        tag_ids = {}
+        for i in range(len(tags)):
+            tag = tags[i]
+            try:
+                t = Tag.objects.get(tag_name=tag['tag_name'])
+                print("not saving tag")
+            except:
+                t = Tag(tag_name=tag['tag_name'], previous_success_rate=tag['success_rate'])
+                t.save()
+            tag_ids[i + 1] = t.id
+        for i in range(len(cards)):
+            card = cards[i]
+            try:
+                c = Card.objects.get(card_front=card['card_front'])
+                print("not saving card")
+            except:
+                c = Card(card_front=card['card_front'], card_back=card['card_back'], tag_count=card['tag_count'])
+                c.save()
+                for i in range(c.tag_count):
+                    t = Tag.objects.get(pk=tag_ids[card['tags'][i]])
+                    t.add_card()
+                    t.save()
+                    c.tags.add(t)
+                    c.save()
         return HttpResponse("loaded")
     else:
         return HttpResponse("nothing")
