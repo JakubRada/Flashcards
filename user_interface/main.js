@@ -162,15 +162,20 @@ function change_flipcard(front, back) {
 
 // handles visibility of next and previous button in browse test type
 function show_next_previous(current_index, max) {
-    if (current_index == 0) {
+    if (max == 1) {
         $("#browse_previous").hide();
-        $("#browse_next").show();
-    } else if (current_index + 1 == max) {
-        $("#browse_next").hide();
-        $("#browse_previous").show();
+        $("#browse_next").hide()
     } else {
-        $("#browse_next").show();
-        $("#browse_previous").show();
+        if (current_index == 0) {
+            $("#browse_previous").hide();
+            $("#browse_next").show();
+        } else if (current_index + 1 == max) {
+            $("#browse_next").hide();
+            $("#browse_previous").show();
+        } else {
+            $("#browse_next").show();
+            $("#browse_previous").show();
+        }
     }
 }
 
@@ -182,8 +187,12 @@ function browse(all_cards, tag_id) {
     update_browse_progress_bar(current_index ,count);
     change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back);
     show_one_item("test_browse");
-    $("#browse_next").show();
     $("#browse_previous").hide();
+    if (count > 1) {
+        $("#browse_next").show();
+    } else {
+        $("#browse_next").hide();
+    }
     $("#progress_bar").show();
     // next card
     $("#browse_next").unbind().click(function() {
