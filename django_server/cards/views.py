@@ -116,7 +116,7 @@ def add_card(request):
             card = Card.objects.get(pk=data['id'])
             tags = card.tags.all()
             for tag in tags:
-                tag.cards.remove(tag)
+                card.tags.remove(tag)
                 tag.remove_card()
                 tag.save()
             card.delete()
@@ -142,7 +142,7 @@ def import_all(request):
         for i in range(len(cards)):
             card = cards[i]
             try:
-                c = Card.objects.get(card_front=card['card_front'])
+                c = Card.objects.get(card_front=card['card_front'], card_back=card['card_back'])
                 print("not saving card")
             except:
                 c = Card(card_front=card['card_front'], card_back=card['card_back'], tag_count=card['tag_count'])
