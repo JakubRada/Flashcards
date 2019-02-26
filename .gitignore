@@ -8,3 +8,5 @@
 /django_server/server/__pycache__/*
 /django_server/cards/migrations/__pycache__/*
 TODO.md
+/presentation/*
+!*.tex
