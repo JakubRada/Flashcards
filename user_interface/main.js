@@ -853,8 +853,7 @@ function create_card() {
                     });
                     // creates JSON object
                     post_information("add_card/", create_card_object("new", "", front_input, back_input, checked));
-                    card_object = null;
-                    reset();
+                    create_card();
                     $("#created").modal("toggle");
                 } else {
                     $("#wrong_card").modal("toggle");
@@ -901,7 +900,7 @@ function create_tag() {
                 } else {
                     var tag_object = create_tag_object("new", "", name_input, 0, 0, []);
                     post_information("add_tag/", tag_object);
-                    reset();
+                    create_tag();
                     $("#created").modal("toggle");
                 }
             });
