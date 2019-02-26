@@ -4,4 +4,6 @@
 /user_interface/jquery-3.3.1.slim.min.js
 /user_interface/jquery.min.js
 /user_interface/popper.min.js
+/django_server/cards/__pycache__/*
+/django_server/server/__pycache__/*
 TODO.md
