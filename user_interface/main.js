@@ -60,6 +60,7 @@ function post_information(suffix, data) {
         url: database_path + suffix,
         dataType: 'json',
         data: data,
+        processData: false,
     });
 }
 
@@ -669,12 +670,21 @@ function levenshtein_distance(string_1, string_2) {
     }
 }
 
+function sort_list(list) {
+    return list.sort(function(a, b) {
+        var x = a.card_front.toLowerCase();
+        var y = b.card_front.toLowerCase();
+        return x.localeCompare(y);
+    });
+}
+
 // listing and editing/deleting cards
 function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
     show_one_item("card_list");
     load_information("cards").done(function(card_list) {
         var count = 0;
+        card_list = sort_list(card_list);
         for (let i = 0; i < card_list.length; i += 1) {
             let card = card_list[i];
             // for each card in database create line in table
@@ -919,6 +929,8 @@ function import_data() {
                     console.log(processed_data);
                     post_information('import/', processed_data);
                     $("#loading").hide();
+                    $("#import_response_text").text("Data imported SUCCESSFULLY");
+                    $("#import_response").modal('toggle');
                 }
             } else {
                 $("#wrong_import_modal").modal("toggle");
@@ -1048,9 +1060,9 @@ function write_file(filename, json_list) {
     }
     console.log(string);
     const file = require('fs');
-    file.writeFile("../export/" + filename + ".yml", string, function(e) {
-        if (e) {
-            console.log("success");
+    file.writeFile("../export/" + filename + ".yml", string, function(complete) {
+        if (complete) {
+            $("#loading").hide();
         }
     });
 }

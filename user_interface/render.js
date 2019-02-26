@@ -12,18 +12,23 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({
         width: 1200,
         minWidth: 800,
-        height: 800,
+        height: 900,
         minHeight: 600,
         title: 'Cards',
+        center: true,
+        webPreferences: {
+            nodeIntegration: true,
+        },
     });
     // removes the upper menu bar
-    // mainWindow.setMenu(null);
+    mainWindow.setMenu(null);
     // loading mainWindow.html with correct path
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainWindow.html'),
         protocol: 'file',
         slashes: true
     }));
+    //mainWindow.webContents.openDevTools();
     // Quit app when closed
     mainWindow.on('closed', function() {
         app.quit();

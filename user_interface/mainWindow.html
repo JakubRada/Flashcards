@@ -139,7 +139,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="submit" id="save_new_card">Save</button>
+                            <button class="btn btn-primary" type="button" id="save_new_card">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel">Cancel</button>
                         </div>
                     </form>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="submit" id="save_new_tag">Save</button>
+                            <button class="btn btn-primary" type="button" id="save_new_tag">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel">Cancel</button>
                         </div>
                     </form>
@@ -196,7 +196,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="submit" id="save_card_changes">Save</button>
+                            <button class="btn btn-primary" type="button" id="save_card_changes">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel_card">Cancel</button>
                         </div>
                     </form>
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="submit" id="save_tag_changes">Save</button>
+                            <button class="btn btn-primary" type="button" id="save_tag_changes">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel_tag">Cancel</button>
                         </div>
                     </form>
@@ -447,6 +447,23 @@
                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                         </div>
                         <div class="modal-body" id="wrong_export_modal_content"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- import modal -->
+        <div id="response">
+            <div class="modal fade" id="import_response" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import</h5>
+                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                        </div>
+                        <div class="modal-body" id="import_response_text"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                         </div>
