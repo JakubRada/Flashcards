@@ -773,7 +773,7 @@ function list_tags_to_edit() {
                     $("#yes").unbind().click(function() {
                         $("#delete_conf").modal("toggle");
                         post_information("add_tag/", create_tag_object("delete", tag_info.id, tag_info.tag_name, tag_info.success_rate, tag_info.card_count, tag_info.cards));
-                        list_cards_to_edit();
+                        list_tags_to_edit();
                     });
                 });
             });
