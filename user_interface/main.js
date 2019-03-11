@@ -670,10 +670,18 @@ function levenshtein_distance(string_1, string_2) {
     }
 }
 
-function sort_list(list) {
+function sort_card_list(list) {
     return list.sort(function(a, b) {
         var x = a.card_front.toLowerCase();
         var y = b.card_front.toLowerCase();
+        return x.localeCompare(y);
+    });
+}
+
+function sort_tag_list(list) {
+    return list.sort(function(a, b) {
+        var x = a.tag_name.toLowerCase();
+        var y = b.tag_name.toLowerCase();
         return x.localeCompare(y);
     });
 }
@@ -683,16 +691,17 @@ function list_cards_to_edit() {
     $("#table_of_cards tbody").empty();
     show_one_item("card_list");
     load_information("cards").done(function(card_list) {
-        var count = 0;
-        card_list = sort_list(card_list);
+        card_list = sort_card_list(card_list);
         for (let i = 0; i < card_list.length; i += 1) {
             let card = card_list[i];
+            $(
+                '<tr id=c' + i + '></tr>'
+            ).appendTo("#table_of_cards tbody");
             // for each card in database create line in table
             load_information("cards/" + card.id).done(function(card_info) {
-                count += 1;
                 $(
-                    '<tr><th scope="row">' + count + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_card_' + card_info.id + '">Delete</button></td></tr>'
-                ).appendTo("#table_of_cards tbody");
+                    '<th scope="row">' + (i + 1) + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_card_' + card_info.id + '">Delete</button></td>'
+                ).appendTo("#c" + i);
                 $("#edit_card_" + card_info.id).unbind().click(function() {
                     edit_card(card_info);
                 });
@@ -758,13 +767,14 @@ function list_tags_to_edit() {
     $("#table_of_tags tbody").empty();
     show_one_item('tag_list');
     load_information("tags").done(function(tag_list) {
-        var count = 0;
-        for (let tag of tag_list) {
+        tag_list = sort_tag_list(tag_list);
+        for (let i = 0; i < tag_list.length; i += 1) {
+            var tag = tag_list[i];
+            $('<tr id=t' + i + '></tr>').appendTo("#table_of_tags tbody");
             load_information("tags/" + tag.id).done(function(tag_info) {
-                count += 1;
                 $(
-                    '<tr><th scope="row">' + count + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_tag_' + tag_info.id + '">Delete</button></td></tr>'
-                ).appendTo("#table_of_tags tbody");
+                    '<th scope="row">' + (i + 1) + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_tag_' + tag_info.id + '">Delete</button></td>'
+                ).appendTo("#t" + i);
                 $("#edit_tag_" + tag_info.id).unbind().click(function() {
                     edit_tag(tag_info);
                 });
