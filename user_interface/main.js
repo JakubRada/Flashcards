@@ -606,6 +606,7 @@ function levenshtein_distance(string_1, string_2) {
     var str_2_len = string_2.length;
     var cost;
     var matrix = new Array();
+    var changes = [0];
     var return_str = "";
     var correct_span = "<span class='text-success'>";
     var wrong_span = "<span class='text-danger'>";
@@ -631,8 +632,9 @@ function levenshtein_distance(string_1, string_2) {
     }
     console.table(matrix);
     // highlight wrong answer or typos in partly correct answer
-    var ratio = (str_1_len - matrix[str_1_len][str_2_len]) / str_1_len;
-    if (ratio > 0.3) {
+    var ratio = (matrix[str_1_len][str_2_len]) / str_2_len;
+    console.log(ratio);
+    if (ratio < 0.3) {
         var x = 0;
         var y = 0;
         var x_increment = 1;
@@ -649,13 +651,32 @@ function levenshtein_distance(string_1, string_2) {
                 x += 1;
                 y += 1;
             }
-            if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
-                return_str += (correct_span + string_2[x - 1] + end_span);
-            } else {
-                if (str_1_len < str_2_len) {
-                    return_str += (wrong_span + string_2[x - 1] + end_span);
+            changes.push(matrix[y][x]);
+            if (str_1_len == str_2_len) {
+                if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
+                    return_str += (correct_span + string_2[x - 1] + end_span);
                 } else {
                     return_str += (wrong_span + string_1[y - 1] + end_span);
+                }
+            }
+        }
+        changes.push(matrix[y][x]);
+        var longer;
+        if (str_1_len < str_2_len) {
+            longer = string_2;
+        } else if (str_1_len > str_2_len) {
+            longer = string_1;
+        }
+        if (str_1_len != str_2_len) {
+            for (let i = 1; i <= max; i += 1) {
+                if (changes[i] <= changes[i - 1]) {
+                    return_str += (correct_span + longer[i - 1] + end_span);
+                } else {
+                    if (lower_after(changes, i, changes[i])) {
+                        return_str += (correct_span + longer[i - 1] + end_span);
+                    } else {
+                        return_str += (wrong_span + longer[i - 1] + end_span);
+                    }
                 }
             }
         }
@@ -663,6 +684,15 @@ function levenshtein_distance(string_1, string_2) {
     } else {
         return [false, wrong_span + string_1 + end_span];
     }
+}
+
+function lower_after(changes, index_from, value) {
+    for (let i = index_from; i < changes.length - 1; i += 1) {
+        if (changes[i] < value) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // sorts list of cards by alphabetical order (front)
