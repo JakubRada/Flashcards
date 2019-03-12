@@ -632,7 +632,7 @@ function levenshtein_distance(string_1, string_2) {
     console.table(matrix);
     // highlight wrong answer or typos in partly correct answer
     var ratio = (str_1_len - matrix[str_1_len][str_2_len]) / str_1_len;
-    if (ratio > 0.5) {
+    if (ratio > 0.3) {
         var x = 0;
         var y = 0;
         var x_increment = 1;
