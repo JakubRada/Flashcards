@@ -54,6 +54,7 @@ function one_choice(choice_num) {
     }
 }
 
+// sends post request into django database
 function post_information(suffix, data) {
     $.ajax({
         type: 'POST',
@@ -590,7 +591,6 @@ function check_magic(raw_input, correct_answer) {
     // for multiple answer question, if user enters one of possibilities
     for (let answer of possible_answers) {
         dist = levenshtein_distance(raw_input, answer);
-        console.log()
         if (dist[0]) {
             return [true, dist[1]];
         }
@@ -603,6 +603,7 @@ function check_magic(raw_input, correct_answer) {
     return [false, dist[1]];
 }
 
+// calculates levenshtein distance between two strings and returns correct answer or answer with corrected mistakes
 function levenshtein_distance(string_1, string_2) {
     // set up variables
     var str_1_len = string_1.length;
@@ -670,6 +671,7 @@ function levenshtein_distance(string_1, string_2) {
     }
 }
 
+// sorts list of cards by alphabetical order (front)
 function sort_card_list(list) {
     return list.sort(function(a, b) {
         var x = a.card_front.toLowerCase();
@@ -678,6 +680,7 @@ function sort_card_list(list) {
     });
 }
 
+// sorts list of tags by alphabetical order (name)
 function sort_tag_list(list) {
     return list.sort(function(a, b) {
         var x = a.tag_name.toLowerCase();
@@ -1047,6 +1050,7 @@ function export_data() {
     });
 }
 
+// writes file with exported data
 function write_file(filename, json_list) {
     var string = '';
     for (let json of json_list) {
@@ -1076,6 +1080,7 @@ function write_file(filename, json_list) {
     });
 }
 
+// prepares data to export
 function prepare_data(filename) {
     load_information("tags").done(function(tag_list) {
         var count = 0;
@@ -1135,7 +1140,7 @@ function wrong_export_format(string) {
     export_data();
 }
 
-// main
+// main, handle clicks on navigation bar
 $(document).ready(function() {
     reset();
     // clicks on navigation bar
