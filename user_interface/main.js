@@ -106,7 +106,6 @@ function test_main() {
             $(
                 '<button type="button" class="btn btn-dark btn-lg btn-block">' + tag.tag_name + '</button>'
             ).unbind().click([tag.id, tag.tag_name], function(event) {
-                console.log(event);
                 test_type(event.data[0], event.data[1]);
             }).appendTo("#test_tags_buttons");
         }
@@ -243,7 +242,6 @@ function load_cards(type, tag_id, is_reversed) {
                 if (index == all_card_ids.length) {
                     // if all cards loaded, start selected test type
                     all_cards = group_similar_cards(all_cards);
-                    console.log(all_cards);
                     if (type == "browse"){
                         browse(all_cards, tag_id);
                     } else if (type == "choices") {
@@ -381,7 +379,6 @@ function get_random_index() {
         return_list[i] = value;
         used[i] = value;
     }
-    console.log(return_list);
     return return_list;
 }
 
@@ -586,7 +583,6 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
 // determines whether
 function check_magic(raw_input, correct_answer) {
     var possible_answers = correct_answer.split(", ");
-    console.log(raw_input + " --> " + possible_answers);
     var dist;
     // for multiple answer question, if user enters one of possibilities
     for (let answer of possible_answers) {
@@ -654,10 +650,8 @@ function levenshtein_distance(string_1, string_2) {
                 y += 1;
             }
             if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
-                console.log("[" + y + ", " + x + "] <= [" + (y - y_increment) + ", " + (x - x_increment) + "]");
                 return_str += (correct_span + string_2[x - 1] + end_span);
             } else {
-                console.log("[" + y + ", " + x + "] >= [" + (y - y_increment) + ", " + (x - x_increment) + "]");
                 if (str_1_len < str_2_len) {
                     return_str += (wrong_span + string_2[x - 1] + end_span);
                 } else {
@@ -938,7 +932,6 @@ function import_data() {
                 reader.onload = function() {
                     //processing data from file
                     var processed_data = process_data(reader.result);
-                    console.log(processed_data);
                     post_information('import/', processed_data);
                     $("#loading").hide();
                     $("#import_response_text").text("Data imported SUCCESSFULLY");
@@ -1071,7 +1064,6 @@ function write_file(filename, json_list) {
             }
         }
     }
-    console.log(string);
     const file = require('fs');
     file.writeFile("../export/" + filename + ".yml", string, function(complete) {
         if (complete) {
