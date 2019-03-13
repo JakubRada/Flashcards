@@ -686,6 +686,7 @@ function levenshtein_distance(string_1, string_2) {
     }
 }
 
+// checks if error was addition of character
 function lower_after(changes, index_from, value) {
     for (let i = index_from; i < changes.length - 1; i += 1) {
         if (changes[i] < value) {
