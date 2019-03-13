@@ -1079,9 +1079,22 @@ function export_data() {
 }
 
 // writes file with exported data
-function write_file(filename, json_list) {
+function write_file(filename, export_list) {
+    const file = require('fs');
+    var complete_string = "";
+    for (let item of export_list) {
+        if (item[0] = "tag") {
+            complete_string += (item.join(", ") + "\n");
+        } else {
+            var length = item[3].length;
+            for (let i = 0; i < length; i += 1) {
+                
+            }
+        }
+    }
+
     var string = '';
-    for (let json of json_list) {
+    for (let json of export_list) {
         string += json.id + ":";
         string += "\n";
         if (json.id.match(/tag_[0-9]+/)) {
@@ -1099,8 +1112,9 @@ function write_file(filename, json_list) {
             }
         }
     }
-    const file = require('fs');
-    file.writeFile("../export/" + filename + ".yml", string, function(complete) {
+
+
+    file.appendFile("../export/" + filename + ".yml", string, function(complete) {
         if (complete) {
             $("#loading").hide();
         }
@@ -1109,40 +1123,35 @@ function write_file(filename, json_list) {
 
 // prepares data to export
 function prepare_data(filename) {
+    var count = 0;
+    var export_list = [];
+    var length;
     load_information("tags").done(function(tag_list) {
-        var count = 0;
-        var json_list = [];
-        var length = tag_list.length;
+        length = tag_list.length;
         for (let tag of tag_list) {
-            load_information("tags/" + tag.id).done(function(tag_info) {
-                json_list.push({
-                    "id": "tag_" + (count + 1),
-                    "tag_name": tag_info.tag_name,
-                    "previous_success_rate": tag_info.success_rate,
-                    "card_count": tag_info.card_count
-                });
+            export_list.push([
+                "tag",
+                count + 1,
+                tag.tag_name
+            ]);
+            count += 1;
+        }
+    });
+    load_information("cards").done(function(card_list) {
+        length = card_list.length;
+        count = 0;
+        for (let card of card_list) {
+            load_information("cards/" + card.id).done(function(card_info) {
+                export_list.push([
+                    "card",
+                    card_info.card_front,
+                    card_info.card_back,
+                    card_info.tags
+                ]);
                 count += 1;
                 if (count == length) {
-                    load_information("cards").done(function(card_list) {
-                        count = 0;
-                        length = card_list.length;
-                        for (let card of card_list) {
-                            load_information("cards/" + card.id).done(function(card_info) {
-                                json_list.push({
-                                    "id": "card_" + (count + 1),
-                                    "card_front": card_info.card_front,
-                                    "card_back": card_info.card_back,
-                                    "tag_count": card_info.tag_count,
-                                    "tags": card_info.tags
-                                });
-                                count += 1;
-                                if (count == length) {
-                                    write_file(filename, json_list);
-                                    $("#loading").hide();
-                                }
-                            });
-                        }
-                    });
+                    write_file(filename, export_list);
+                    $("#loading").hide();
                 }
             });
         }
