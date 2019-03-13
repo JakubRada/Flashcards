@@ -1080,19 +1080,16 @@ function export_data() {
 
 // writes file with exported data
 function write_file(filename, export_list) {
-    const file = require('fs');
     var complete_string = "";
     for (let item of export_list) {
-        if (item[0] = "tag") {
+        if (item[0] == "tag") {
             complete_string += (item.join(", ") + "\n");
         } else {
-            var length = item[3].length;
-            for (let i = 0; i < length; i += 1) {
-                
-            }
+            item[3] = item[3].join("|");
+            complete_string += (item.join(", ") + "\n");
         }
     }
-
+    /*
     var string = '';
     for (let json of export_list) {
         string += json.id + ":";
@@ -1112,13 +1109,16 @@ function write_file(filename, export_list) {
             }
         }
     }
-
-
+    
+    
+    const file = require('fs');
     file.appendFile("../export/" + filename + ".yml", string, function(complete) {
         if (complete) {
             $("#loading").hide();
         }
     });
+    */
+    console.log(complete_string);
 }
 
 // prepares data to export
