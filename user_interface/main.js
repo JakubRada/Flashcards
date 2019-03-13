@@ -1014,6 +1014,9 @@ function process_data(text) {
         entry = entries[i];
         if (entry[0] == "card") {
             tags = entry[3].split("|").sort();
+            for (let i = 0; i < tags.length; i += 1) {
+                tags[i] = Number(tags[i]);
+            }
             object = {id: "new", card_front: entry[1], card_back: entry[2], tag_count: tags.length, tags: tags};
             result[0].push(object);
         } else if (entry[0] == "tag") {
@@ -1021,8 +1024,8 @@ function process_data(text) {
             result[1].push(object);
         }
     }
-    console.log(filter_json(result));
-    //return filter_json(result);
+    //console.log(filter_json(result));
+    return filter_json(result);
 }
 
 // filters out jsons which contain invalid values
