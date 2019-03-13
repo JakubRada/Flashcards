@@ -956,7 +956,7 @@ function import_data() {
         try {
             const file = document.getElementById("import_input").files[0];
             $("#import_input").val("");
-            if (file.name.endsWith(".yml")) {
+            if (file.name.endsWith(".csv")) {
                 // reading file
                 const reader = new FileReader();
                 reader.readAsText(file);
@@ -977,51 +977,52 @@ function import_data() {
     });
 }
 
+// splits and sorts tags to be correctly connected with words
+function sort_tags_to_import(entries) {
+    var tags = [];
+    var cards = [];
+    for (let entry of entries) {
+        entry = entry.split(", ")
+        if (entry[0] == "card") {
+            cards.push(entry);
+        } else if (entry[0] == "tag") {
+            tags.push(entry);
+        }
+    }
+    tags.sort(function(a, b) {
+        return a[1] - b[1];
+    });
+    return tags.concat(cards);
+}
+
 // handles processing of data
 function process_data(text) {
-    var lines;
+    var entries;
     // splits text to lines
     try {
-        lines = text.split("\r\n");
+        entries = text.split("\r\n");
     } catch(exception) {
-        lines = text.split("\n");
+        entries = text.split("\n");
     }
-    var length = lines.length;
-    var line;
-    var index = 0;
-    var card_count = -1;
-    var tag_count = -1;
-    var card_obj;
+    entries = sort_tags_to_import(entries);
+    var count = entries.length;
+    var entry;
     var result = [[], []];
-    // processes all lines and creates list of json objects
-    while (index < length - 1) {
-        line = lines[index];
-        if (line.match(/card_[0-9]+:/)) {
-            card_count += 1;
-            card_obj = true;
-            result[0][card_count] = {id: 'new', card_front: '', card_back: '', tag_count: 0, tags: []};
-        } else if (line.match(/tag_[0-9]+:/)) {
-            tag_count += 1;
-            card_obj = false;
-            result[1][tag_count] = {id: 'new', tag_name: '', success_rate: 0, card_count: 0};
-        } else if (line.match(/card_front: /) && card_obj) {
-            result[0][card_count].card_front = line.split(":")[1].trim();
-        } else if (line.match(/card_back: /) && card_obj) {
-            result[0][card_count].card_back = line.split(":")[1].trim();
-        } else if (line.match(/tag_count: /) && card_obj) {
-            result[0][card_count].tag_count = Number(line.split(":")[1].trim());
-        } else if (line.match(/[0-9]+: /) && card_obj) {
-            result[0][card_count].tags.push(Number(line.split(":")[1].trim()));
-        } else if (line.match(/tag_name: /) && !card_obj) {
-            result[1][tag_count].tag_name = line.split(":")[1].trim();
-        } else if (line.match(/previous_success_rate: /) && !card_obj) {
-            result[1][tag_count].success_rate = Number(line.split(":")[1].trim());
-        } else if (line.match(/card_count: /) && !card_obj) {
-            result[1][tag_count].card_count = Number(line.split(":")[1].trim());
+    var object;
+    var tags;
+    for (let i = 0; i < count; i += 1) {
+        entry = entries[i];
+        if (entry[0] == "card") {
+            tags = entry[3].split("|").sort();
+            object = {id: "new", card_front: entry[1], card_back: entry[2], tag_count: tags.length, tags: tags};
+            result[0].push(object);
+        } else if (entry[0] == "tag") {
+            object = {id: "new", tag_name: entry[2], success_rate: 0, card_count: 0};
+            result[1].push(object);
         }
-        index += 1;
     }
-    return filter_json(result);
+    console.log(filter_json(result));
+    //return filter_json(result);
 }
 
 // filters out jsons which contain invalid values
