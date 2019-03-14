@@ -21,7 +21,7 @@
         <script src="./main.js"></script>
         <script>if (window.module) module = window.module;</script>
     </head>
-    <body style="background-color: #eeeeee; color: #37474f; user-select: none;">
+    <body style="background-color: #c4c4c4; color: #37474f; user-select: none;">
         <!-- navigation bar on top of the page -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container-fluid">
@@ -139,7 +139,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="button" id="save_new_card">Save</button>
+                            <button class="btn btn-info" type="button" id="save_new_card">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel">Cancel</button>
                         </div>
                     </form>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="button" id="save_new_tag">Save</button>
+                            <button class="btn btn-info" type="button" id="save_new_tag">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel">Cancel</button>
                         </div>
                     </form>
@@ -196,7 +196,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="button" id="save_card_changes">Save</button>
+                            <button class="btn btn-info" type="button" id="save_card_changes">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel_card">Cancel</button>
                         </div>
                     </form>
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <button class="btn btn-primary" type="button" id="save_tag_changes">Save</button>
+                            <button class="btn btn-info" type="button" id="save_tag_changes">Save</button>
                             <button class="btn btn-danger ml-3" id="cancel_tag">Cancel</button>
                         </div>
                     </form>
@@ -242,19 +242,19 @@
                 <div class="jumbotron mt-5 shadow-lg rounded" id="choose_type">
                     <div class="row">
                         <h1 class="display-4 ml-3" id="tag_test"></h1>
-                        <button type="button" class="btn btn-primary btn-lg ml-auto" id="test_type_back">Back to tag selection</button>
+                        <button type="button" class="btn btn-info btn-lg ml-auto" id="test_type_back">Back to tag selection</button>
                     </div>
                     <p class="lead">Choose type of test:</p>
                     <hr class="my-4">
                     <div class="row" id="test_type_buttons">
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="browse_button"><h5>Browse</h5></button>
+                            <button type="button" class="btn btn-info btn-lg" style="width: 100%;" id="browse_button"><h5>Browse</h5></button>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;" id="choices_button"><h5>Choices</h5></button>
+                            <button type="button" class="btn btn-info btn-lg" style="width: 100%;" id="choices_button"><h5>Choices</h5></button>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-primary btn-lg" style="width: 100%;"id="write_button"><h5>Write</h5></button>
+                            <button type="button" class="btn btn-info btn-lg" style="width: 100%;"id="write_button"><h5>Write</h5></button>
                         </div>
                     </div>
                     <div class="row mt-5 justify-content-md-center">
@@ -271,13 +271,13 @@
             <div class="container">
                 <div class="container mt-5">
                     <div class="progress" style="height: 20px;">
-                        <div id="positive_progress" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                        <div id="positive_progress" class="progress-bar bg-dark" role="progressbar" style="width: 0%;"></div>
                     </div>
                 </div>
                 <div class="jumbotron mt-3 shadow-lg rounded">
                     <div class="row">
                         <h1 class="display-4 ml-3">Flip a card</h1>
-                        <button type="button" class="btn btn-primary btn-lg ml-auto" id="browse_back">Back to test selection</button>
+                        <button type="button" class="btn btn-info btn-lg ml-auto" id="browse_back">Back to test selection</button>
                     </div>
                     <hr class="my-4">
                     <p class="lead">Click on the card to flip it.</p>
@@ -298,10 +298,10 @@
                     <div class="mt-3">
                         <div class="d-flex">
                             <div class="p-2 mr-auto">
-                                <button type="button" class="btn btn-primary" id="browse_previous">Previous</button>
+                                <button type="button" class="btn btn-info" id="browse_previous">Previous</button>
                             </div>
                             <div class="p-2 ml-auto">
-                                <button type="button" class="btn btn-primary" id="browse_next">Next</button>
+                                <button type="button" class="btn btn-info" id="browse_next">Next</button>
                             </div>
                         </div>
                     </div>
@@ -319,13 +319,13 @@
                             <p class="lead">Choose one from these options:</p>
                             <div class="list-group" id="choices_list">
                                 <li class="list-group-item" hidden></li>
-                                <li class="list-group-item list-group-item-action" id="option_1"></li>
-                                <li class="list-group-item list-group-item-action" id="option_2"></li>
-                                <li class="list-group-item list-group-item-action" id="option_3"></li>
-                                <li class="list-group-item list-group-item-action" id="option_4"></li>
+                                <li class="list-group-item list-group-item-secondary list-group-item-action" id="option_1"></li>
+                                <li class="list-group-item list-group-item-secondary list-group-item-action" id="option_2"></li>
+                                <li class="list-group-item list-group-item-secondary list-group-item-action" id="option_3"></li>
+                                <li class="list-group-item list-group-item-secondary list-group-item-action" id="option_4"></li>
                                 <li class="list-group-item" hidden></li>
                             </div>
-                            <button role="button" class="btn btn-primary mt-5" id="choices_check_answer">Check answer</button>
+                            <button role="button" class="btn btn-info mt-5" id="choices_check_answer">Check answer</button>
                         </div>
                         <div class="col-4">
                             <p class="mt-2">Correct</p>
@@ -358,7 +358,7 @@
                                     <label for="write_answer">Write the correct answer:</label>
                                     <input type="text" class="form-control" id="write_answer">
                                 </div>
-                                <button role="button" class="btn btn-primary" id="check_write_answer">Check answer</button>
+                                <button role="button" class="btn btn-info" id="check_write_answer">Check answer</button>
                             </form>
                         </div>
                         <div class="col-4">
@@ -396,7 +396,7 @@
                         </div>
                     </div>
                     <div class="mt-5">
-                        <button type="button" class="btn btn-primary" id="confirm_import">Confirm import</button>
+                        <button type="button" class="btn btn-info" id="confirm_import">Confirm import</button>
                     </div>
                 </div>
             </div>
@@ -412,7 +412,7 @@
                         </div>
                         <div class="modal-body" id="wrong_import_modal_content">File has to be <kbd>.csv</kbd> format</div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>
@@ -432,7 +432,7 @@
                         </div>
                     </div>
                     <div class="mt-5">
-                        <button type="button" class="btn btn-primary" id="confirm_export">Confirm export</button>
+                        <button type="button" class="btn btn-info" id="confirm_export">Confirm export</button>
                     </div>
                 </div>
             </div>
@@ -448,7 +448,7 @@
                         </div>
                         <div class="modal-body" id="wrong_export_modal_content"></div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>
@@ -465,7 +465,7 @@
                         </div>
                         <div class="modal-body" id="response_text"></div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>
@@ -484,7 +484,7 @@
                             <p></p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -503,7 +503,7 @@
                             <p>Are you sure you want to delete this item?</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="yes">Yes</button>
+                            <button type="button" class="btn btn-info" id="yes">Yes</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                         </div>
                     </div>
@@ -523,7 +523,7 @@
                             <p>Two different tags cannot have the same names. You have to change it.</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>
@@ -542,7 +542,7 @@
                             <p>Two different cards cannot have similar both front and back. Only fronts or only backs can be equal.</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>
@@ -561,7 +561,7 @@
                             <p>It has been successfully saved.</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
                 </div>
@@ -584,7 +584,7 @@
                         <div class="card-body" id="correct_correct_answer"></div>
                     </div>
                     <hr class="my-4">
-                    <button type="button" class="btn btn-primary dismiss">Next question</button>
+                    <button type="button" class="btn btn-info dismiss">Next question</button>
                 </div>
             </div>
         </div>
@@ -605,7 +605,7 @@
                         <div class="card-body" id="wrong_correct_answer"></div>
                     </div>
                     <hr class="my-4">
-                    <button type="button" class="btn btn-primary dismiss">Next question</button>
+                    <button type="button" class="btn btn-info dismiss">Next question</button>
                 </div>
             </div>
         </div>
@@ -615,7 +615,7 @@
                 <div class="jumbotron mt-5 shadow-lg rounded">
                     <div class="row">
                         <h1 class="display-4 ml-3" id="tag_summary_headline"></h1>
-                        <button type="button" class="btn btn-primary btn-lg ml-auto" id="summary_back">Continue to test selection</button>
+                        <button type="button" class="btn btn-info btn-lg ml-auto" id="summary_back">Continue to test selection</button>
                     </div>
                     <p class="lead mt-3">Here is a summary of your answers: </p>
                     <hr class="my-4">
@@ -624,7 +624,7 @@
                             <h1>Overall progress: <span id="success_rate"></span></h1><h1><span class="badge badge-pill badge-success ml-3" id="improvement"></span></h1>
                             <h1><span class="badge badge-pill badge-danger ml-3" id="impairment"></span></h1>
                     </div>
-                    <button class="btn btn-primary mt-5" id="answers_button" type="button" data-toggle="collapse" data-target="#answers">Show answers</button>
+                    <button class="btn btn-info mt-5" id="answers_button" type="button" data-toggle="collapse" data-target="#answers">Show answers</button>
                     <div class="collapse mt-3" id="answers">
                         <table class="table table-borderless" id="answers_table">
                             <thead class="thead-dark">
