@@ -21,7 +21,7 @@ const controlButtons = [
 ];
 
 // basic url where django database is running
-const database_path = "http://127.0.0.1:8000/cards/";
+const database_path = "http://localhost:8000/cards/";
 
 // hides everything
 function hide_all() {
