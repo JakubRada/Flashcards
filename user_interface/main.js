@@ -962,11 +962,11 @@ function import_data() {
                 reader.readAsText(file);
                 reader.onload = function() {
                     //processing data from file
-                    var processed_data = process_data(reader.result);
-                    post_information('import/', processed_data);
+                    post_information('import/', process_data(reader.result));
                     $("#loading").hide();
-                    $("#import_response_text").text("Data imported SUCCESSFULLY");
-                    $("#import_response").modal('toggle');
+                    $("#response_title").text("Import");
+                    $("#response_text").text("Data imported SUCCESSFULLY");
+                    $("#response").modal('toggle');
                 }
             } else {
                 $("#wrong_import_modal").modal("toggle");
@@ -1081,59 +1081,44 @@ function export_data() {
 // writes file with exported data
 function write_file(filename, export_list) {
     var complete_string = "";
-    for (let item of export_list) {
-        if (item[0] == "tag") {
-            complete_string += (item.join(", ") + "\n");
-        } else {
-            item[3] = item[3].join("|");
-            complete_string += (item.join(", ") + "\n");
-        }
+    var tag_list;
+    for (let item of export_list[0]) {
+        complete_string += (`tag, ${item.number}, ${item.tag_name}\n`);
     }
-    /*
-    var string = '';
-    for (let json of export_list) {
-        string += json.id + ":";
-        string += "\n";
-        if (json.id.match(/tag_[0-9]+/)) {
-            string += ("  tag_name: " + json.tag_name + "\n");
-            string += ("  previous_success_rate: " + json.previous_success_rate + "\n");
-            string += ("  card_count: " + json.card_count + "\n");
-        } else {
-            string += ("  card_front: " + json.card_front + "\n");
-            string += ("  card_back: " + json.card_back + "\n");
-            string += ("  tag_count: " + json.tag_count + "\n");
-            var length = json.tags.length; // replace with json.tag_count
-            string += "  tags:\n";
-            for (let i = 0; i < length; i += 1) {
-                string += ("    " + i + ": " + json.tags[i] + "\n");
+    for (let item of export_list[1]) {
+        tag_list = [];
+        for (let card_tag of item.tags) {
+            for (let tag of export_list[0]) {
+                if (card_tag == tag.id) {
+                    tag_list.push(export_list[0].indexOf(tag) + 1).toString();
+                }
             }
         }
+        complete_string += (`card, ${item.card_front}, ${item.card_back}, ${tag_list.join("|")}\n`)
     }
-    
-    
     const file = require('fs');
-    file.appendFile("../export/" + filename + ".yml", string, function(complete) {
-        if (complete) {
-            $("#loading").hide();
-        }
+    file.writeFile(`../export/${filename}.csv`, complete_string, function() {
+        $("#loading").hide();
+        $("#response_title").text("Export");
+        $("#response_text").text(`Data successfully exported into ${filename}.csv in export folder`);
+        $("#response").modal('toggle');
     });
-    */
-    console.log(complete_string);
 }
 
 // prepares data to export
 function prepare_data(filename) {
     var count = 0;
-    var export_list = [];
+    var export_list = [[], []];
     var length;
     load_information("tags").done(function(tag_list) {
         length = tag_list.length;
         for (let tag of tag_list) {
-            export_list.push([
-                "tag",
-                count + 1,
-                tag.tag_name
-            ]);
+            export_list[0].push({
+                "type": "tag",
+                "number": count + 1,
+                "tag_name": tag.tag_name, 
+                "id": tag.id
+            });
             count += 1;
         }
     });
@@ -1142,12 +1127,12 @@ function prepare_data(filename) {
         count = 0;
         for (let card of card_list) {
             load_information("cards/" + card.id).done(function(card_info) {
-                export_list.push([
-                    "card",
-                    card_info.card_front,
-                    card_info.card_back,
-                    card_info.tags
-                ]);
+                export_list[1].push({
+                    "type": "card",
+                    "card_front": card_info.card_front,
+                    "card_back": card_info.card_back,
+                    "tags": card_info.tags
+                });
                 count += 1;
                 if (count == length) {
                     write_file(filename, export_list);
@@ -1160,7 +1145,7 @@ function prepare_data(filename) {
 
 // determines if string contains special symbols and cannot be used for file name
 function contains_special_symbols(string) {
-    var charlist = '1234567890!@#$%^&*()=+[{}];:\'"\\|,<.>/?'.split("");
+    var charlist = '!@#$%^&*()=+[{}];:\'"\\|,<.>/?'.split("");
     for (let char of charlist) {
         if (string.includes(char)) {
             return true;

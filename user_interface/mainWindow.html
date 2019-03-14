@@ -455,15 +455,15 @@
             </div>
         </div>
         <!-- import modal -->
-        <div id="response">
-            <div class="modal fade" id="import_response" tabindex="-1" role="dialog">
+        <div id="response_modal">
+            <div class="modal fade" id="response" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Import</h5>
+                            <h5 class="modal-title" id="response_title"></h5>
                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                         </div>
-                        <div class="modal-body" id="import_response_text"></div>
+                        <div class="modal-body" id="response_text"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                         </div>
@@ -529,23 +529,24 @@
                 </div>
             </div>
         </div>
+        <!-- alert that card already exists -->
         <div id="wrong_card_modal">
-                <div class="modal fade" id="wrong_card" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Card already exists</h5>
-                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Two different cards cannot have similar both front and back. Only fronts or only backs can be equal.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-                                </div>
-                            </div>
+            <div class="modal fade" id="wrong_card" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Card already exists</h5>
+                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Two different cards cannot have similar both front and back. Only fronts or only backs can be equal.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                         </div>
                     </div>
+                </div>
+            </div>
         </div>
         <!-- message shown after successful creation -->
         <div id="created_modal">
