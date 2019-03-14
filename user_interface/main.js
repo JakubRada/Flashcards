@@ -982,7 +982,8 @@ function sort_tags_to_import(entries) {
     var tags = [];
     var cards = [];
     for (let entry of entries) {
-        entry = entry.split(", ")
+        entry = entry.split(",");
+        entry = $.map(entry, $.trim);
         if (entry[0] == "card") {
             cards.push(entry);
         } else if (entry[0] == "tag") {
