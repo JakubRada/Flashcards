@@ -970,6 +970,7 @@ function import_data() {
                 }
             } else {
                 $("#wrong_import_modal").modal("toggle");
+                $("#loading").hide();
             }
         } catch(e) {
             $("#loading").hide();
@@ -1095,7 +1096,7 @@ function write_file(filename, export_list) {
                 }
             }
         }
-        complete_string += (`card, ${item.card_front}, ${item.card_back}, ${tag_list.join("|")}\n`)
+        complete_string += (`card, ${item.card_front}, ${item.card_back}, ${tag_list.join("|")}\n`);
     }
     const file = require('fs');
     file.writeFile(`../export/${filename}.csv`, complete_string, function() {
@@ -1159,6 +1160,7 @@ function contains_special_symbols(string) {
 function wrong_export_format(string) {
     $("#wrong_export_modal_content").text(string);
     $("#wrong_export_modal").modal("toggle");
+    $("#loading").hide();
     export_data();
 }
 
