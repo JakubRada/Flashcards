@@ -1099,10 +1099,14 @@ function write_file(filename, export_list) {
         complete_string += (`card, ${item.card_front}, ${item.card_back}, ${tag_list.join("|")}\n`);
     }
     const file = require('fs');
-    file.writeFile(`../export/${filename}.csv`, complete_string, function() {
+    if (!file.stat("export", function(err, stats) {})) {
+        file.mkdir("export", {recursive: true}, function(err) {});
+    }
+    file.writeFile(`export/${filename}.csv`, complete_string, function() {
         $("#loading").hide();
         $("#response_title").text("Export");
-        $("#response_text").text(`Data successfully exported into ${filename}.csv in export folder`);
+        $("#response_text").text("Data successfully exported into ");
+        $("#path").text(`/${filename}.csv`);
         $("#response").modal('toggle');
     });
 }
