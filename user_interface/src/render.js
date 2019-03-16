@@ -28,7 +28,7 @@ app.on('ready', function() {
         protocol: 'file',
         slashes: true
     }));
-    //mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
     // Quit app when closed
     mainWindow.on('closed', function() {
         app.quit();
