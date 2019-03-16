@@ -1108,6 +1108,7 @@ function write_file(filename, export_list) {
         $("#response_text").text("Data successfully exported into ");
         $("#path").text(`/${filename}.csv`);
         $("#response").modal('toggle');
+        $("export_input").text("");
     });
 }
 
