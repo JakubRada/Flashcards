@@ -74,6 +74,9 @@
         <div id="title_page"><!-- add titlepage text-->
             <div class="container mt-5">
                 <h1 class="display-1">Flashcards</h1>
+                <div class="mt-5">
+                    <img src="../assets/title_page/title_image1.jpg" class="img-fluid">
+                </div>
             </div>
         </div>
         <!-- listing all cards -->
@@ -476,15 +479,118 @@
         </div>
         <!-- help -->
         <div id="help_modal"><!-- add help text -->
-            <div class="modal fade" id="help" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
+            <div class="modal fade bd-example-modal-lg" id="help" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="help">Help</h5>
+                            <h2 class="modal-title" id="help">Help</h2>
                             <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <p></p>
+                            <h4><span class="badge badge-dark">Card</span> = pair of texts, only one is know at the time</h4>
+                            <h4><span class="badge badge-dark">Tag</span> = group of cards, unit for testing</h4>
+                            <hr>
+                            <h3><span class="badge badge-dark">Create card</span></h3>
+                            <ul>
+                                <li>Adds new card into your collection</li>
+                                <li><strong>Front side</strong> text field fill with text to be shown on the front side of the flashcard</li>
+                                <li><strong>Back side</strong> text field fill with text to be shown on the back side of the flashcard</li>
+                                <li>Select any number of <strong>tags</strong> to add this card to</li>
+                                <li>Click <strong>Save</strong> to save the card</li>
+                                <li>Click <strong>Cancel</strong> to discard changes</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Create tag</span></h3>
+                            <ul>
+                                <li>Adds new tag into your collection</li>
+                                <li><strong>Tag name</strong> text field fill with text to be treated as a name of the tag</li>
+                                <li>Click <strong>Save</strong> to save the tag</li>
+                                <li>Click <strong>Cancel</strong> to discard changes</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Edit card</span></h3>
+                            <ul>
+                                <li>Shows list of all cards in your collection with details about each card</li>
+                                <ul>
+                                    <li><strong>Front</strong> and <strong>Back</strong> side and <strong>Number of tags</strong> which contain the card</li>
+                                    <li><strong>Edit</strong> button - open form for editing selected card</li>
+                                    <li><strong>Delete</strong> button - remove card from collection</li>
+                                </ul>
+                                <li>Editing is same as creating - fields and checkboxes are filled with current information about selected card</li>
+                                <li><strong>Save</strong> to save changes</li>
+                                <li><strong>Cancel</strong> to discard changes</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Edit tag</span></h3>
+                            <ul>
+                                <li>Shows list of all tags in collection with details about each tag</li>
+                                <ul>
+                                    <li><strong>Tag name</strong>, <strong>Number of cards</strong> which are in the tag and <strong>Success rate</strong> of the last test</li>
+                                    <li><strong>Edit</strong> button - open form for editing selected tag</li>
+                                    <li><strong>Delete</strong> button - remove tag from collection</li>
+                                </ul>
+                                <li>Only <strong>Tag name</strong> can be changed - field filled with current name</li>
+                                <li><strong>Save</strong> to save changes</li>
+                                <li><strong>Cancel</strong> to discard changes</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Tests</span></h3>
+                            <ul>
+                                <li>Choose <strong>tag</strong> to test from listed options</li>
+                                <li>Choose type of test (<strong>browse, choices, write</strong>) and select if card will be tested normally or with Front and Back <strong>swapped</strong> (<strong>Reversed</strong> switch)</li>
+                                <li>Click <strong>Back to tag selection</strong> to return to selection of tag to test</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Browse</span></h3>
+                            <ul>
+                                <li>No questions in this type of test</li>
+                                <li>Browsing cards by clicking <strong>Previous</strong> or <strong>Next</strong> buttons</li>
+                                <li>Clicking on card <strong>flips</strong> it to show the hidden side</li>
+                                <li>On top of the page is status bar on which is shown which card from how many is shown</li>
+                                <li>Click <strong>Back to test selection</strong> to return back to selecting type of test</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Choices</span></h3>
+                            <ul>
+                                <li>On the top of the page is shown <strong>Front</strong> side of the card</li>
+                                <li>Below are listed <strong>4 choices</strong> from which <strong>Only one</strong> is correct</li>
+                                <li>Select correct one by clicking on them</li>
+                                <li>Click on <strong>Check answer</strong> to confirm answer - page with result - shows whether the answer was correct or not, when not it provides correct one, too</li>
+                                <li>Click on <strong>Next question</strong> to move to next question</li>
+                                <li>On the right side are three status bars</li>
+                                <ul>
+                                    <li>Number of correct answers, wrong answers and answers to be answered</li>
+                                </ul>
+                                <li>After the last question a summary is shown</li>
+                                <ul>
+                                    <li>Percentage of correct answers is shown and comparison with previous test</li>
+                                    <li>Click on <strong>Show answers</strong> to display a table with all answers and correct answers</li>
+                                    <li>Click on <strong>Continue to test selection</strong> to finish test and return to selecting another test</li>
+                                </ul>
+                            </ul>
+                            <h3><span class="badge badge-dark">Write</span></h3>
+                            <ul>
+                                <li>On the top of the page is shown <strong>Front</strong> side of the card</li>
+                                <li>Below is a field where to put answer</li>
+                                <li>Click on <strong>Check answer</strong> to confirm answer - page with result - shows whether the answer was correct or not, when not it provides correct one and highlights mistakes in given answer</li>
+                                <li>Click on <strong>Next question</strong> to move to next question</li>
+                                <li>On the right side are three status bars</li>
+                                <ul>
+                                    <li>Number of correct answers, wrong answers and answers to be answered</li>
+                                </ul>
+                                <li>After the last question a summary is shown</li>
+                                <ul>
+                                    <li>Percentage of correct answers is shown and comparison with previous test</li>
+                                    <li>Click on <strong>Show answers</strong> to display a table with all answers and correct answers</li>
+                                    <li>Click on <strong>Continue to test selection</strong> to finish test and return to selecting another test</li>
+                                </ul>
+                            </ul>
+                            <h3><span class="badge badge-dark">Import</span></h3>
+                            <ul>
+                                <li>Only one button - show file system</li>
+                                <li>Select <strong>file</strong> to import (it has to be <strong>.csv</strong> format)</li>
+                                <li>If the file is written correctly, data will be added to collection</li>
+                                <li>(If imported card already exists in collection, it will be skipped)</li>
+                            </ul>
+                            <h3><span class="badge badge-dark">Export</span></h3>
+                            <ul>
+                                <li>One text field - write name of file in which data will be exported (<strong>letters and numbers only</strong>)</li>
+                                <li>File will be saved to <strong>export</strong> folder in the main folder of this app</li>
+                            </ul>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
