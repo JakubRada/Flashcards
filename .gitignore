@@ -1,8 +1,5 @@
 /user_interface/node_modules/*
-/user_interface/bootstrap.min.css
-/user_interface/bootstrap.min.js
-/user_interface/jquery.min.js
-/user_interface/popper.min.js
+/user_interface/lib/*
 /django_server/cards/__pycache__/*
 /django_server/server/__pycache__/*
 /django_server/cards/migrations/__pycache__/*
