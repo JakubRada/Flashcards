@@ -14,7 +14,7 @@ app.on('ready', function() {
         minWidth: 800,
         height: 900,
         minHeight: 600,
-        title: 'Cards',
+        title: 'Flashcards',
         center: true,
         webPreferences: {
             nodeIntegration: true,
