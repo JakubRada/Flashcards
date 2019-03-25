@@ -511,7 +511,7 @@ function summary(tag_info, correct, count, answers) {
     post_information("add_tag/", create_tag_object("test", tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
         $("#answers").collapse("hide");
-        show_one_item("test_main");
+        show_one_item("test_type");
     });
 }
 
@@ -785,6 +785,7 @@ function edit_card(card) {
                 post_information("add_card/", create_card_object("update", card.id, front_input, back_input, checked));
                 $("#created").modal("toggle");
                 show_one_item("card_list");
+                list_cards_to_edit();
             }
         });
     });
