@@ -1,10 +1,12 @@
-# Flashcards
+---
+title: Flashcards
+---
 
-## O aplikaci
+# O aplikaci
 
 *Flashcards* je offline počítačová aplikace navržená pro zkoušení slovíček či jiné látky. Umožňuje vytváření a úpravu kartiček a jejich zařazování do okruhů. Okruhy pak lze vyzkoušet třemi typy testů. Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a import dat do/ze souboru.
 
-## Instalace
+# Instalace
 
 1. Nainstalujeme Python 3.7 (Linux z terminálu, Windows z [www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)).
 2. Nainstalujeme Django 2.1.5.
@@ -12,16 +14,16 @@
     - Zadáme příkaz `pip install Django==2.1.5`.
 3. Spustíme aplikaci **flashcards** (na Windows s příponou .exe).
 
-## Termíny v aplikaci
+# Termíny v aplikaci
 
 - **Card** = kartička;
 - **Front side** = líc kartičky (slovo, které bude zapsáno na přední stranu kartičky - v základním nastavení představuje otázku);
 - **Back side** = rub kartičky (slovo, které bude zapsáno na zadní stranu kartičky - v základním nastavení představuje požadovanou odpověď na líc karty);
 - **Tag** = okruh na zkoušení;
 - **Tag name** = název okruhu;
-- **Reverse** = přepínač "směru" otázek, nachází se u výběru typu testu;
+- **Reverse** = přepínač ,,směru" otázek, nachází se u výběru typu testu;
 
-## Vytváření kartiček
+# Vytváření kartiček
 
 Funkce na vytváření nových kartiček. Každá kartička může být uložena v libovolném množství okruhů. Pokud budou obě zadané hodnoty stejné jako v nějaké již existující kartičce, aplikace upozorní uživatele a nová se stejnými hodnotami se již nevytvoří.
 
@@ -31,7 +33,7 @@ Funkce na vytváření nových kartiček. Každá kartička může být uložena
 4. Pod políčky jsou zobrazena zaškrtávací tlačítka pro všechny existující okruhy, kde označíme, do kterých okruhů chceme kartičku přidat.
 5. Tlačítkem **Save** uložíme kartičku, tlačítkem **Cancel** zahodíme všechny zadané hodnoty a kartička se neuloží.
 
-## Zobrazování a úprava kartiček
+# Zobrazování a úprava kartiček
 
 Funkce na úpravu existujících kartiček a zobrazení všech kartiček. Pokud budou obě upravované hodnoty změněné na již existující, aplikace upozorní uživatele a změny se neuloží.
 
@@ -42,7 +44,7 @@ Funkce na úpravu existujících kartiček a zobrazení všech kartiček. Pokud 
 4. Po kliknutí na tlačítko **Edit** se zobrazí formulář na úpravu.
     - Funguje stejně jako vytváření kartičky, s tím rozdílem, že políčka a zaškrtávací tlačítka jsou již předvyplněná momentálními hodnotami.
 
-## Vytváření okruhů
+# Vytváření okruhů
 
 Funkce na vytváření nových okruhů. Pokud okruh se zadanou hodnotou již existuje, aplikace upozorní uživatele a nový okruh nevytvoří.
 
@@ -50,7 +52,7 @@ Funkce na vytváření nových okruhů. Pokud okruh se zadanou hodnotou již exi
 2. Vyplníme políčko **Tag name** textem, který bude sloužit jako název nového okruhu na zkoušení (maximální délka názvu je 100 znaků).
 3. Tlačítkem **Save** uložíme nový okruh, tlačítkem **Cancel** zahodíme vložený text a nový okruh se neuloží.
 
-## Zobrazování a úprava okruhů
+# Zobrazování a úprava okruhů
 
 Funkce na úpravu existujících okruhů a zobrazení všech okruhů. Pokud bude vložený text názvem již existujícího okruhu, aplikace upozorní uživatele a změna se neuloží.
 
@@ -61,21 +63,21 @@ Funkce na úpravu existujících okruhů a zobrazení všech okruhů. Pokud bude
 4. Po kliknutí na tlačítko **Edit** se zobrazí formulář na úpravu.
     - Funguje stejně jako vytváření okruhů, s tím rozdílem, že políčko **Tag name** je již předvyplněno momentální hodnotou.
 
-## Testy
+# Testy
 
-Funkce spravující všechny testy. Jsou zde obsažené tři typy testů: procházení kartiček (v aplikaci **Browse**), vybírání z možností (v aplikaci **Choices**) a psaní správné odpovědi (v aplikaci **Write**). V nich uživatel postupně prochází všechny kartičky zvoleného okruhu a podle typu testu odpovídá na otázky. Při výběru okruhu k testování si lze zvolit, kterým "směrem" budou kartičky zkoušeny. Po každé odpovědi se zobrazí, zda byla odpověď správná, či špatná. Pokud byla špatná, zobrazí se i správné řešení. V průběhu testu je zobrazen počet zbývajících otázek a počet správných a špatných odpovědí. Po zodpovězení všech otázek se zobrazí celková úspěšnost testovaného okruhu, která se uloží pro budoucí porovnání, a uživatel si může prohlédnout všechny své odpovědi.
+Funkce spravující všechny testy. Jsou zde obsažené tři typy testů: procházení kartiček (v aplikaci **Browse**), vybírání z možností (v aplikaci **Choices**) a psaní správné odpovědi (v aplikaci **Write**). V nich uživatel postupně prochází všechny kartičky zvoleného okruhu a podle typu testu odpovídá na otázky. Při výběru okruhu k testování si lze zvolit, kterým ,,směrem" budou kartičky zkoušeny. Po každé odpovědi se zobrazí, zda byla odpověď správná, či špatná. Pokud byla špatná, zobrazí se i správné řešení. V průběhu testu je zobrazen počet zbývajících otázek a počet správných a špatných odpovědí. Po zodpovězení všech otázek se zobrazí celková úspěšnost testovaného okruhu, která se uloží pro budoucí porovnání, a uživatel si může prohlédnout všechny své odpovědi.
 
 1. Klikneme na tlačítko **Test** v menu liště.
 2. Zobrazí se seznam tlačítek, kdy každé představuje jeden okruh ke zkoušení.
 3. Po kliknutí na tlačítko s názvem vybraného okruhu, který chceme otestovat, se zobrazí stránka na výběr typu testu.
 4. Tlačítkem **Back to tag selection** se vrátíme na výběr okruhu.
 5. Máme na výběr ze tří typů testů: procházení kartiček (**Browse**), vybírání z možností (**Choices**) a psaní správné odpovědi (**Write**).
-6. Pod tlačítky je přepínač (**Reverse**), který určuje "směr" kartiček.
+6. Pod tlačítky je přepínač (**Reverse**), který určuje ,,směr" kartiček.
     - V normálním nastavení se aplikace ptá přední stranou kartičky a očekává odpověď zadní stranou
     - Při přepnutém přepínači se aplikace bude ptát zadní stranou kartičky a bude očekávat odpověď přední stranou.
 7. Pro výběr typu testu klikneme na dané tlačítko.
 
-### Test - procházení kartiček
+## Test - procházení kartiček
 
 Tento test nevyžaduje žádné odpovědi, uživatel pouze postupně prochází všechny kartičky.
 
@@ -84,7 +86,7 @@ Tento test nevyžaduje žádné odpovědi, uživatel pouze postupně prochází 
 - Nad kartičkami je ukazatel, který ukazuje, kolikátá kartička z celkového počtu je právě vidět.
 - Procházení ukončíme tlačítkem **Back to test selection**.
 
-### Test - vybírání z možností
+## Test - vybírání z možností
 
 Tento test spočívá ve vybírání správné ze čtyř možností, které aplikace nabídne. Po každé otázce aplikace zobrazí, zda byla vybraná odpověď správná a vybranou i správnou odpověď. Na konci testu je pak vyhodnocení úspěšnosti testu a seznam všech odpovědí vždy se správnou možností.
 
@@ -101,7 +103,7 @@ Po poslední otázce se zobrazí stránka se sumarizací otázek.
     - Správné odpovědi jsou zvýrazněny zeleně, špatné červeně.
 - Tlačítkem **Continue to test selection** se vrátíme na stránku s výběrem typu testu.
 
-### Test - psaní správné odpovědi
+## Test - psaní správné odpovědi
 
 Tento test spočívá v napsání správné odpovědi. Po každé otázce aplikace zobrazí, zda byla vybraná odpověď správná a vybranou i správnou odpověď. Aplikace toleruje překlepy podle délky slova (čím delší slovo, tím více chyb je uznáno). Taková odpověď je vyhodnocena jako správná, ale všechny chyby jsou zvýrazněny. Na konci testu je pak vyhodnocení úspěšnosti testu a seznam všech odpovědí vždy se správnou možností.
 
@@ -118,7 +120,7 @@ Po poslední otázce se zobrazí stránka se sumarizací otázek.
     - Správné odpovědi jsou zvýrazněny zeleně, špatné červeně.
 - Tlačítkem **Continue to test selection** se vrátíme na stránku s výběrem typu testu.
 
-## Export
+# Export
 
 Funkce umožňující export všech kartiček a okruhů, které jsou právě uložené v aplikaci. Export probíhá do **.csv** souboru, který je uložen do složky export, ta je ve stejné složce jako spouštěcí soubor aplikace.
 
@@ -129,7 +131,7 @@ Funkce umožňující export všech kartiček a okruhů, které jsou právě ulo
 3. Kliknutím na tlačítko **Confirm export** se zahájí export dat (může to chvíli trvat).
 4. Po exportování se zobrazí potvrzovací okénko, že export proběhl správně.
 
-## Import
+# Import
 
 Funkce umožňující import kartiček a okruhů ze souboru s koncovkou **.csv**. Importovaná data musí být v přesně daném formátu (viz níže), jinak budou přeskočena. Pokud bude mezi importovanými daty již existující kartička, nebude se přepisovat, ani když bude v jiných okruzích než ta momentálně uložená v aplikaci.
 
@@ -145,10 +147,10 @@ Formát **.csv** souboru
     - tag, číslo okruhu (počítají se jenom ty v tomto souboru), název okruhu
     - například: `tag, 1, Čísla`
 - Kartička
-    - card, přední strana kartičky, zadní strana kartičky, čísla okruhů, do kterých kartička patří, oddělené "|" (čísla okruhů v tomto souboru)
+    - card, přední strana kartičky, zadní strana kartičky, čísla okruhů, do kterých kartička patří, oddělené ,,|" (čísla okruhů v tomto souboru)
     - například: `card, One, Jedna, 1|2|3`
 - Každý záznam píšeme na samostatný řádek
 
-## Nápověda
+# Nápověda
 
 Kliknutím na tlačítko **Help** v menu liště se zobrazí rychlá nápověda v angličtině.

@@ -1,3 +1,3 @@
-# maturita_project
+# Flashcards
 application for testing vocabulary
--- customized bootstrap css file required
+--- need to install python 3.7 and django 2.1.5

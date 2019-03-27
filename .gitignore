@@ -4,5 +4,13 @@
 /django_server/server/__pycache__/*
 /django_server/cards/migrations/__pycache__/*
 TODO.md
-/presentation/*
-!*.tex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+*.nav
+*.snm
