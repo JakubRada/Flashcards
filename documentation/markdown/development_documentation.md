@@ -34,7 +34,7 @@ As said above, all data are handled by Django running offline on localhost. All 
 ## Default server configuration 
 
 - Files in `./server/server/`
-- Here have to be set all installed apps (only 'cards' in this case), type database is used (sqlite3) and which urls will server for receiving requests (specified in 'urls.py')
+- Here have to be set all installed apps (only 'cards' in this case), type of database is used (sqlite3) and which urls will server for receiving requests (specified in 'urls.py')
 - It also contains secret key for this database in case it was to be published online
 
 ## Cards app configuration
