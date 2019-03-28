@@ -4,7 +4,12 @@
 \usepackage[czech]{babel}
 \usepackage[parfill]{parskip}
 \usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
 \providecommand{\tightlist}{\setlength{\itemsep}{1pt}\setlength{\parskip}{1pt}}
+
+\definecolor{codehighlight}{RGB}{203,75,22}
+\let\oldtexttt\texttt
+\renewcommand{\texttt}[1]{\oldtexttt{\textcolor{codehighlight}{#1}}}
 
 \begin{document}
 \begin{center}
@@ -26,15 +31,14 @@ Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke
 zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a
 import dat do/ze souboru.
 
-\hypertarget{instalace}{%
-\section{Instalace}\label{instalace}}
+\hypertarget{instalace-a-spuux161tux11bnuxed}{%
+\section{Instalace a spuštění}\label{instalace-a-spuux161tux11bnuxed}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   Nainstalujeme Python 3.7 (Linux z terminálu, Windows z
-  \href{https://www.python.org/downloads/windows/}{www.python.org/downloads/windows/}).
+  \emph{www.python.org/downloads/windows/})
 \item
   Nainstalujeme Django 2.1.5.
 
@@ -43,8 +47,22 @@ import dat do/ze souboru.
   \item
     Na Windows otevřeme příkazový řádek jako správce.
   \item
-    Zadáme příkaz \texttt{pip\ install\ Django==2.1.5}.
+    Zadáme příkaz
   \end{itemize}
+
+  ~~~~\texttt{pip\ install\ Django==2.1.5}
+\item
+  Spustíme Django server
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Složka \texttt{./server/} (musí zde být soubor \texttt{manage.py})
+  \item
+    Spustíme příkaz
+  \end{itemize}
+
+  ~~~~\texttt{python\ manage.py\ runserver\ localhost:8000}
 \item
   Spustíme aplikaci \textbf{flashcards} (na Windows s příponou .exe).
 \end{enumerate}

@@ -4,7 +4,12 @@
 \usepackage[czech]{babel}
 \usepackage[parfill]{parskip}
 \usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
 \providecommand{\tightlist}{\setlength{\itemsep}{1pt}\setlength{\parskip}{1pt}}
+
+\definecolor{codehighlight}{RGB}{203,75,22}
+\let\oldtexttt\texttt
+\renewcommand{\texttt}[1]{\oldtexttt{\textcolor{codehighlight}{#1}}}
 
 \begin{document}
 \begin{center}

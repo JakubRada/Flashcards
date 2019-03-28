@@ -6,13 +6,22 @@ title: Flashcards
 
 *Flashcards* je offline počítačová aplikace navržená pro zkoušení slovíček či jiné látky. Umožňuje vytváření a úpravu kartiček a jejich zařazování do okruhů. Okruhy pak lze vyzkoušet třemi typy testů. Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a import dat do/ze souboru.
 
-# Instalace
+# Instalace a spuštění
 
-1. Nainstalujeme Python 3.7 (Linux z terminálu, Windows z [www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)).
+1. Nainstalujeme Python 3.7 (Linux z terminálu, Windows z *www.python.org/downloads/windows/*)
 2. Nainstalujeme Django 2.1.5.
     - Na Windows otevřeme příkazový řádek jako správce.
-    - Zadáme příkaz `pip install Django==2.1.5`.
-3. Spustíme aplikaci **flashcards** (na Windows s příponou .exe).
+    - Zadáme příkaz
+
+    &nbsp;&nbsp;&nbsp;&nbsp;`pip install Django==2.1.5`
+
+3. Spustíme Django server
+    - Složka `./server/` (musí zde být soubor `manage.py`)
+    - Spustíme příkaz
+
+    &nbsp;&nbsp;&nbsp;&nbsp;`python manage.py runserver localhost:8000`
+
+4. Spustíme aplikaci **flashcards** (na Windows s příponou .exe).
 
 # Termíny v aplikaci
 
