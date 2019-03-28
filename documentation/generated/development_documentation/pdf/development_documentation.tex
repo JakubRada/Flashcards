@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[a4paper, total={18cm, 25cm}]{geometry}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\usepackage[czech]{babel}
 \usepackage[parfill]{parskip}
 \usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
@@ -21,186 +21,199 @@
 \begin{center}
   \rule{\textwidth}{0.5pt}
 \end{center}
-\hypertarget{overview}{%
-\section{Overview}\label{overview}}
+\hypertarget{pux159ehled}{%
+\section{Přehled}\label{pux159ehled}}
 
-Flaschcards app has the same structure as a web application, main parts
-are programmed using html, css and javascript, but is rendered using
-Electron instead of conventional web browser. In addition, all the data
-are saved into separate database, so both parts can be altered
-independently. As server side app is used Django by Python and its run
-on localhost. Visual part and server part are communicating
-asynchronously through JSON requests.
+Aplikace Flashcards má stejnou strukturu jako webová aplikace, hlavní
+části jsou naprogramovány s použitím HTML, CSS a Javascriptu, ale na
+rozdíl od ostatních webových aplikací se nevykresluje ve webovém
+prohlížeči, ale v Electronu. Data se ukládají do oddělené databáze,
+takže obě části aplikace běží nezávisle na sobě. O databázi se stará
+Django Framework (Python) a běží to na localhostu. Klient a server
+komunikují asynchronně skrz JSON requesty.
 
-\hypertarget{dependencies}{%
-\section{Dependencies}\label{dependencies}}
+\hypertarget{pouux17eituxe9-knihovny}{%
+\section{Použité knihovny}\label{pouux17eituxe9-knihovny}}
 
-App uses many dependencies. On the server side is used Django framework,
-which also requires Python 3 (using the latest version is recommended).
-On the user side is used electron to render all visual features instead
-of web browser and it also requires Node.js. Bootstrap is used for
-better looks of the application, contains of three files: css file,
-which is altered to change some default colors, javascript file and
-popper.js. For asynchronous changes and communication with the server is
-used JQuery.
+Aplikace používá mnoho různých knihoven na usnadnění používání některých
+funkcí. Na serverové části je použito Django, které ovšem vyžaduje
+nainstalovaný Python 3 (je doporučeno používat nejnovější verzi). Na
+straně klienta je použit Electron, který renderuje všechny vizuální
+aspekty místo prohlížeče, a ten pro své fungování potřebuje Node.js. Pro
+hezčí vzhled je použit Bootstrap, skládá se ze tří souborů:
+\texttt{.css}, které je upravené kvůli sladění některých barev s
+celkovým vzhledem, \texttt{.js} a \texttt{popper.js}, které jsou potřeba
+pro některé funkce. Pro dynamické měnění obsahu na stránce a komunikaci
+se serverem je použita JQuery.
 
 \begin{itemize}
 \tightlist
 \item
-  Server side
+  Server
 
   \begin{itemize}
   \tightlist
   \item
-    Python 3.7 (\emph{www.python.org/downloads/windows/})
+    Python 3.7 nebo vyšší (\emph{www.python.org/downloads/windows})
   \item
-    Django 2.1.5 (installed by \texttt{pip\ install\ Django==2.1.5})
+    Django 2.1.5 (nainstalováno příkazem
+    \texttt{pip\ install\ Django==2.1.5})
   \end{itemize}
 \item
-  User side
+  Uživatelské rozhraní
 
   \begin{itemize}
   \tightlist
   \item
-    Node.js
+    Node.js (\emph{www.npmjs.com/get-npm})
   \item
     Electron (\emph{www.electronjs.org})
   \item
     Electron packager
-    (\emph{www.github.com/electron-userland/electron-packager})
   \item
-    Bootstrap precompiled files (downloaded from
+    Bootstrap předkompilované soubory (stažené z
     \emph{www.getbootstrap.com/docs/4.3/getting-started/download/})
 
     \begin{itemize}
     \tightlist
     \item
-      css file, javascript file and popper.js
+      CSS, Javascript a Popper
     \end{itemize}
   \item
     JQuery (\emph{www.jquery.com})
   \end{itemize}
 \end{itemize}
 
-\hypertarget{server-side}{%
-\section{Server side}\label{server-side}}
+\hypertarget{konfigurace-serveru}{%
+\section{Konfigurace serveru}\label{konfigurace-serveru}}
 
-As said above, all data are handled by Django running offline on
-localhost. All files related to server are saved in \texttt{./server/}
-folder. In the \texttt{./server/server/} folder are basic settings for
-server app and in the \texttt{./server/cards/} folder are files unique
-for this specific app. In this folder can be found models for database
-objects and functions handling requests from user client.
+Jak bylo zmíněno dříve, o všechna ukládaná data se stará Django běžící
+offline na localhostu na portu 8000. Všechny soubory týkající se serveru
+se nachází ve složce \texttt{./server/}. Ve složce
+\texttt{./server/server} je obecné nastavení serverové aplikace, ve
+složce \texttt{./server/cards/} jsou pak soubory této konkrétní aplikace
+s modely pro databázi a funkcemi na zpracovávání příchozích a odchozích
+requestů.
 
-\hypertarget{command-to-start-a-server}{%
-\subsection{Command to start a server}\label{command-to-start-a-server}}
+\hypertarget{spuux161tux11bnuxed-serveru}{%
+\subsection{Spuštění serveru}\label{spuux161tux11bnuxed-serveru}}
 
-\texttt{python\ manage.py\ runserver\ localhost:8000}
-
-\begin{itemize}
-\tightlist
-\item
-  From \texttt{./server/} folder
-\end{itemize}
-
-\hypertarget{default-server-configuration}{%
-\subsection{Default server
-configuration}\label{default-server-configuration}}
+~~~~\texttt{python\ manage.py\ runserver\ localhost:8000}
 
 \begin{itemize}
 \tightlist
 \item
-  Files in \texttt{./server/server/}
-\item
-  Here have to be set all installed apps (only `cards' in this case),
-  type database is used (sqlite3) and which urls will server for
-  receiving requests (specified in `urls.py')
-\item
-  It also contains secret key for this database in case it was to be
-  published online
+  Spuštěn ze složky, ve které se nachází soubor \texttt{manage.py}
+  (\texttt{./server/})
 \end{itemize}
 
-\hypertarget{cards-app-configuration}{%
-\subsection{Cards app configuration}\label{cards-app-configuration}}
+\hypertarget{zuxe1kladnuxed-nastavenuxed-serveru}{%
+\subsection{Základní nastavení
+serveru}\label{zuxe1kladnuxed-nastavenuxed-serveru}}
 
-All files in \texttt{./server/cards/}. For this app are important only
-\texttt{models.py}, \texttt{urls.py} and \texttt{views.py}. Others are
-either necessary for Django or are empty, without use in this case.
+\begin{itemize}
+\tightlist
+\item
+  Soubory v \texttt{./server/server}.
+\item
+  Zde se nastavují všechny nainstalované aplikace využívající tento
+  server (v tomto případě pouze `cards'), typ použité databáze
+  (`sqlite3') a které urls jsou použity pro příjímání requestů
+  (\texttt{urls.py}).
+\item
+  Dále se zde nachází secret key pro případ publikování databáze na
+  internet
+\end{itemize}
 
-\hypertarget{models}{%
-\subsubsection{Models}\label{models}}
+\hypertarget{nastavenuxed-aplikace-cards}{%
+\subsection{Nastavení aplikace
+Cards}\label{nastavenuxed-aplikace-cards}}
 
-Here are declared database objects with their variables and relations
-among them. Each model serves as a template and creates table in the
-database. Individual rows are connected among tables through
+Všechny soubory v \texttt{./server/cards/}. Pro tuto aplikaci jsou
+potřebné pouze \texttt{models.py}, \texttt{urls.py} a \texttt{views.py}.
+Ostatní jsou buď automaticky vytvořené, nebo prázdné.
+
+Základní adresa k serveru
+
+~~~~\texttt{localhost:8000/cards}
+
+\hypertarget{modely}{%
+\subsubsection{Modely}\label{modely}}
+
+V tomto souboru se definují databázové objekty s jejich proměnnými a
+vztahy s ostatními objekty. Každý model slouží jako šablona pro záznamy
+do databáze a vytvoří si tabulku, kam tyto záznamy budou ukládány.
+Jednotlivé řádky tabulky jsou propojovány s jinými tabulkami skrze
 relationship fields.
 
 \begin{itemize}
 \tightlist
 \item
   model \texttt{Tag(tag\_name,\ previous\_success\_rate,\ card\_count)}
+  \ldots{} šablona pro okruhy
 
   \begin{itemize}
   \tightlist
   \item
-    \texttt{tag\_name} \ldots{} CharField (max. 100 characters);
-    represents name of a specific tag
+    \texttt{tag\_name} \ldots{} CharField (max. 100 znaků); reprezentuje
+    jméno daného okruhu
   \item
-    \texttt{previous\_success\_rate} \ldots{} IntegerField; represents
-    success rate of the last test of a specific tag
+    \texttt{previous\_success\_rate} \ldots{} IntegerField; reprezentuje
+    procentuální úspěšnost posledního testu daného okruhu
   \item
-    \texttt{card\_count} \ldots{} IntegerField, optional (default=0);
-    represents number of cards linked to a specific tag
+    \texttt{card\_count} \ldots{} IntegerField, volitelný (default=0);
+    reprezentuje počet karet propojených k okruhu
   \item
-    each variable has its \texttt{get} and \texttt{set} method to alter
-    or return value
+    každá proměnná má svoje \texttt{get} a \texttt{set}, které vrací,
+    nebo upravují jejich hodnoty
   \item
-    \texttt{add\_card} and \texttt{remove\_card} methods serve to
-    increase or decrease \texttt{card\_count} variable
+    \texttt{add\_card} a \texttt{remove\_card} metody slouží k navýšení,
+    nebo snížení počtu karet v \texttt{card\_count} proměnné
   \end{itemize}
 \item
   model \texttt{Card(card\_front,\ card\_back,\ tag\_count,\ tags)}
+  \ldots{} šablona pro kartičky
 
   \begin{itemize}
   \tightlist
   \item
-    \texttt{card\_front} \ldots{} CharField (max. 200 characters);
-    represents text shown on front side of a specific card
+    \texttt{card\_front} \ldots{} CharField (max. 200 znaků);
+    reprezentuje text zobrazený na přední straně kartičky
   \item
-    \texttt{card\_back} \ldots{} CharField (max. 200 characters);
-    represents text shown on back side of a specific card
+    \texttt{card\_back} \ldots{} CharField (max. 200 znaků);
+    reprezentuje text zobrazený na zadní straně kartičky
   \item
-    \texttt{tag\_count} \ldots{} IntegerField, optional (default=0);
-    represents number of tags linked to a specific card
+    \texttt{tag\_count} \ldots{} IntegerField, volitelný (default=0);
+    reprezentuje počet okruhů, ve kterých je daná kartička
   \item
-    \texttt{tags} \ldots{} ManyToManyField; links cards to tags and tags
-    to cards
+    \texttt{tags} \ldots{} ManyToManyField; propojuje kartičky s
+    libovolným počtem okruhů
 
     \begin{itemize}
     \tightlist
     \item
-      by running \texttt{tags.add(tag)} are tags connected to a specific
-      card, \texttt{tags.remove(tag)} destroys the connection
+      příkazem \texttt{tags.add(tag)} je propojena kartička s okruhem,
+      \texttt{tags.remove(tag)} zničí vazbu mezi nimi
     \item
-      in each tag is simultaneously created variable \texttt{cards}
-      where are stored connections with each card so these relations can
-      be accessed from both ends
+      v každém okruhu se automaticky vytvoří proměnná \texttt{cards},
+      kam se naopak ukládají všechny propojené kartičky. To znamená, že
+      jejich spojení je oboustranné a lze k nim přistoupit z obou dvou.
     \end{itemize}
   \item
-    each variable has its \texttt{get} and \texttt{set} method to alter
-    or return value
+    každá proměnná má svoje \texttt{get} a \texttt{set}, které vrací,
+    nebo upravují jejich hodnoty
   \item
-    \texttt{add\_tag} and \texttt{remove\_tag} methods serve to increase
-    or decrease \texttt{tag\_count} variable
+    \texttt{add\_tag} a \texttt{remove\_tag} metody slouží ke zvýšení,
+    nebo snížení počtu okruhů v \texttt{tag\_count} proměnné
   \end{itemize}
 \end{itemize}
 
-\hypertarget{views-and-urls}{%
-\subsubsection{Views and urls}\label{views-and-urls}}
+\hypertarget{views-a-urls}{%
+\subsubsection{Views a Urls}\label{views-a-urls}}
 
-Here are declared functions to handle incoming and outcoming Json and
-Http requests from client. All requests and responses are happening
-through Json objects in order to communicate better with JavaScript.
+Zde jsou definovány funkce, které spravují příchozí a odchozí JSON a
+Http requesty z/do klienta. Všechna data posílaná requesty jsou v JSON
+formátu pro lepší komunikaci s Javascriptem.
 
 \begin{itemize}
 \tightlist
@@ -210,11 +223,12 @@ through Json objects in order to communicate better with JavaScript.
   \begin{itemize}
   \tightlist
   \item
-    request has to be sent on url \texttt{localhost:8000/cards/cards/}
+    musí být poslán na url \texttt{localhost:8000/cards/cards}
   \item
-    returns list of Json objects, each represents one card from database
+    vrací seznam JSON objektů, každý reprezentuje jednu kartičku z
+    databáze
   \item
-    Json object does not contain all information -
+    JSON objekt neobsahuje všechny atributy kartičky -
     \texttt{\{id,\ card\_front,\ card\_back\}}
   \end{itemize}
 \item
@@ -223,11 +237,11 @@ through Json objects in order to communicate better with JavaScript.
   \begin{itemize}
   \tightlist
   \item
-    request has to be sent on url \texttt{localhost:8000/cards/tags/}
+    musí být poslán na url \texttt{localhost:8000/cards/tags}
   \item
-    returns list of Json objects, each represents one tag from database
+    vrací seznam JSON objektů, každý reprezentuje jeden okruh z databáze
   \item
-    Json object does not contain all information -
+    JSON objekt neobsahuj všechny atributy kartičky -
     \texttt{\{id,\ tag\_name\}}
   \end{itemize}
 \item
@@ -236,13 +250,12 @@ through Json objects in order to communicate better with JavaScript.
   \begin{itemize}
   \tightlist
   \item
-    request has to be sent on url
-    \texttt{localhost:8000/cards/tags/tag\_id/}
+    musí být poslán na url \texttt{localhost:8000/cards/tags/tag\_id/}
   \item
-    returns Json object with all information about tag specified by
+    vrací JSON objekt se všemi informacemi o okruhu specifikovaným
     \texttt{tag\_id}
   \item
-    returns
+    vrací
     \texttt{\{id,\ tag\_name,\ success\_rate,\ card\_count,\ cards\}}
   \end{itemize}
 \item
@@ -251,14 +264,12 @@ through Json objects in order to communicate better with JavaScript.
   \begin{itemize}
   \tightlist
   \item
-    request has to be sent on url
-    \texttt{localhost:8000/cards/cards/card\_id/}
+    musí být poslán na url \texttt{localhost:8000/cards/cards/card\_id/}
   \item
-    returns Json object with all information about card specified by
+    vrací JSON objekt se všemi informacemi o kartičce specifikované
     \texttt{card\_id}
   \item
-    returns
-    \texttt{\{id,\ card\_front,\ card\_back,\ tag\_count,\ tags\}}
+    vrací \texttt{\{id,\ card\_front,\ card\_back,\ tag\_count,\ tags\}}
   \end{itemize}
 \item
   request \texttt{add\_tag}
@@ -266,22 +277,23 @@ through Json objects in order to communicate better with JavaScript.
   \begin{itemize}
   \tightlist
   \item
-    request sent on url \texttt{localhost:8000/cards/add\_tag/}
+    musí být poslán na url \texttt{localhost:8000/cards/add\_tag/}
   \item
-    receives Json object from client -
+    dostane JSON objekt od klienta -
     \texttt{\{type,\ id,\ tag\_name,\ success\_rate,\ card\_count,\ cards\}}
-    - by \texttt{type} value decides what change will happen
 
     \begin{itemize}
     \tightlist
     \item
-      adds new tag (\texttt{"type":\ "new}),
+      podle hodnoty \texttt{type} argumentu určí, která akce se provede
     \item
-      updates name of a tag (\texttt{"type":\ "update"}),
+      vytvoří nový okruh (\texttt{type:\ new}),
     \item
-      updates success rate of the last test (\texttt{"type":\ "test"}),
+      zaktualizuje jméno (\texttt{type:\ update}),
     \item
-      deletes a tag (\texttt{"type":\ "delete"}).
+      zaktualizuje úspěšnost posledního testu (\texttt{type:\ test}),
+    \item
+      smaže okruh (\texttt{type:\ delete}).
     \end{itemize}
   \end{itemize}
 \item
@@ -290,21 +302,22 @@ through Json objects in order to communicate better with JavaScript.
   \begin{itemize}
   \tightlist
   \item
-    request sent on url \texttt{localhost:8000/cards/add\_card/}
+    musí být poslán na url \texttt{localhost:8000/cards/add\_card/}
   \item
-    receives Json object from client -
+    dostane JSON objekt od klienta -
     \texttt{\{type,\ id,\ card\_front,\ card\_back,\ tag\_count,\ tags\}}
-    - by \texttt{type} value decides what change will happen
 
     \begin{itemize}
     \tightlist
     \item
-      adds new card and automatically updates all tag relationships
-      (\texttt{"type":\ "new"}),
+      podle hodnoty \texttt{type} argumentu určí, která akce se provede
     \item
-      updates names and relationships (\texttt{"type":\ "update"}),
+      vytvoří novou kartičku (\texttt{type:\ new}),
     \item
-      deletes a card (```type'': ``delete'').
+      zaktualizuje jméno a automaticky všechny vazby mezi okruhy
+      (\texttt{type:\ update}),
+    \item
+      smaže kartičku (\texttt{type:\ delete}).
     \end{itemize}
   \end{itemize}
 \item
@@ -312,10 +325,10 @@ through Json objects in order to communicate better with JavaScript.
 
   \begin{itemize}
   \item
-    request sent on url \texttt{localhost:8000/cards/import/}
+    musí být poslán na url \texttt{localhost:8000/cards/import/}
   \item
-    receives list of two Json object lists containing both cards and
-    tags
+    dostane dvojici seznamů JSON objektů, které obsahují okruhy i
+    kartičky
 
     \texttt{{[}}
 
@@ -325,235 +338,253 @@ through Json objects in order to communicate better with JavaScript.
 
     \texttt{{]}}
   \item
-    determines if imported item is non-existant and adds it to the
-    database - connects tags to cards based on indexes of second list
-    (in each tags variable are indexes of second list to connect to) in
-    the process
+    funkce sama určí, jestli je položka unikátní a přidá ji do databáze
+    - automaticky spojí okruhy s kartičkami na základě indexů druhého
+    listu (v každé \texttt{tags} proměnné je seznam indexů položek z
+    druhého listu, které mají být propojeny)
   \item
-    if item already exists its skipped
+    když položka již existuje, je přeskočena
   \end{itemize}
 \end{itemize}
 
-In \texttt{urls.py} are defined addresses where to send specific
-requests. Each request has its own address for better organization.
+V souboru \texttt{urls.py} jsou definovány url adresy kam se posílají
+jednotlivé requesty. Každý request má svojí adresu pro lepší organizaci.
 
-\hypertarget{client-side}{%
-\section{Client side}\label{client-side}}
+\hypertarget{klient}{%
+\section{Klient}\label{klient}}
 
-User interface client is created in the same way as any modern web
-application, but for rendering is used Electron instead of some web
-browser such as Firefox or Chrome. Its advantage is that it can be run
-offline and in a separate window so it looks much better, but on the
-other hand it is necessary to use Node.js so the client takes quite a
-lot of memory. As it was said Electron is a framework built on Node.js
-so all its packages can be used in the app, such as file manager. This
-means the app can access file on the hard drive which would not be
-possible, for safety reasons, from simple web app.
+Klient uživatelského rozhraní je vytvořeno stejným způsobem jako moderní
+webové aplikace, ale místo renderování v prohlížeči jako Firefox nebo
+Chrome se vykreslují v Electronu. Výhoda tohoto řešení je lepší
+fungování offline a také vytváření vlastního okna pro aplikaci pro hezčí
+vzhled, ale na druhou stranu je nezbytné nainstalovat Node.js, což dělá
+klienta náročného na úložiště (kolem 100 MB minimálně). Zase ale mohou
+být využity ostatní Node.js rozšíření, jako například file manager. Díky
+tomu máme přístup k souborům na lokálním disku, čehož by nešlo dosáhnout
+s běžnou webovou aplikací, protože Javascript žádnou takovou funkci
+neposkytuje.
 
-\hypertarget{folders-and-files}{%
-\subsection{Folders and files}\label{folders-and-files}}
+\hypertarget{sloux17eky-a-soubory}{%
+\subsection{Složky a soubory}\label{sloux17eky-a-soubory}}
 
-All files for the client are located in \texttt{./user\_interface/}
-folder.
+Všechny soubory jsou umístěny ve složce \texttt{./user\_interface/}.
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{/assets/} contains images and icons.
+  \texttt{/assets/} obsahuje obrázky a ikony.
 \item
-  \texttt{/lib/} contains Bootstrap files, Jquery and custom .css file
-  for flipping card.
+  \texttt{/lib/} obsahuje předkompilované Bootstrap soubory, Jquery a
+  speciální CSS soubor, který otáčí kartičkou.
 \item
-  \texttt{/node\_modules/} contains all Node.js packages including
-  electron; from these will be built final executable.
+  \texttt{/node\_modules/} obsahuje všechny Node.js package všetně
+  Electronu; z těchto souborů se postaví konečný spustitelný soubor
 \item
-  \texttt{/src/} contains Javascript and HTML files which define actual
-  functionality of the application
+  \texttt{/src/} obsahuje Javascript a HTML soubory, které zajišťují
+  funkcionalitu aplikace
 \item
-  In this file are also \texttt{package-lock.json} and
+  Dále složka obsahuje soubory \texttt{package-lock.json} a
   \texttt{package.json}
 
   \begin{itemize}
   \tightlist
   \item
-    the first one describes the exact tree of files downloaded into
-    node-modules
+    První z těchto dvou popisuje přesný strom souborů stažených do
+    node-modules složky
   \item
-    the second one handles starting the app from terminal and also
-    packaging the file into executable
+    Druhý slouží ke spouštění aplikace z terminálu a ke konečnému
+    zabalení aplikace do spustitelné formu
   \end{itemize}
 \end{itemize}
 
 \hypertarget{structure}{%
 \subsection{Structure}\label{structure}}
 
-Contents of all files are described in next chapters, this part
-describes only the process. Rendering process starts at the
-\texttt{render.js} file which is set to be executed first in
+Konkrétní obsahy jednotlivých souborů jsou popsány v následujících
+kapitolách, tady je popsán pouze proces. Vykreslovací proces začíná v
+\texttt{render.js} souboru, který je nastaven ke spuštění v
 \texttt{package.json}.
 
-This file creates window and loads into it \texttt{mainWindow.html} file
-which controls the layout and visual aspect of the app. It is
-constructed as a one-page app so everything is declared in one html file
-and only currently required parts are shown, the rest is hidden.
-Visibility is determined by Javascript file.
+Tento soubor vytvoří okno a načte do něj \texttt{mainWindow.html}, který
+určuje rozložení a vzhled stránky. Aplikace je postavena jako
+jednostránková aplikace, to znamená, že všechny části jsou na jedné
+stránce, ale většina je skrytá a zobrazuje se jen ta momentálně potřebná
+část. O viditelnost se stará Javascriptový soubor.
 
-The visuals of html layout is enhanced by Bootstrap. To the
-\texttt{mainWindow.html} are linked Bootstraps precompiled \texttt{.css}
-files, which are modified in order to adjust some colors to app theme,
-\texttt{.js} files, which are required for some features, and
-\texttt{popper.js}, which is also required by Bootstrap.
+Vzhled HTML stránky je vylepšen Bootstrapem. Do \texttt{mainWindow.html}
+jsou nalinkovány \texttt{.css} soubory, které jsou upravené oproti těm
+oficiálním o některé barvy, \texttt{.js} soubory a \texttt{popper.js},
+které jsou potřebné pro některé funkce Bootstrapu.
 
-To \texttt{mainWindow.html} is also linked \texttt{main.js} file, which
-contains all inner functions of the app. For example, it handles what is
-visible, getting input from user and sending and receiving requests from
-the database. All its functions are described in some of next chapters.
+Do \texttt{mainWindow.htlm} je také nalinkován \texttt{main.js} soubor,
+který tvoří jádro aplikace a obsahuje všechny hlavní funkce aplikace.
+Například se stará o viditelnost obsahu, získává input od uživatele a
+posílá a příjímá requesty z databáze. Všechny jeho funkce jsou popsány v
+některé z dalších kapitol.
 
-\hypertarget{installing-electron}{%
-\subsubsection{Installing Electron}\label{installing-electron}}
+\hypertarget{instalace-electronu}{%
+\subsubsection{Instalace Electronu}\label{instalace-electronu}}
 
 ~~~~\texttt{npm\ install\ electron\ -\/-save-dev}
 
 \begin{itemize}
 \tightlist
 \item
-  executed in main folder of the project
+  spuštěno v hlavni složce projektu
 \end{itemize}
 
-\hypertarget{terminal-command-to-start-client}{%
-\subsubsection{Terminal command to start
-client}\label{terminal-command-to-start-client}}
+\hypertarget{instalace-electron-packageru}{%
+\subsubsection{Instalace
+Electron-packageru}\label{instalace-electron-packageru}}
+
+~~~~\texttt{npm\ install\ electron-packager\ -\/-save-dev}
+
+\begin{itemize}
+\tightlist
+\item
+  spuštěno ve složce, ve které jsou node-modules
+\end{itemize}
+
+\hypertarget{spuux161tux11bnuxed-klienta-z-terminuxe1lu}{%
+\subsubsection{Spuštění klienta z
+terminálu}\label{spuux161tux11bnuxed-klienta-z-terminuxe1lu}}
 
 ~~~~\texttt{npm\ start}
 
 \begin{itemize}
 \tightlist
 \item
-  executed from \texttt{user\_interface} folder
+  spuštěno ve složce \texttt{user\_interface}
 \end{itemize}
 
-\hypertarget{packaging}{%
-\subsubsection{Packaging}\label{packaging}}
+\hypertarget{zabalenuxed-aplikace-do-package}{%
+\subsubsection{Zabalení aplikace do
+package}\label{zabalenuxed-aplikace-do-package}}
 
-To package app into folder containing executable and other dependencies
-is run by
+Pro zabalení aplikace do složky obsahující spustitelný soubor a vše
+potřebné pro spuštění souboru bez instalace spustit
 
-~~~~\texttt{npm\ run} + one of these
+~~~~\texttt{npm\ run} + jedna z možností
 \texttt{package-win/package-linux/pakcage-mac}
 
-This command is defined in the \texttt{package.json} file in attribute
-\texttt{"scripts":\ \{\}} and packs file into folder
-\texttt{/user\_interface/release-builds/} using
-\texttt{electron-packager} and it is functioning without installing
-anything. \textbf{But it's only the visual part, the server needs to
-have installed Python and Django and it has to be turned manually from
-command line or by using shell script added to \texttt{render.js}.}
+Tento příkaz je definován v \texttt{package.json} v atributu
+\texttt{"scripts":\{\}} a zabalí aplikaci do složky
+\texttt{/user\_interface/release-builds/}. Použije k tomu
+\texttt{electron-packager} a výsledný package funguje bez instalování
+čehokoliv. \textbf{To platí jen pro vizuální stránku aplikace, server
+potřebuje mít nainstalované Django a Python a musí být spuštěn z
+příkazové řádky (viz Spuštění serveru)}
 
 \hypertarget{render.js}{%
 \subsection{render.js}\label{render.js}}
 
-It's a simple file, where are described only looks of the window and
-which html it should render.
+Jednoduchý soubor, popisují se jenom vlastnosti okna a který HTML soubor
+se má použít.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  On the beggining of the file it is necessary to include Electron and
-  assign to it \texttt{app} and \texttt{BrowserWindow} variables.
+  Na začátku souboru se musí zahrnout všechny Node.js moduly, které
+  budou použity, včetně Electronu a je potřeba příradit mu proměnné
+  \texttt{app} a \texttt{BrowserWindow}.
 \item
-  Everything else should be in
-  \texttt{app.on("ready",\ function()\ \{\ code\ \});} statement, it
-  waits before Electron is initialized.
+  Vše ostatní by mělo být v bloku
+  \texttt{app.on("ready",\ function()\ \{\ code\ \});}, který před
+  spuštěním počká až se dokončí načtení modulů a inicializaci okna.
 \item
-  To \texttt{mainWindow} variable is assigned \texttt{BrowserWindow}
-  class - here are defined properties of the window
+  Vytvořit instanci classy \texttt{BrowserWindow}, kde se nadefinují
+  vlastnosti okna.
 
   \begin{itemize}
   \tightlist
   \item
-    Here are set height, width, where should the window appear and its
-    title
+    Výška, šířka okna (i s minimálními hodnotami, aby byl vidět nějaký
+    obsah), kde na obrazovce se má okno zobrazit a nadpis. Je možné
+    přidat ještě ikonku, ale to udělá Electron-packager.
   \end{itemize}
 \item
-  With \texttt{.setMenu} are specified items in menu bar (turned off by
-  default).
+  Metodou \texttt{.setMenu} nastavíme lištu menu (v této aplikaci je
+  defaultně vypnutá).
 \item
-  Loading \texttt{html} code from another file
+  Načtení HTML kódu ze souboru (\texttt{mainWindow.html} v tomto
+  případě).
 \item
-  Making sure that app will quit after the window is closed
+  Na konci je pojistka, aby se vypnula aplikace po zavření všech oken.
 \end{enumerate}
 
-For discovering more about Electron APIs and possibilities visit
-(\emph{www.electronjs.org/docs})
+Více informací o Electron API a dalších možnostech nastavení je na
+\emph{www.electronjs.org/docs}.
 
 \hypertarget{mainwindow.html}{%
 \subsection{mainWindow.html}\label{mainwindow.html}}
 
-In the header of this file are many \texttt{link} and \texttt{script}
-tags loading Javascript and css extensions. In commented part are online
-CDN links in case the linked files are not downloaded. Also there are
-two special \texttt{script} tags around the others just for Electron to
-load them correctly.
+V hlavičce tohoto souboru je mnoho \texttt{link} a \texttt{script} tagů,
+které načítají javascriptová a css rozšíření. V zakomentovaných řádcích
+jsou online CDN odkazy pro případ, že by ty stažené soubory přestaly
+fungovat (např. kvůli novější verzi). Dále jsou zde dva speciální
+\texttt{script} tagy kolem ostatních, aby je Electron správně načetl při
+renderování.
 
-Almost every tags are inheriting from \texttt{bootstrap.css} so they
-many classes in themselves. Those which will be accessed from
-\texttt{main.js} for dynamical updates are also named by \texttt{id}
-property.
+Skoro všechny tagy inheritují vlastnosti z \texttt{bootstrap.css} a
+obsahují spoustu \texttt{class} atributů. Ty které jsou nějakým způsobem
+ovládány Javascriptem jsou také pojmenovány pomocí unikátního
+\texttt{id} atributu.
 
-Most of the content is dynamically updated so there is almost no
-content, these are just prepared to be filled by the data from database.
+Většina obsahu se generuje dynamicky, takže HTML samo o sobě obsahuje
+jen přípravená místa pro naplnění daty z databáze.
 
-For discovering more about Bootstrap classes visit its documentation
+Více detailních informací o \texttt{class} atributech je v dokumentaci
+Bootstrapu
 (\emph{www.getbootstrap.com/docs/4.2/getting-started/introduction/}).
 
 \hypertarget{main.js}{%
 \subsection{main.js}\label{main.js}}
 
-This file contains combination of JQuery APIs and plain Javascript. By
-definition everything from JQuery begins with \texttt{\$} sign and it
-provides better communication with \texttt{html} file and it makes
-handling requests easier.
+Tento soubor obsahuje kombinaci JQuery API a čistého Javascriptu.
+Všechny příkazy z JQuery jsou označeny \texttt{\$} a zajišťují lepší
+import dat do HTML souboru a také usnadňují komunikaci se serverem.
 
-After the \texttt{mainWindow.html} is loaded into Electron and
-everything is set up, the block inside
-\texttt{\$(document).ready(function()\ \{\});} is executed first. It
-calls the \texttt{reset()} function, which hides everything except title
-page, and it waits for pressing any of the buttons in navigation bar and
-calls corresponding function when done so.
+Po načtení \texttt{mainWindow.html} do Electronu se spustí blok
+\texttt{\$(document).ready(function()\ \{\ code\ \});}. Nejprve zavolá
+funkci \texttt{reset()}, která skryje vše kromě titulní strany. Poté
+čeká na \textbf{click events} na tlačítkách v liště menu a spustí
+příslušnou funkci, když \textbf{event} nastane.
 
 \hypertarget{home-button}{%
 \subsubsection{Home button}\label{home-button}}
 
-Calls only the \texttt{reset()} function and shows title page.
+Spustí pouze funkci \texttt{reset()} a zobrazí titulní stranu.
 
-\hypertarget{other-functions}{%
-\subsubsection{Other functions}\label{other-functions}}
+\hypertarget{dalux161uxed-funkce}{%
+\subsubsection{Další funkce}\label{dalux161uxed-funkce}}
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{hide\_all()} - hides every div; only navigation bar remains
+  \texttt{hide\_all()} - skryje úplně vše, kromě navigační lišty (ta
+  skrýt nelze).
 \item
-  \texttt{reset()} - calls \texttt{hide\_all()} and shows title page
+  \texttt{reset()} - zavolá \texttt{hide\_all()} a zviditelní titulní
+  stranu
 \item
-  \texttt{show\_one\_item(item)} - takes id of div to show as an
-  argument; calls \texttt{hide\_all()} and shows \texttt{item}
+  \texttt{show\_one\_item(item)} - bere \texttt{id} objektu jako
+  argument; zavolá \texttt{hide\_all()} a zobrazí daný objekt
 \item
-  \texttt{post\_information(suffix,\ data)} - takes suffix to
-  \texttt{database\_path} to send data to and data as arguments; makes
-  \textbf{ajax POST} request with json object
+  \texttt{post\_information(suffix,\ data)} - bere příponu za základní
+  adresu k serveru, kam se pošle request, a data k odeslání (v JSON
+  formátu) jako argumenty; vytvoří \textbf{ajax POST} request
 \item
-  \texttt{load\_information(suffix)} - takes suffix to
-  \texttt{database\_path} to get data from; makes \textbf{ajax GET}
-  request and returns data from the specified path
+  \texttt{load\_information(suffix)} - bere příponu za základní adresu k
+  serveru jako argument; vytvoří \textbf{ajax GET} request a vrátí
+  příchozí data
 \item
   \texttt{create\_card\_object(type,\ id,\ card\_front,\ card\_back,\ tags)}
 
   \begin{itemize}
   \tightlist
   \item
-    returns string of JSON card object with values from arguments
+    vytvoří string z JSON objektu (kartička) s hodnotami z argumentů
   \end{itemize}
 \item
   \texttt{create\_tag\_object(type,\ id,\ tag\_name,\ success\_rate,\ card\_count,\ cards)}
@@ -561,7 +592,7 @@ Calls only the \texttt{reset()} function and shows title page.
   \begin{itemize}
   \tightlist
   \item
-    returns string of JSON tag object with values from arguments
+    vytvoří string z JSON objektu (okruh) s hodnotami z argumentů
   \end{itemize}
 \end{itemize}
 
@@ -571,14 +602,14 @@ Calls only the \texttt{reset()} function and shows title page.
 \begin{itemize}
 \tightlist
 \item
-  Every \textbf{click} event has to be \texttt{unbind()}, otherwise the
-  events would stack up and after second press of the button the
-  function would be called twice and so on.
+  Každý \textbf{click event} musí mít za sebou metodu
+  \texttt{.unbind()}, jinak by se příkazy sčítaly a po druhém zmáčknutí
+  daného tlačítka by se funkce spustila dvakrát a tak dále.
 \item
-  Inside every \textbf{click} event should be called
-  \texttt{event.preventDefault();}. This app uses JQuery for handling
-  button clicks so we need to disable the \texttt{html} handling the
-  clicks. Otherwise the page would refresh and we would see title page
-  again.
+  Uvnitř každého \textbf{click event}u musí být zavolána funkce
+  \texttt{event.preventDefault();}. Jelikož tato aplikace používá JQuery
+  pro správu kliknutí, je potřeba zabránit HTML, aby se snažilo reagovat
+  na kliknutí. Stránka by se obnovila, protože HTML by nevědělo, co
+  dělat, a byla by vidět jen titulní strana.
 \end{itemize}
 \end{document}

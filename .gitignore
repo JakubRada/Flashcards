@@ -1,8 +1,4 @@
 /user_interface/node_modules/*
-/user_interface/lib/*
-/django_server/cards/__pycache__/*
-/django_server/server/__pycache__/*
-/django_server/cards/migrations/__pycache__/*
 TODO.md
 *.aux
 *.fdb_latexmk
@@ -14,3 +10,4 @@ TODO.md
 *.toc
 *.nav
 *.snm
+*.cpython-37.pyc
