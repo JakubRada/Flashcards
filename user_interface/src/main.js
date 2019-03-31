@@ -630,10 +630,8 @@ function levenshtein_distance(string_1, string_2) {
             );
         }
     }
-    console.table(matrix);
     // highlight wrong answer or typos in partly correct answer
     var ratio = (matrix[str_1_len][str_2_len]) / str_2_len;
-    console.log(ratio);
     if (ratio < 0.3) {
         var x = 0;
         var y = 0;
@@ -1027,7 +1025,6 @@ function process_data(text) {
             result[1].push(object);
         }
     }
-    //console.log(filter_json(result));
     return filter_json(result);
 }
 
