@@ -133,7 +133,7 @@ Všechny soubory jsou umístěny ve složce `./user_interface/`.
     - První z těchto dvou popisuje přesný strom souborů stažených do node-modules složky
     - Druhý slouží ke spouštění aplikace z terminálu a ke konečnému zabalení aplikace do spustitelné formu
 
-## Structure
+## Struktura
 
 Konkrétní obsahy jednotlivých souborů jsou popsány v následujících kapitolách, tady je popsán pouze proces. Vykreslovací proces začíná v `render.js` souboru, který je nastaven ke spuštění v `package.json`.
 
@@ -203,6 +203,214 @@ Po načtení `mainWindow.html` do Electronu se spustí blok `$(document).ready(f
 
 Spustí pouze funkci `reset()` a zobrazí titulní stranu.
 
+### Vytváření karet
+
+Funkce, která se spustí při kliknutí na tlačítko s `id=create_card_button` a které se nachází v navigační liště. Po kliknutí se spustí funkce `create_card()`.
+
+- `create_card()` - nemá žádné parametry; je pouze organizační
+    - Pomocí JQuery vyprázdní všechna pole a zobrazí container, který obsahuje HTML definici pro vytváření karet.
+    - Pomocí `load_information("tags")` pošle request, načte všechny okruhy z databáze a pro každý vytvoří prázdný checkbox.
+    - Čeká na kliknutí na Cancel (`id=cancel`) nebo na Save (`id=save_new_card`).
+        - Cancel zavolá funkci `reset()`.
+    - Po kliknutí na Save se uloží hodnoty z polí do proměnných.
+    - Zkontroluje se, jestli karta se stejnými hodnotami již neexistuje v databázi.
+        - Pomocí `load_information("cards")` se postupně načtou všechny karty v databázi a porovnají se skrz funkci `card_is_unique(new_front, new_back, all_cards)`.
+    - Když je unikátní, uloží se, které okruhy byly vybrány a vytvoří se JSON objekt, jenž je následně poslán do databáze `post_information(suffix, create_card_object(viz Ostatní funkce))`.
+    - Poté se funkce zavolá znovu a uživatel může vytvořit další kartu.
+    - Když není unikátní, vyprázdní se všechna pole a vyskočí upozornění.
+- `card_is_unique(new_front, new_back, all_cards)` - jako argumenty má nové hodnoty pro předek a zadek karty a seznam karet k porovnání
+    - Pokud se rovnají přední i zadní strany u alespoň jedné karty ze seznamu, vrátí funkce `false`, jinak vrátí `true`.
+
+### Vytváření okruhů
+
+Funkce, která se spustí při kliknutí na tlačítko s `id=create_card_button` a které se nachází v navigační liště. Po kliknutí se spustí funkce `create_tag()`.
+
+- `create_tag()` - nemá parametry; je pouze organizační
+    - Pomocí JQuery vyprázdní pole na vstup a zobrazí container s HTML obsahem pro vytváření okruhů.
+    - Čeká na kliknutí na Cancel (`id=cancel`) nebo na Save (`id=save_new_card`).
+        - Cancel zavolá funkci `reset()`.
+    - Po kliknutí na Save se uloží hodnoty z pole do proměnné.
+    - Zkontroluje se, jestli okruh již neexistuje v databázi.
+        - Pomocí `load_information("tags")` se načtou jména všech okruhů a porovnají se
+    - Když je unikátní, vytvoří se, funkce se zavolá znovu a uživatel může přidat další okruh.
+    - Když není unikátní, vyprázdní se pole a vyskočí upozornění.
+
+### Editace karet
+
+Funkce, která se spustí při kliknutí na tlačítko s `id=edit_card_button` a které se nachází v navigační liště. Vypíše všechny karty do tabulky a umožní jejich úpravu. Jako první se volá funkce `list_cards_to_edit()`.
+
+- `list_cards_to_edit()` - nemá parametry; je pouze organizační
+    - Vyprázdní se předchozí tabulka, takže zůstanou jen nadpisy sloupečků, a zobrazí se container s tabulkou.
+    - Načtou se názvy a id všech karet v databázi do seznamu, na který je pak zavolána funkce `sort_card_list(card_list)`, která list seřadí.
+    - Pro každé id se vytvoří řádek v tabulce, zbytek ale zůstane prázdný.
+    - Pomocí `load_information()` se načtou všechny informace o jednotlivých kartách a přidají se do odpovídajících řádků podle id.
+    - V každém řádku se také vytvoří tlačítko Edit a tlačítko Delete.
+    - Po stisknutí Delete se zeptá na potvrzení a pomocí `post_information("add_card/", create_card_object("delete", ...))` se pošle request do databáze, kde se kartička smaže. Znovu se zavolá `list_cards_to_edit()`, aby se obnovil seznam karet.
+    - Po stisknutí Edit se zavolá `edit_card(card_info)`
+- `edit_card(card)` - jako parametr bere objekt JSON, který obsahuje informace o kartě
+    - Funkce funguje dost podobně jako `create_card()`, ale pole a checkboxy se vyplní podle aktuálních informací o kartě.
+    - Po kliknutí na Save se opět pošle request do databáze pomocí `post_information("add_card/", create_card_object("update", ...))`.
+    - Po uložení nebo kliknutím na Cancel se zavolá funkce `list_cards_to_edit()`.
+- `sort_card_list(card_list)` - využívá předdefinovanou funkci `sort()` a porovnává přední strany karet.
+
+### Editace okruhů
+
+Funkce, která se spustí při kliknutí na tlačítko s `id=edit_card_button` a které se nachází v navigační liště. Vypíše všechny karty do tabulky a umožní jejich úpravu. Jako první se volá funkce `list_cards_to_edit()`.
+
+- `list_tags_to_edit()` - nemá parametry; je pouze organizační
+    - Vyprázdní se předchozí tabulka, takže zůstanou jen nadpisy sloupečků, a zobrazí se container s tabulkou.
+    - Načtou se názvy a id všech okruhů v databázi do seznamu, na který je pak zavolána funkce `sort_tag_list(tag_list)`, která list seřadí.
+    - Pro každé id se vytvoří řádek v tabulce, zbytek ale zůstane prázdný.
+    - Pomocí `load_information()` se načtou všechny informace o jednotlivých okruzích a přidají se do odpovídajících řádků podle id.
+    - V každém řádku se také vytvoří tlačítko Edit a tlačítko Delete.
+    - Po stisknutí Delete se zeptá na potvrzení a pomocí `post_information("add_tag/", create_tag_object("delete", ...))` se pošle request do databáze, kde se okruh smaže. Znovu se zavolá `list_tags_to_edit()`, aby se obnovil seznam okruhů.
+    - Po stisknutí Edit se zavolá `edit_tag(tag_info)`
+- `edit_tag(tag)` - jako parametr bere objekt JSON, který obsahuje informace o okruhu
+    - Funkce funguje dost podobně jako `create_tag()`, ale pole se vyplní podle aktuálních informací o okruhu.
+    - Po kliknutí na Save se opět pošle request do databáze pomocí `post_information("add_tag/", create_tag_object("update", ...))`.
+    - Po uložení nebo kliknutím na Cancel se zavolá funkce `list_tags_to_edit()`.
+- `sort_tag_list(tag_list)` - využívá předdefinovanou funkci `sort()` a porovnává názvy okruhů.
+
+### Testy
+
+Funkce, která spravuje výběr okruhu k prozkoušení a typ testu, poté zavolá odpovídající funkci. Spustí se při kliknutí na tlačítko s `id=test_button`, které se nachází v navigační liště.
+
+- `test_main()` - nemá parametry; slouží jen k organizaci
+    - Vyprázdní se předchozí obsah a zobrazí se container pro výběr okruhu.
+    - Načtou se všechny okruhy z databáze a pro každý se vytvoří tlačítko.
+    - Po kliknutí na vybrané tlačítko se zavolá `test_type(event.data[0], event.data[1])`
+- `test_type(tag_id, tag_name)` - jako parametry bere id a název okruhu
+    - Zobrazí se container pro výběr typu testu se třemi tlačítky, jedním pro každý z typů testu.
+    - Po kliknutí na dané tlačítko se zavolá funkce `load_cards("browse"/"choices"/"write", tag_id, is_reversed())`.
+- `is_reversed()` - nebere žádné parametry;
+    - Zjistí, jestli je přepínač "směru" kartiček sepnutý.
+    - Směr znamená, jestli se bude jako otázka brát přední, nebo zadní strana kartičky a odpověď bude ta druhá.
+    - Vrací `true` nebo `false`.
+- `load_cards(typem, tag_id, is_reversed)` - jako parametry bere typ testu, id okruhu a směr kladení otázek
+    - Načte z databáze všechny kartičky, které jsou v okruhu určeným parametrem `tag_id`, do seznamu.
+        - Pokud je parametr `is_reversed true`, přední a zadní strany se automaticky prohodí.
+    - Po načtení všech karet se zavolá funkce `group_similar_cards(all_cards)`, která vyfiltruje seznam.
+    - Podle hodnoty parametru `type` se zavolá odpovídající funkce `browse`/`choices`/`write`, která provede vlastní test.
+- `group_similar_cards(all_cards)` - jako parametr bere seznam kartiček, který má vyfiltrovat
+    - Projde seznam kartiček a na každou zavolá funkci `contains_similar_front(return_card_list, card.card_front)`. (V `return_card_list` jsou kartičky, které již byly zkontrolovány, nebo spojeny)
+    - Pokud vrátí `true`, kartičky se spojí do jedné, aby nebyl problém při hledání správné odpovědi při kartičkách, které mají stejnou přední stranu, ale jiné zadní strany (synonyma).
+- `contains_similar_front(card_list, card_front)` - jako parametry bere seznam kartiček a přední stranu porovnávané kartičky
+    - Projde všechny kartičky v seznamu a porovná jejich přední strany s přední stranou zadanou v parametrech.
+    - Vrátí `[true, index]` nebo `[false, null]`.
+
+#### Test typu "Browse"
+
+- `browse(all_cards, tag_id)` - jako parametry bere seznam kartiček a id okruhu
+    - Funkce, která se stará o typ testu, kde se prochází všechny kartičky a otáčí se.
+    - Na začátku se zavolá funkce `update_browse_progress_bar(current_index, count)` a `change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back)`, které nastaví kartičku na první v seznamu a vynuluje ukazatel nahoře.
+    - Podle počtu kartiček se rozhodne, jestli budou vidět tlačítka NEXT a PREVIOUS.
+    - Po kliknutí na tlačítka s `id=browse_next` resp. `id=browse_previous`, znovu se zavolají funkce na aktualizování horního ukazatele a změnu hodnot na kartičce. Dále se znovu rozhodne o viditelnosti NEXT a PREVIOUS pomocí funkce `show_next_previous(current_index, count)`.
+    - Kliknutím na kartičku se otočí a zobrazí druhou hodnotu.
+    - Tlačítko `id=browse_back` znovu zavolá funkci `test_type()`.
+- `update_browse_progress_bar(current, max)` - jako parametr bere číslo aktuální kartičky a celkový počet
+    - Upravuje Bootstrapový objekt (ukazuje kolikátá kartička je právě prohlížena), aby odpovídal aktuálním hodnotám
+- `change_flipcard(front, back)` - jako parametry bere nové hodnoty na přední a zadní stranu
+    - Pokud byla kartička ponechána otočená, nejprve se otočí zpátky a až potom se změní hodnoty.
+    - Poté dojde ke změně hodnot v HTML stránce.
+- `show_next_previous(current_index, max)` - jako parametry bere číslo kartičky a celkový počet
+    - Zobrazuje a schovává tlačítka NEXT a PREVIOUS, aby nebyly vidět při první resp. poslední kartičce.
+
+#### Test typu "Choices"
+
+- `choices(count, correct, wrong, answers, current_word_index, all_cards, tag_info)`
+    - Jako parametry bere, celkový počet karet, kolik jich už bylo správně, kolik špatně, číslo momentální kartičky, seznam karet a informace o okruhu - pro další kartičku se zavolá znovu tato funkce, akorát s jinými hodnotami
+    - Aktualizují se ukazatele správných/špatných odpovědí a zbývajících odpovědí pomocí funkce `update_write_choices_progress_bar("choices", correct, wrong, count)`.
+    - Zobrazí se container se tímto typem testu, nahoře je přední strana kartičky, pod tím jsou čtyři možnosti odpovědí.
+    - Funkce `get_random_choices(count, current_word_index, all_cards)` vybere indexy náhodných kartiček, které budou sloužit jako špatné odpovědi.
+    - Funkce `get_random_index()` náhodně seřadí čísla od 0 do 3, což způsobí náhodné zamíchání možností mezi čtyři políčka.
+    - Pomocí hodnot z těchto dvou funkcí se vyplní možnosti náhodně zvolenými zadními stranami kartiček.
+    - Funkce `activate_one()` označí první možnost jako vybranou.
+    - Funkce `choose()` sdružuje označování možností jako vybrané po kliknutí.
+    - Kliknutím na tlačítko s `id="choices_check_answer` se porovná vybraná možnost se správnou.
+        - Zvýší se počet `correct` případně `wrong`, číslo kartičky a uloží se odpověď.
+        - Zobrazí se container, kde se ukáže správnost odpovědi a správná odpověď.
+    - Pokud je kartička poslední, zavolá se `summary(tag_info, correct, count, answers)`, jinak se zavolá funkce znovu se změněnými hodnotami
+- `get_random_choices(count, current_word_index, all_cards)`
+    - Jako parametry bere počet kartiček, číslo aktuální kartičky a seznam všech kartiček.
+    - Zavolá funkci `count_same_backs(all_cards)` - zredukuje počet karet o ty, které mají stejnou zadní stranu - aby nebylo více stejných možností.
+    - Vrátí seznam max. čtyř indexů ze seznamu karet (když je seznam karet kratší než 4, je jich méně).
+- `count_same_backs(all_cards)` - jako parametr bere seznam karet
+    - Vrátí číslo, které reprezentuje počet unikátních zadních stran v seznamu karet.
+- `get_random_index()` - nemá parametry
+    - Zamíchá čísla od 0 do 3 v náhodném pořadí - podle toho se přiřazují možnosti.
+- `activate_one()` - nemá parametry
+    - Odoznačí minulý výběr a označí vždy první možnost jako vybranou.
+- `choose()` - nemá parametry
+    - Sdružuje **click eventy**, které označují vybranou možnost pomocí `one_choice(x)`.
+- `one_choice(index)` - nemá parametry
+    - Odoznačí minulou možnost a označí tu která má v id `index`.
+- `update_write_choices_progress_bar(type, correct, wrong, max)` - jako parametry bere typ testu, počet správných a špatných odpovědí a celkový počet otázek.
+    - Aktualizuje ukazatele zadaných hodnot.
+
+#### Test typu "Write"
+
+- `write(count, correct, wrong, answers, current_word_index, all_cards, tag_info)` 
+    - Jako parametry bere, celkový počet karet, kolik jich už bylo správně, kolik špatně, číslo momentální kartičky, seznam karet a informace o okruhu - pro další kartičku se zavolá znovu tato funkce, akorát s jinými hodnotami
+    - Aktualizují se ukazatele správných/špatných odpovědí a zbývajících odpovědí pomocí funkce `update_write_choices_progress_bar("write", correct, wrong, count)`.
+    - Po kliknutí na tlačítko s `id=check_write_answer` se uloží hodnota zapsaná do textového pole.
+    - Pomocí funkce `check_magic(raw_answer, current_card.card_back.toLowerCase())` se zkontroluje výsledek.
+        - Zvýší se počet správných/špatných odpovědí, číslo kartičky a uloží se odpověď.
+        - Zobrazí se container, kde se ukáže správnost odpovědi a správná odpověď.
+    - Pokud je kartička poslední, zavolá se `summary(tag_info, correct, count, answers)`, jinak se zavolá funkce znovu se změněnými hodnotami
+- `update_write_choices_progress_bar(type, correct, wrong, max)` - jako parametry bere typ testu, počet správných a špatných odpovědí a celkový počet otázek.
+    - Aktualizuje ukazatele zadaných hodnot.
+- `check_magic(raw_answer, correct_answer)` - jako argumenty bere zadanou odpověď v malém fontu a správnou odpověď
+    - Správná odpověď se rozdělí podle čárek, v případě, že by bylo více možností (synonyma)
+    - Pro každou možnou odpověď se vypočítá Levenshteinova vzdálenost pomocí funkce `levenshtein_distance(raw_input, answer)`.
+    - Když funkce vrátí `true`, vyhodnotí se jako správná, jinak se vyhodnotí jako špatná.
+- `levenshtein_distance(string_1, string_2)` - jako parametr bere 2 stringy
+    - Spočítá počet operací (přidání, vynechání, záměna), které je potřeba provést, aby se `string_1` změnil na`string_2`
+    - Když je (počet chyb)/(délka slova) < 0.3, vyhodnotí se jako správná odpověď (tolerance překlepů).
+    - Zvýrazní a doplní chyby ve `string_1`.
+    - Vrací `[true/false, string se zvýrazněnými chybami]`
+
+#### Sumarizace testu
+
+- `summary(tag_info, correct, count, answers)` - jako argumenty bere informace o okruhu, počet správných odpovědí, počet otázek, seznam všech odpovědí
+    - Zobrazí container se zhodnocením testu.
+    - Vypočítá procentuální úspěšnost a zlepšení/zhoršení oproti minulému testu stejného okruhu.
+    - Nabízí seznam všech otázek se zadanými a správnými odpověďmi.
+    - Pomocí `post_information("add_tag/", create_tag_object("test, ...))` uloží výsledek testu do databáze.
+    - Zavolá funkci `test_type()` a uživatel může začít nový test.
+
+### Export
+
+Funkce, která se spustí po kliknutí na tlačítko s `id=export_button` a které se nachází v navigační liště. Vypíše všechny kartičky a okruhy do `.csv` souboru včetně jejich spojení.
+
+- `export_data()` - nemá žádné parametry
+    - Zobrazí container s polem, kam se vyplní název souboru bez koncovky.
+    - Po stisknutí tlačítka s `id=confirm_export` se uloží obsah pole a zkontroluje se formát názvu (nesmí obsahovat speciální znaky a mezery).
+    - Pokud splní všechny podmínky, zavolá se funkce `prepare_data(filename)`.
+- `contains_special_symbols(string)` - jako parametr bere jakýkoli string
+    - Zkontroluje, že string neobsahuje žádný ze speciálních znaků.
+- `prepare_data(filename)` - jako parametr bere název souboru
+    - Postupně pomocí `load_information("cards"/"tags")` načte všechny kartičky a okruhy z databáze a vytvoří list objektů.
+    - Po načtení všeho zavolá funkci `write_file(filename, export_list)`.
+- `write_file(filename, export_list)` - jako parametry bere název souboru a seznam objektů
+    - Pro každou položku seznamu vytvoří řádek.
+    - Pomocí Node.js balíčku `fs` vytvoří ve složce `./export/` soubor `filename.csv`, kam uloží všechny vytvořené řádky.
+
+### Import
+
+Funkce, která se spustí po kliknutí na tlačítko s `id=import_button` a které se nachází v navigační liště. Z `.csv` souboru načte kartičky a uloží je do databáze.
+
+- `import_data()` - nemá žádné parametry
+    - Zobrazí container s tlačítkem, které zobrazí průzkumníka souborů, kde uživatel vybere soubor, který chce importovat.
+    - Po kliknutí na tlačítko s `id=confirm_import` se přečte soubor a pomocí `post_information("import/", process_data(reader.result))` se uloží importovaná data do databáze.
+- `process_data(text)` - jako parametr je text, který obsahuje informace k importu
+    - Text se rozdělí na řádky, které se pomocí `sort_tags_to_import(entries)` seřadí na karty a okruhy.
+    - Vytvoří se JSON objekty karet a okruhů, přičemž se pomocí indexů seřazeného listu propojí příslušné okruhy a karty.
+    - Vrací to list objektů, které projdou funkcí `filter_json(result)`.
+- `sort_tags_to_import(entries)` - jako parametr bere seznam řádků
+    - Seřadí je tak, aby se karty a okruhy správně propojily.
+- `filter_json(json_list)` - jako parametr bere seznam JSON objektů
+    - Projde seznam a vyfiltruje objekty, které jsou stejné, nebo obsahují nepovolená data (např. není tam přední strana kartičky, ...).
+
 ### Další funkce
 
 - `hide_all()` - skryje úplně vše, kromě navigační lišty (ta skrýt nelze).
@@ -219,3 +427,7 @@ Spustí pouze funkci `reset()` a zobrazí titulní stranu.
 
 - Každý **click event** musí mít za sebou metodu `.unbind()`, jinak by se příkazy sčítaly a po druhém zmáčknutí daného tlačítka by se funkce spustila dvakrát a tak dále.
 - Uvnitř každého **click event**u musí být zavolána funkce `event.preventDefault();`. Jelikož tato aplikace používá JQuery pro správu kliknutí, je potřeba zabránit HTML, aby se snažilo reagovat na kliknutí. Stránka by se obnovila, protože HTML by nevědělo, co dělat, a byla by vidět jen titulní strana.
+
+## package.json
+
+Soubor popisující aplikaci jako celek. Nalezneme zde název, popis, autora, licenci, ... Dále se zde definují scripty, které usnadňují některé operace jako spouštění z terminálu nebo zabalení aplikace. Nejdůležitější jsou závislé položky, které se zahrnou do finálního package.
