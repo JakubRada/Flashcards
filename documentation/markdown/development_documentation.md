@@ -1,5 +1,6 @@
 ---
 title: Flashcards
+subtitle: Vývojářská dokumentace
 ---
 
 # Přehled

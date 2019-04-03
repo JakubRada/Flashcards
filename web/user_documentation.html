@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+        <title>Uživatelská příručka</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body style="background-color: #c4c4c4; color: #37474f;">
+        <h1 class="display-1 text-center mt-1 mb-5">Uživatelská příručka</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="#">Flashcards</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Hlavní stránka</a></li>
+                <li class="nav-item"><a class="nav-link" href="development_documentation.html">Vývojářská dokumentace</a></li>
+            </ul>
+        </nav>
+        <div class="container mt-5">
+            <h1 id="o-aplikaci">O aplikaci</h1>
+            <p><em>Flashcards</em> je offline počítačová aplikace navržená pro zkoušení slovíček či jiné látky. Umožňuje vytváření a úpravu kartiček a jejich zařazování do okruhů. Okruhy pak lze vyzkoušet třemi typy testů. Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a import dat do/ze souboru.</p>
+            <h1 id="instalace-a-spuštění">Instalace a spuštění</h1>
+            <ol type="1">
+            <li>Nainstalujeme Python 3.7 (Linux z terminálu, Windows z <em>www.python.org/downloads/windows/</em>)</li>
+            <li>Nainstalujeme Django 2.1.5.
+            <ul>
+            <li>Na Windows otevřeme příkazový řádek jako správce.</li>
+            <li>Zadáme příkaz</li>
+            </ul>
+            <p>    <code>pip install Django==2.1.5</code></p></li>
+            <li>Spustíme Django server
+            <ul>
+            <li>Složka <code>./server/</code> (musí zde být soubor <code>manage.py</code>)</li>
+            <li>Spustíme příkaz</li>
+            </ul>
+            <p>    <code>python manage.py runserver localhost:8000</code></p></li>
+            <li><p>Spustíme aplikaci <strong>flashcards</strong> (na Windows s příponou .exe).</p></li>
+            </ol>
+            <h1 id="termíny-v-aplikaci">Termíny v aplikaci</h1>
+            <ul>
+            <li><strong>Card</strong> = kartička;</li>
+            <li><strong>Front side</strong> = líc kartičky (slovo, které bude zapsáno na přední stranu kartičky - v základním nastavení představuje otázku);</li>
+            <li><strong>Back side</strong> = rub kartičky (slovo, které bude zapsáno na zadní stranu kartičky - v základním nastavení představuje požadovanou odpověď na líc karty);</li>
+            <li><strong>Tag</strong> = okruh na zkoušení;</li>
+            <li><strong>Tag name</strong> = název okruhu;</li>
+            <li><strong>Reverse</strong> = přepínač ,,směru" otázek, nachází se u výběru typu testu;</li>
+            </ul>
+            <h1 id="vytváření-kartiček">Vytváření kartiček</h1>
+            <p>Funkce na vytváření nových kartiček. Každá kartička může být uložena v libovolném množství okruhů. Pokud budou obě zadané hodnoty stejné jako v nějaké již existující kartičce, aplikace upozorní uživatele a nová se stejnými hodnotami se již nevytvoří.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>Create card</strong> v menu liště.</li>
+            <li>Vyplníme políčko <strong>Front side</strong> textem, který chceme zobrazit na přední straně kartičky (maximální délka vloženého textu je 200 znaků).</li>
+            <li>To stejné provedeme s políčkem <strong>Back side</strong>.</li>
+            <li>Pod políčky jsou zobrazena zaškrtávací tlačítka pro všechny existující okruhy, kde označíme, do kterých okruhů chceme kartičku přidat.</li>
+            <li>Tlačítkem <strong>Save</strong> uložíme kartičku, tlačítkem <strong>Cancel</strong> zahodíme všechny zadané hodnoty a kartička se neuloží.</li>
+            </ol>
+            <h1 id="zobrazování-a-úprava-kartiček">Zobrazování a úprava kartiček</h1>
+            <p>Funkce na úpravu existujících kartiček a zobrazení všech kartiček. Pokud budou obě upravované hodnoty změněné na již existující, aplikace upozorní uživatele a změny se neuloží.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>Edit card</strong> v menu liště.</li>
+            <li>Zobrazí se seznam všech existujících kartiček v tabulce.
+            <ul>
+            <li>Tabulka má čtyři sloupečky: text na přední straně (<strong>Front side</strong>); text na zadní straně (<strong>Back side</strong>); počet okruhů, které obsahují danou kartičku (<strong>No. of tags</strong>); tlačítko na úpravu (<strong>Edit</strong>) a na smazání (<strong>Delete</strong>).</li>
+            </ul></li>
+            <li>Po kliknutí na tlačítko <strong>Delete</strong> se aplikace zeptá na potvrzení a poté kartičku smaže a odstraní ji ze všech okruhů.</li>
+            <li>Po kliknutí na tlačítko <strong>Edit</strong> se zobrazí formulář na úpravu.
+            <ul>
+            <li>Funguje stejně jako vytváření kartičky, s tím rozdílem, že políčka a zaškrtávací tlačítka jsou již předvyplněná momentálními hodnotami.</li>
+            </ul></li>
+            </ol>
+            <h1 id="vytváření-okruhů">Vytváření okruhů</h1>
+            <p>Funkce na vytváření nových okruhů. Pokud okruh se zadanou hodnotou již existuje, aplikace upozorní uživatele a nový okruh nevytvoří.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>Create tag</strong> v menu liště.</li>
+            <li>Vyplníme políčko <strong>Tag name</strong> textem, který bude sloužit jako název nového okruhu na zkoušení (maximální délka názvu je 100 znaků).</li>
+            <li>Tlačítkem <strong>Save</strong> uložíme nový okruh, tlačítkem <strong>Cancel</strong> zahodíme vložený text a nový okruh se neuloží.</li>
+            </ol>
+            <h1 id="zobrazování-a-úprava-okruhů">Zobrazování a úprava okruhů</h1>
+            <p>Funkce na úpravu existujících okruhů a zobrazení všech okruhů. Pokud bude vložený text názvem již existujícího okruhu, aplikace upozorní uživatele a změna se neuloží.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>Edit tag</strong> v menu liště.</li>
+            <li>Zobrazí se tabulka všech existujících okruhů v tabulce.
+            <ul>
+            <li>Tabulka má čtyři sloupečky: název okruhu (<strong>Name of the tag</strong>); počet kartiček v daném okruhu (<strong>No. of cards</strong>); úspěšnost posledního testu daného okruhu v procentech (<strong>Learned</strong>); tlačítko na úpravu (<strong>Edit</strong>) a na smazání (<strong>Delete</strong>).</li>
+            </ul></li>
+            <li>Po kliknutí na tlačítko <strong>Delete</strong> se aplikace zeptá na potvrzení a poté okruh smaže. Kartičky v okruhu zůstanou zachovány.</li>
+            <li>Po kliknutí na tlačítko <strong>Edit</strong> se zobrazí formulář na úpravu.
+            <ul>
+            <li>Funguje stejně jako vytváření okruhů, s tím rozdílem, že políčko <strong>Tag name</strong> je již předvyplněno momentální hodnotou.</li>
+            </ul></li>
+            </ol>
+            <h1 id="testy">Testy</h1>
+            <p>Funkce spravující všechny testy. Jsou zde obsažené tři typy testů: procházení kartiček (v aplikaci <strong>Browse</strong>), vybírání z možností (v aplikaci <strong>Choices</strong>) a psaní správné odpovědi (v aplikaci <strong>Write</strong>). V nich uživatel postupně prochází všechny kartičky zvoleného okruhu a podle typu testu odpovídá na otázky. Při výběru okruhu k testování si lze zvolit, kterým ,,směrem" budou kartičky zkoušeny. Po každé odpovědi se zobrazí, zda byla odpověď správná, či špatná. Pokud byla špatná, zobrazí se i správné řešení. V průběhu testu je zobrazen počet zbývajících otázek a počet správných a špatných odpovědí. Po zodpovězení všech otázek se zobrazí celková úspěšnost testovaného okruhu, která se uloží pro budoucí porovnání, a uživatel si může prohlédnout všechny své odpovědi.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>Test</strong> v menu liště.</li>
+            <li>Zobrazí se seznam tlačítek, kdy každé představuje jeden okruh ke zkoušení.</li>
+            <li>Po kliknutí na tlačítko s názvem vybraného okruhu, který chceme otestovat, se zobrazí stránka na výběr typu testu.</li>
+            <li>Tlačítkem <strong>Back to tag selection</strong> se vrátíme na výběr okruhu.</li>
+            <li>Máme na výběr ze tří typů testů: procházení kartiček (<strong>Browse</strong>), vybírání z možností (<strong>Choices</strong>) a psaní správné odpovědi (<strong>Write</strong>).</li>
+            <li>Pod tlačítky je přepínač (<strong>Reverse</strong>), který určuje ,,směr" kartiček.
+            <ul>
+            <li>V normálním nastavení se aplikace ptá přední stranou kartičky a očekává odpověď zadní stranou</li>
+            <li>Při přepnutém přepínači se aplikace bude ptát zadní stranou kartičky a bude očekávat odpověď přední stranou.</li>
+            </ul></li>
+            <li>Pro výběr typu testu klikneme na dané tlačítko.</li>
+            </ol>
+            <h2 id="test---procházení-kartiček">Test - procházení kartiček</h2>
+            <p>Tento test nevyžaduje žádné odpovědi, uživatel pouze postupně prochází všechny kartičky.</p>
+            <ul>
+            <li>Kliknutím na kartičku se kartička otočí a zobrazí druhou stranu.</li>
+            <li>Kliknutím na tlačítko <strong>Next</strong> se zobrazí další kartička, tlačítko <strong>Previous</strong> zobrazí předchozí kartičku.</li>
+            <li>Nad kartičkami je ukazatel, který ukazuje, kolikátá kartička z celkového počtu je právě vidět.</li>
+            <li>Procházení ukončíme tlačítkem <strong>Back to test selection</strong>.</li>
+            </ul>
+            <h2 id="test---vybírání-z-možností">Test - vybírání z možností</h2>
+            <p>Tento test spočívá ve vybírání správné ze čtyř možností, které aplikace nabídne. Po každé otázce aplikace zobrazí, zda byla vybraná odpověď správná a vybranou i správnou odpověď. Na konci testu je pak vyhodnocení úspěšnosti testu a seznam všech odpovědí vždy se správnou možností.</p>
+            <ul>
+            <li>Nahoře je velkým nápisem napsána přední strana kartičky, pro kterou hledáme správnou dvojici.</li>
+            <li>Pod ní jsou možnosti, ze kterých vybíráme. Vybírá se kliknutím na danou odpověď.</li>
+            <li>Na pravé straně jsou tři ukazatele: počet správných odpovědí (zelená barva), počet špatných odpovědí (červená barva) a počet zbývajících otázek (černá barva).</li>
+            <li>Tlačítkem <strong>Check answer</strong> potvrdíme odpověď a zobrazí se zhodnocení.</li>
+            <li>Na stránce se zhodnocením je jediné tlačítko <strong>Next question</strong>, kterým se posuneme na další otázku.</li>
+            </ul>
+            <p>Po poslední otázce se zobrazí stránka se sumarizací otázek.</p>
+            <ul>
+            <li>Je zde vypsán počet správných odpovědí, procentuální úspěšnost a jestli došlo ke zlepšení, nebo ke zhoršení.</li>
+            <li>Kliknutím na tlačítko <strong>Show answers</strong> se zobrazí seznam všech odpovědí.
+            <ul>
+            <li>Správné odpovědi jsou zvýrazněny zeleně, špatné červeně.</li>
+            </ul></li>
+            <li>Tlačítkem <strong>Continue to test selection</strong> se vrátíme na stránku s výběrem typu testu.</li>
+            </ul>
+            <h2 id="test---psaní-správné-odpovědi">Test - psaní správné odpovědi</h2>
+            <p>Tento test spočívá v napsání správné odpovědi. Po každé otázce aplikace zobrazí, zda byla vybraná odpověď správná a vybranou i správnou odpověď. Aplikace toleruje překlepy podle délky slova (čím delší slovo, tím více chyb je uznáno). Taková odpověď je vyhodnocena jako správná, ale všechny chyby jsou zvýrazněny. Na konci testu je pak vyhodnocení úspěšnosti testu a seznam všech odpovědí vždy se správnou možností.</p>
+            <ul>
+            <li>Nahoře je velkým nápisem napsána přední strana kartičky, pro kterou píšeme správnou dvojici.</li>
+            <li>Pod ní je jediné políčko, kam má být vepsána správná odpověď.</li>
+            <li>Na pravé straně jsou tři ukazatele: počet správných odpovědí (zelená barva), počet špatných odpovědí (červená barva) a počet zbývajících otázek (černá barva).</li>
+            <li>Tlačítkem <strong>Check answer</strong> potvrdíme odpověď a zobrazí se zhodnocení.</li>
+            <li>Na stránce se zhodnocením je jediné tlačítko <strong>Next question</strong>, kterým se posuneme na další otázku.</li>
+            </ul>
+            <p>Po poslední otázce se zobrazí stránka se sumarizací otázek.</p>
+            <ul>
+            <li>Je zde vypsán počet správných odpovědí, procentuální úspěšnost a jestli došlo ke zlepšení, nebo ke zhoršení.</li>
+            <li>Kliknutím na tlačítko <strong>Show answers</strong> se zobrazí seznam všech odpovědí.
+            <ul>
+            <li>Správné odpovědi jsou zvýrazněny zeleně, špatné červeně.</li>
+            </ul></li>
+            <li>Tlačítkem <strong>Continue to test selection</strong> se vrátíme na stránku s výběrem typu testu.</li>
+            </ul>
+            <h1 id="export">Export</h1>
+            <p>Funkce umožňující export všech kartiček a okruhů, které jsou právě uložené v aplikaci. Export probíhá do <strong>.csv</strong> souboru, který je uložen do složky export, ta je ve stejné složce jako spouštěcí soubor aplikace.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>File</strong> a pak na tlačítko <strong>Export</strong> v menu liště.</li>
+            <li>Zobrazí se stránka s jediným políčkem, kam napíšeme název exportovaného souboru.
+            <ul>
+            <li>Název může obsahovat pouze písmena a číslice.</li>
+            <li>Název píšeme bez koncovky!</li>
+            </ul></li>
+            <li>Kliknutím na tlačítko <strong>Confirm export</strong> se zahájí export dat (může to chvíli trvat).</li>
+            <li>Po exportování se zobrazí potvrzovací okénko, že export proběhl správně.</li>
+            </ol>
+            <h1 id="import">Import</h1>
+            <p>Funkce umožňující import kartiček a okruhů ze souboru s koncovkou <strong>.csv</strong>. Importovaná data musí být v přesně daném formátu (viz níže), jinak budou přeskočena. Pokud bude mezi importovanými daty již existující kartička, nebude se přepisovat, ani když bude v jiných okruzích než ta momentálně uložená v aplikaci.</p>
+            <ol type="1">
+            <li>Klikneme na tlačítko <strong>File</strong> a pak na tlačítko <strong>Import</strong> v menu liště.</li>
+            <li>Zobrazí se stránka s jediným tlačítkem, které zobrazí průzkumníka souborů.</li>
+            <li>V průzkumníkovi najdeme soubor, který chceme importovat.</li>
+            <li>Kliknutím na tlačítko <strong>Confirm export</strong> se zahájí import dat (může to chvíli trvat).</li>
+            <li>Po importování se zobrazí potvrzovací okénko, že byl import dokončen.</li>
+            </ol>
+            <p>Formát <strong>.csv</strong> souboru</p>
+            <ul>
+            <li>Okruh
+            <ul>
+            <li>tag, číslo okruhu (počítají se jenom ty v tomto souboru), název okruhu</li>
+            <li>například: <code>tag, 1, Čísla</code></li>
+            </ul></li>
+            <li>Kartička
+            <ul>
+            <li>card, přední strana kartičky, zadní strana kartičky, čísla okruhů, do kterých kartička patří, oddělené ,,|" (čísla okruhů v tomto souboru)</li>
+            <li>například: <code>card, One, Jedna, 1|2|3</code></li>
+            </ul></li>
+            <li>Každý záznam píšeme na samostatný řádek</li>
+            </ul>
+            <h1 id="nápověda">Nápověda</h1>
+            <p>Kliknutím na tlačítko <strong>Help</strong> v menu liště se zobrazí rychlá nápověda v angličtině.</p>
+        </div>
+    </body>
+</html>

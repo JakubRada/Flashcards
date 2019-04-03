@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+        <title>Vývojářská dokumentace</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body style="background-color: #c4c4c4; color: #37474f;">
+        <h1 class="display-1 text-center mt-1 mb-5">Vývojářská dokumentace</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="#">Flashcards</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Hlavní stránka</a></li>
+                <li class="nav-item"><a class="nav-link" href="development_documentation.html">Vývojářská dokumentace</a></li>
+            </ul>
+        </nav>
+        <div class="container mt-5">
+            <h1 id="přehled">Přehled</h1>
+            <p>Aplikace Flashcards má stejnou strukturu jako webová aplikace, hlavní části jsou naprogramovány s použitím HTML, CSS a Javascriptu, ale na rozdíl od ostatních webových aplikací se nevykresluje ve webovém prohlížeči, ale v Electronu. Data se ukládají do oddělené databáze, takže obě části aplikace běží nezávisle na sobě. O databázi se stará Django Framework (Python) a běží to na localhostu. Klient a server komunikují asynchronně skrz JSON requesty.</p>
+            <h1 id="použité-knihovny">Použité knihovny</h1>
+            <p>Aplikace používá mnoho různých knihoven na usnadnění používání některých funkcí. Na serverové části je použito Django, které ovšem vyžaduje nainstalovaný Python 3 (je doporučeno používat nejnovější verzi). Na straně klienta je použit Electron, který renderuje všechny vizuální aspekty místo prohlížeče, a ten pro své fungování potřebuje Node.js. Pro hezčí vzhled je použit Bootstrap, skládá se ze tří souborů: <code>.css</code>, které je upravené kvůli sladění některých barev s celkovým vzhledem, <code>.js</code> a <code>popper.js</code>, které jsou potřeba pro některé funkce. Pro dynamické měnění obsahu na stránce a komunikaci se serverem je použita JQuery.</p>
+            <ul>
+            <li>Server
+            <ul>
+            <li>Python 3.7 nebo vyšší (<em>www.python.org/downloads/windows</em>)</li>
+            <li>Django 2.1.5 (nainstalováno příkazem <code>pip install Django==2.1.5</code>)</li>
+            </ul></li>
+            <li>Uživatelské rozhraní
+            <ul>
+            <li>Node.js (<em>www.npmjs.com/get-npm</em>)</li>
+            <li>Electron (<em>www.electronjs.org</em>)</li>
+            <li>Electron packager</li>
+            <li>Bootstrap předkompilované soubory (stažené z <em>www.getbootstrap.com/docs/4.3/getting-started/download/</em>)
+            <ul>
+            <li>CSS, Javascript a Popper</li>
+            </ul></li>
+            <li>JQuery (<em>www.jquery.com</em>)</li>
+            </ul></li>
+            </ul>
+            <h1 id="konfigurace-serveru">Konfigurace serveru</h1>
+            <p>Jak bylo zmíněno dříve, o všechna ukládaná data se stará Django běžící offline na localhostu na portu 8000. Všechny soubory týkající se serveru se nachází ve složce <code>./server/</code>. Ve složce <code>./server/server</code> je obecné nastavení serverové aplikace, ve složce <code>./server/cards/</code> jsou pak soubory této konkrétní aplikace s modely pro databázi a funkcemi na zpracovávání příchozích a odchozích requestů.</p>
+            <h2 id="spuštění-serveru">Spuštění serveru</h2>
+            <p>    <code>python manage.py runserver localhost:8000</code></p>
+            <ul>
+            <li>Spuštěn ze složky, ve které se nachází soubor <code>manage.py</code> (<code>./server/</code>)</li>
+            </ul>
+            <h2 id="základní-nastavení-serveru">Základní nastavení serveru</h2>
+            <ul>
+            <li>Soubory v <code>./server/server</code>.</li>
+            <li>Zde se nastavují všechny nainstalované aplikace využívající tento server (v tomto případě pouze ‘cards’), typ použité databáze (‘sqlite3’) a které urls jsou použity pro příjímání requestů (<code>urls.py</code>).</li>
+            <li>Dále se zde nachází secret key pro případ publikování databáze na internet</li>
+            </ul>
+            <h2 id="nastavení-aplikace-cards">Nastavení aplikace Cards</h2>
+            <p>Všechny soubory v <code>./server/cards/</code>. Pro tuto aplikaci jsou potřebné pouze <code>models.py</code>, <code>urls.py</code> a <code>views.py</code>. Ostatní jsou buď automaticky vytvořené, nebo prázdné.</p>
+            <p>Základní adresa k serveru</p>
+            <p>    <code>localhost:8000/cards</code></p>
+            <h3 id="modely">Modely</h3>
+            <p>V tomto souboru se definují databázové objekty s jejich proměnnými a vztahy s ostatními objekty. Každý model slouží jako šablona pro záznamy do databáze a vytvoří si tabulku, kam tyto záznamy budou ukládány. Jednotlivé řádky tabulky jsou propojovány s jinými tabulkami skrze relationship fields.</p>
+            <ul>
+            <li>model <code>Tag(tag_name, previous_success_rate, card_count)</code> … šablona pro okruhy
+            <ul>
+            <li><code>tag_name</code> … CharField (max. 100 znaků); reprezentuje jméno daného okruhu</li>
+            <li><code>previous_success_rate</code> … IntegerField; reprezentuje procentuální úspěšnost posledního testu daného okruhu</li>
+            <li><code>card_count</code> … IntegerField, volitelný (default=0); reprezentuje počet karet propojených k okruhu</li>
+            <li>každá proměnná má svoje <code>get</code> a <code>set</code>, které vrací, nebo upravují jejich hodnoty</li>
+            <li><code>add_card</code> a <code>remove_card</code> metody slouží k navýšení, nebo snížení počtu karet v <code>card_count</code> proměnné</li>
+            </ul></li>
+            <li>model <code>Card(card_front, card_back, tag_count, tags)</code> … šablona pro kartičky
+            <ul>
+            <li><code>card_front</code> … CharField (max. 200 znaků); reprezentuje text zobrazený na přední straně kartičky</li>
+            <li><code>card_back</code> … CharField (max. 200 znaků); reprezentuje text zobrazený na zadní straně kartičky</li>
+            <li><code>tag_count</code> … IntegerField, volitelný (default=0); reprezentuje počet okruhů, ve kterých je daná kartička</li>
+            <li><code>tags</code> … ManyToManyField; propojuje kartičky s libovolným počtem okruhů
+            <ul>
+            <li>příkazem <code>tags.add(tag)</code> je propojena kartička s okruhem, <code>tags.remove(tag)</code> zničí vazbu mezi nimi</li>
+            <li>v každém okruhu se automaticky vytvoří proměnná <code>cards</code>, kam se naopak ukládají všechny propojené kartičky. To znamená, že jejich spojení je oboustranné a lze k nim přistoupit z obou dvou.</li>
+            </ul></li>
+            <li>každá proměnná má svoje <code>get</code> a <code>set</code>, které vrací, nebo upravují jejich hodnoty</li>
+            <li><code>add_tag</code> a <code>remove_tag</code> metody slouží ke zvýšení, nebo snížení počtu okruhů v <code>tag_count</code> proměnné</li>
+            </ul></li>
+            </ul>
+            <h3 id="views-a-urls">Views a Urls</h3>
+            <p>Zde jsou definovány funkce, které spravují příchozí a odchozí JSON a Http requesty z/do klienta. Všechna data posílaná requesty jsou v JSON formátu pro lepší komunikaci s Javascriptem.</p>
+            <ul>
+            <li>request <code>cards</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/cards</code></li>
+            <li>vrací seznam JSON objektů, každý reprezentuje jednu kartičku z databáze</li>
+            <li>JSON objekt neobsahuje všechny atributy kartičky - <code>{id, card_front, card_back}</code></li>
+            </ul></li>
+            <li>request <code>tags</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/tags</code></li>
+            <li>vrací seznam JSON objektů, každý reprezentuje jeden okruh z databáze</li>
+            <li>JSON objekt neobsahuj všechny atributy kartičky - <code>{id, tag_name}</code></li>
+            </ul></li>
+            <li>request <code>tag(tag_id)</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/tags/tag_id/</code></li>
+            <li>vrací JSON objekt se všemi informacemi o okruhu specifikovaným <code>tag_id</code></li>
+            <li>vrací <code>{id, tag_name, success_rate, card_count, cards}</code></li>
+            </ul></li>
+            <li>request <code>card(card_id)</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/cards/card_id/</code></li>
+            <li>vrací JSON objekt se všemi informacemi o kartičce specifikované <code>card_id</code></li>
+            <li>vrací <code>{id, card_front, card_back, tag_count, tags}</code></li>
+            </ul></li>
+            <li>request <code>add_tag</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/add_tag/</code></li>
+            <li>dostane JSON objekt od klienta - <code>{type, id, tag_name, success_rate, card_count, cards}</code>
+            <ul>
+            <li>podle hodnoty <code>type</code> argumentu určí, která akce se provede</li>
+            <li>vytvoří nový okruh (<code>type: new</code>),</li>
+            <li>zaktualizuje jméno (<code>type: update</code>),</li>
+            <li>zaktualizuje úspěšnost posledního testu (<code>type: test</code>),</li>
+            <li>smaže okruh (<code>type: delete</code>).</li>
+            </ul></li>
+            </ul></li>
+            <li>request <code>add_card</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/add_card/</code></li>
+            <li>dostane JSON objekt od klienta - <code>{type, id, card_front, card_back, tag_count, tags}</code>
+            <ul>
+            <li>podle hodnoty <code>type</code> argumentu určí, která akce se provede</li>
+            <li>vytvoří novou kartičku (<code>type: new</code>),</li>
+            <li>zaktualizuje jméno a automaticky všechny vazby mezi okruhy (<code>type: update</code>),</li>
+            <li>smaže kartičku (<code>type: delete</code>).</li>
+            </ul></li>
+            </ul></li>
+            <li>request <code>import_all</code>
+            <ul>
+            <li>musí být poslán na url <code>localhost:8000/cards/import/</code></li>
+            <li><p>dostane dvojici seznamů JSON objektů, které obsahují okruhy i kartičky</p>
+            <p><code>[</code></p>
+            <p>    <code>[{type: "new", card_front, card_back, tag_count, tags}],</code></p>
+            <p>    <code>[{type: "new", tag_name, success_rate: 0, card_count: 0}]</code></p>
+            <p><code>]</code></p></li>
+            <li>funkce sama určí, jestli je položka unikátní a přidá ji do databáze - automaticky spojí okruhy s kartičkami na základě indexů druhého listu (v každé <code>tags</code> proměnné je seznam indexů položek z druhého listu, které mají být propojeny)</li>
+            <li><p>když položka již existuje, je přeskočena</p></li>
+            </ul></li>
+            </ul>
+            <p>V souboru <code>urls.py</code> jsou definovány url adresy kam se posílají jednotlivé requesty. Každý request má svojí adresu pro lepší organizaci.</p>
+            <h1 id="klient">Klient</h1>
+            <p>Klient uživatelského rozhraní je vytvořeno stejným způsobem jako moderní webové aplikace, ale místo renderování v prohlížeči jako Firefox nebo Chrome se vykreslují v Electronu. Výhoda tohoto řešení je lepší fungování offline a také vytváření vlastního okna pro aplikaci pro hezčí vzhled, ale na druhou stranu je nezbytné nainstalovat Node.js, což dělá klienta náročného na úložiště (kolem 100 MB minimálně). Zase ale mohou být využity ostatní Node.js rozšíření, jako například file manager. Díky tomu máme přístup k souborům na lokálním disku, čehož by nešlo dosáhnout s běžnou webovou aplikací, protože Javascript žádnou takovou funkci neposkytuje.</p>
+            <h2 id="složky-a-soubory">Složky a soubory</h2>
+            <p>Všechny soubory jsou umístěny ve složce <code>./user_interface/</code>.</p>
+            <ul>
+            <li><code>/assets/</code> obsahuje obrázky a ikony.</li>
+            <li><code>/lib/</code> obsahuje předkompilované Bootstrap soubory, Jquery a speciální CSS soubor, který otáčí kartičkou.</li>
+            <li><code>/node_modules/</code> obsahuje všechny Node.js package všetně Electronu; z těchto souborů se postaví konečný spustitelný soubor</li>
+            <li><code>/src/</code> obsahuje Javascript a HTML soubory, které zajišťují funkcionalitu aplikace</li>
+            <li>Dále složka obsahuje soubory <code>package-lock.json</code> a <code>package.json</code>
+            <ul>
+            <li>První z těchto dvou popisuje přesný strom souborů stažených do node-modules složky</li>
+            <li>Druhý slouží ke spouštění aplikace z terminálu a ke konečnému zabalení aplikace do spustitelné formu</li>
+            </ul></li>
+            </ul>
+            <h2 id="struktura">Struktura</h2>
+            <p>Konkrétní obsahy jednotlivých souborů jsou popsány v následujících kapitolách, tady je popsán pouze proces. Vykreslovací proces začíná v <code>render.js</code> souboru, který je nastaven ke spuštění v <code>package.json</code>.</p>
+            <p>Tento soubor vytvoří okno a načte do něj <code>mainWindow.html</code>, který určuje rozložení a vzhled stránky. Aplikace je postavena jako jednostránková aplikace, to znamená, že všechny části jsou na jedné stránce, ale většina je skrytá a zobrazuje se jen ta momentálně potřebná část. O viditelnost se stará Javascriptový soubor.</p>
+            <p>Vzhled HTML stránky je vylepšen Bootstrapem. Do <code>mainWindow.html</code> jsou nalinkovány <code>.css</code> soubory, které jsou upravené oproti těm oficiálním o některé barvy, <code>.js</code> soubory a <code>popper.js</code>, které jsou potřebné pro některé funkce Bootstrapu.</p>
+            <p>Do <code>mainWindow.htlm</code> je také nalinkován <code>main.js</code> soubor, který tvoří jádro aplikace a obsahuje všechny hlavní funkce aplikace. Například se stará o viditelnost obsahu, získává input od uživatele a posílá a příjímá requesty z databáze. Všechny jeho funkce jsou popsány v některé z dalších kapitol.</p>
+            <h3 id="instalace-electronu">Instalace Electronu</h3>
+            <p>    <code>npm install electron --save-dev</code></p>
+            <ul>
+            <li>spuštěno v hlavni složce projektu</li>
+            </ul>
+            <h3 id="instalace-electron-packageru">Instalace Electron-packageru</h3>
+            <p>    <code>npm install electron-packager --save-dev</code></p>
+            <ul>
+            <li>spuštěno ve složce, ve které jsou node-modules</li>
+            </ul>
+            <h3 id="spuštění-klienta-z-terminálu">Spuštění klienta z terminálu</h3>
+            <p>    <code>npm start</code></p>
+            <ul>
+            <li>spuštěno ve složce <code>user_interface</code></li>
+            </ul>
+            <h3 id="zabalení-aplikace-do-package">Zabalení aplikace do package</h3>
+            <p>Pro zabalení aplikace do složky obsahující spustitelný soubor a vše potřebné pro spuštění souboru bez instalace spustit</p>
+            <p>    <code>npm run</code> + jedna z možností <code>package-win/package-linux/pakcage-mac</code></p>
+            <p>Tento příkaz je definován v <code>package.json</code> v atributu <code>"scripts":{}</code> a zabalí aplikaci do složky <code>/user_interface/release-builds/</code>. Použije k tomu <code>electron-packager</code> a výsledný package funguje bez instalování čehokoliv. <strong>To platí jen pro vizuální stránku aplikace, server potřebuje mít nainstalované Django a Python a musí být spuštěn z příkazové řádky (viz Spuštění serveru)</strong></p>
+            <h2 id="render.js">render.js</h2>
+            <p>Jednoduchý soubor, popisují se jenom vlastnosti okna a který HTML soubor se má použít.</p>
+            <ol type="1">
+            <li>Na začátku souboru se musí zahrnout všechny Node.js moduly, které budou použity, včetně Electronu a je potřeba příradit mu proměnné <code>app</code> a <code>BrowserWindow</code>.</li>
+            <li>Vše ostatní by mělo být v bloku <code>app.on("ready", function() { code });</code>, který před spuštěním počká až se dokončí načtení modulů a inicializaci okna.</li>
+            <li>Vytvořit instanci classy <code>BrowserWindow</code>, kde se nadefinují vlastnosti okna.
+            <ul>
+            <li>Výška, šířka okna (i s minimálními hodnotami, aby byl vidět nějaký obsah), kde na obrazovce se má okno zobrazit a nadpis. Je možné přidat ještě ikonku, ale to udělá Electron-packager.</li>
+            </ul></li>
+            <li>Metodou <code>.setMenu</code> nastavíme lištu menu (v této aplikaci je defaultně vypnutá).</li>
+            <li>Načtení HTML kódu ze souboru (<code>mainWindow.html</code> v tomto případě).</li>
+            <li>Na konci je pojistka, aby se vypnula aplikace po zavření všech oken.</li>
+            </ol>
+            <p>Více informací o Electron API a dalších možnostech nastavení je na <em>www.electronjs.org/docs</em>.</p>
+            <h2 id="mainwindow.html">mainWindow.html</h2>
+            <p>V hlavičce tohoto souboru je mnoho <code>link</code> a <code>script</code> tagů, které načítají javascriptová a css rozšíření. V zakomentovaných řádcích jsou online CDN odkazy pro případ, že by ty stažené soubory přestaly fungovat (např. kvůli novější verzi). Dále jsou zde dva speciální <code>script</code> tagy kolem ostatních, aby je Electron správně načetl při renderování.</p>
+            <p>Skoro všechny tagy inheritují vlastnosti z <code>bootstrap.css</code> a obsahují spoustu <code>class</code> atributů. Ty které jsou nějakým způsobem ovládány Javascriptem jsou také pojmenovány pomocí unikátního <code>id</code> atributu.</p>
+            <p>Většina obsahu se generuje dynamicky, takže HTML samo o sobě obsahuje jen přípravená místa pro naplnění daty z databáze.</p>
+            <p>Více detailních informací o <code>class</code> atributech je v dokumentaci Bootstrapu (<em>www.getbootstrap.com/docs/4.2/getting-started/introduction/</em>).</p>
+            <h2 id="main.js">main.js</h2>
+            <p>Tento soubor obsahuje kombinaci JQuery API a čistého Javascriptu. Všechny příkazy z JQuery jsou označeny <code>$</code> a zajišťují lepší import dat do HTML souboru a také usnadňují komunikaci se serverem.</p>
+            <p>Po načtení <code>mainWindow.html</code> do Electronu se spustí blok <code>$(document).ready(function() { code });</code>. Nejprve zavolá funkci <code>reset()</code>, která skryje vše kromě titulní strany. Poté čeká na <strong>click events</strong> na tlačítkách v liště menu a spustí příslušnou funkci, když <strong>event</strong> nastane.</p>
+            <h3 id="home-button">Home button</h3>
+            <p>Spustí pouze funkci <code>reset()</code> a zobrazí titulní stranu.</p>
+            <h3 id="vytváření-karet">Vytváření karet</h3>
+            <p>Funkce, která se spustí při kliknutí na tlačítko s <code>id=create_card_button</code> a které se nachází v navigační liště. Po kliknutí se spustí funkce <code>create_card()</code>.</p>
+            <ul>
+            <li><code>create_card()</code> - nemá žádné parametry; je pouze organizační
+            <ul>
+            <li>Pomocí JQuery vyprázdní všechna pole a zobrazí container, který obsahuje HTML definici pro vytváření karet.</li>
+            <li>Pomocí <code>load_information("tags")</code> pošle request, načte všechny okruhy z databáze a pro každý vytvoří prázdný checkbox.</li>
+            <li>Čeká na kliknutí na Cancel (<code>id=cancel</code>) nebo na Save (<code>id=save_new_card</code>).
+            <ul>
+            <li>Cancel zavolá funkci <code>reset()</code>.</li>
+            </ul></li>
+            <li>Po kliknutí na Save se uloží hodnoty z polí do proměnných.</li>
+            <li>Zkontroluje se, jestli karta se stejnými hodnotami již neexistuje v databázi.
+            <ul>
+            <li>Pomocí <code>load_information("cards")</code> se postupně načtou všechny karty v databázi a porovnají se skrz funkci <code>card_is_unique(new_front, new_back, all_cards)</code>.</li>
+            </ul></li>
+            <li>Když je unikátní, uloží se, které okruhy byly vybrány a vytvoří se JSON objekt, jenž je následně poslán do databáze <code>post_information(suffix, create_card_object(viz Ostatní funkce))</code>.</li>
+            <li>Poté se funkce zavolá znovu a uživatel může vytvořit další kartu.</li>
+            <li>Když není unikátní, vyprázdní se všechna pole a vyskočí upozornění.</li>
+            </ul></li>
+            <li><code>card_is_unique(new_front, new_back, all_cards)</code> - jako argumenty má nové hodnoty pro předek a zadek karty a seznam karet k porovnání
+            <ul>
+            <li>Pokud se rovnají přední i zadní strany u alespoň jedné karty ze seznamu, vrátí funkce <code>false</code>, jinak vrátí <code>true</code>.</li>
+            </ul></li>
+            </ul>
+            <h3 id="vytváření-okruhů">Vytváření okruhů</h3>
+            <p>Funkce, která se spustí při kliknutí na tlačítko s <code>id=create_card_button</code> a které se nachází v navigační liště. Po kliknutí se spustí funkce <code>create_tag()</code>.</p>
+            <ul>
+            <li><code>create_tag()</code> - nemá parametry; je pouze organizační
+            <ul>
+            <li>Pomocí JQuery vyprázdní pole na vstup a zobrazí container s HTML obsahem pro vytváření okruhů.</li>
+            <li>Čeká na kliknutí na Cancel (<code>id=cancel</code>) nebo na Save (<code>id=save_new_card</code>).
+            <ul>
+            <li>Cancel zavolá funkci <code>reset()</code>.</li>
+            </ul></li>
+            <li>Po kliknutí na Save se uloží hodnoty z pole do proměnné.</li>
+            <li>Zkontroluje se, jestli okruh již neexistuje v databázi.
+            <ul>
+            <li>Pomocí <code>load_information("tags")</code> se načtou jména všech okruhů a porovnají se</li>
+            </ul></li>
+            <li>Když je unikátní, vytvoří se, funkce se zavolá znovu a uživatel může přidat další okruh.</li>
+            <li>Když není unikátní, vyprázdní se pole a vyskočí upozornění.</li>
+            </ul></li>
+            </ul>
+            <h3 id="editace-karet">Editace karet</h3>
+            <p>Funkce, která se spustí při kliknutí na tlačítko s <code>id=edit_card_button</code> a které se nachází v navigační liště. Vypíše všechny karty do tabulky a umožní jejich úpravu. Jako první se volá funkce <code>list_cards_to_edit()</code>.</p>
+            <ul>
+            <li><code>list_cards_to_edit()</code> - nemá parametry; je pouze organizační
+            <ul>
+            <li>Vyprázdní se předchozí tabulka, takže zůstanou jen nadpisy sloupečků, a zobrazí se container s tabulkou.</li>
+            <li>Načtou se názvy a id všech karet v databázi do seznamu, na který je pak zavolána funkce <code>sort_card_list(card_list)</code>, která list seřadí.</li>
+            <li>Pro každé id se vytvoří řádek v tabulce, zbytek ale zůstane prázdný.</li>
+            <li>Pomocí <code>load_information()</code> se načtou všechny informace o jednotlivých kartách a přidají se do odpovídajících řádků podle id.</li>
+            <li>V každém řádku se také vytvoří tlačítko Edit a tlačítko Delete.</li>
+            <li>Po stisknutí Delete se zeptá na potvrzení a pomocí <code>post_information("add_card/", create_card_object("delete", ...))</code> se pošle request do databáze, kde se kartička smaže. Znovu se zavolá <code>list_cards_to_edit()</code>, aby se obnovil seznam karet.</li>
+            <li>Po stisknutí Edit se zavolá <code>edit_card(card_info)</code></li>
+            </ul></li>
+            <li><code>edit_card(card)</code> - jako parametr bere objekt JSON, který obsahuje informace o kartě
+            <ul>
+            <li>Funkce funguje dost podobně jako <code>create_card()</code>, ale pole a checkboxy se vyplní podle aktuálních informací o kartě.</li>
+            <li>Po kliknutí na Save se opět pošle request do databáze pomocí <code>post_information("add_card/", create_card_object("update", ...))</code>.</li>
+            <li>Po uložení nebo kliknutím na Cancel se zavolá funkce <code>list_cards_to_edit()</code>.</li>
+            </ul></li>
+            <li><code>sort_card_list(card_list)</code> - využívá předdefinovanou funkci <code>sort()</code> a porovnává přední strany karet.</li>
+            </ul>
+            <h3 id="editace-okruhů">Editace okruhů</h3>
+            <p>Funkce, která se spustí při kliknutí na tlačítko s <code>id=edit_card_button</code> a které se nachází v navigační liště. Vypíše všechny karty do tabulky a umožní jejich úpravu. Jako první se volá funkce <code>list_cards_to_edit()</code>.</p>
+            <ul>
+            <li><code>list_tags_to_edit()</code> - nemá parametry; je pouze organizační
+            <ul>
+            <li>Vyprázdní se předchozí tabulka, takže zůstanou jen nadpisy sloupečků, a zobrazí se container s tabulkou.</li>
+            <li>Načtou se názvy a id všech okruhů v databázi do seznamu, na který je pak zavolána funkce <code>sort_tag_list(tag_list)</code>, která list seřadí.</li>
+            <li>Pro každé id se vytvoří řádek v tabulce, zbytek ale zůstane prázdný.</li>
+            <li>Pomocí <code>load_information()</code> se načtou všechny informace o jednotlivých okruzích a přidají se do odpovídajících řádků podle id.</li>
+            <li>V každém řádku se také vytvoří tlačítko Edit a tlačítko Delete.</li>
+            <li>Po stisknutí Delete se zeptá na potvrzení a pomocí <code>post_information("add_tag/", create_tag_object("delete", ...))</code> se pošle request do databáze, kde se okruh smaže. Znovu se zavolá <code>list_tags_to_edit()</code>, aby se obnovil seznam okruhů.</li>
+            <li>Po stisknutí Edit se zavolá <code>edit_tag(tag_info)</code></li>
+            </ul></li>
+            <li><code>edit_tag(tag)</code> - jako parametr bere objekt JSON, který obsahuje informace o okruhu
+            <ul>
+            <li>Funkce funguje dost podobně jako <code>create_tag()</code>, ale pole se vyplní podle aktuálních informací o okruhu.</li>
+            <li>Po kliknutí na Save se opět pošle request do databáze pomocí <code>post_information("add_tag/", create_tag_object("update", ...))</code>.</li>
+            <li>Po uložení nebo kliknutím na Cancel se zavolá funkce <code>list_tags_to_edit()</code>.</li>
+            </ul></li>
+            <li><code>sort_tag_list(tag_list)</code> - využívá předdefinovanou funkci <code>sort()</code> a porovnává názvy okruhů.</li>
+            </ul>
+            <h3 id="testy">Testy</h3>
+            <p>Funkce, která spravuje výběr okruhu k prozkoušení a typ testu, poté zavolá odpovídající funkci. Spustí se při kliknutí na tlačítko s <code>id=test_button</code>, které se nachází v navigační liště.</p>
+            <ul>
+            <li><code>test_main()</code> - nemá parametry; slouží jen k organizaci
+            <ul>
+            <li>Vyprázdní se předchozí obsah a zobrazí se container pro výběr okruhu.</li>
+            <li>Načtou se všechny okruhy z databáze a pro každý se vytvoří tlačítko.</li>
+            <li>Po kliknutí na vybrané tlačítko se zavolá <code>test_type(event.data[0], event.data[1])</code></li>
+            </ul></li>
+            <li><code>test_type(tag_id, tag_name)</code> - jako parametry bere id a název okruhu
+            <ul>
+            <li>Zobrazí se container pro výběr typu testu se třemi tlačítky, jedním pro každý z typů testu.</li>
+            <li>Po kliknutí na dané tlačítko se zavolá funkce <code>load_cards("browse"/"choices"/"write", tag_id, is_reversed())</code>.</li>
+            </ul></li>
+            <li><code>is_reversed()</code> - nebere žádné parametry;
+            <ul>
+            <li>Zjistí, jestli je přepínač “směru” kartiček sepnutý.</li>
+            <li>Směr znamená, jestli se bude jako otázka brát přední, nebo zadní strana kartičky a odpověď bude ta druhá.</li>
+            <li>Vrací <code>true</code> nebo <code>false</code>.</li>
+            </ul></li>
+            <li><code>load_cards(typem, tag_id, is_reversed)</code> - jako parametry bere typ testu, id okruhu a směr kladení otázek
+            <ul>
+            <li>Načte z databáze všechny kartičky, které jsou v okruhu určeným parametrem <code>tag_id</code>, do seznamu.
+            <ul>
+            <li>Pokud je parametr <code>is_reversed true</code>, přední a zadní strany se automaticky prohodí.</li>
+            </ul></li>
+            <li>Po načtení všech karet se zavolá funkce <code>group_similar_cards(all_cards)</code>, která vyfiltruje seznam.</li>
+            <li>Podle hodnoty parametru <code>type</code> se zavolá odpovídající funkce <code>browse</code>/<code>choices</code>/<code>write</code>, která provede vlastní test.</li>
+            </ul></li>
+            <li><code>group_similar_cards(all_cards)</code> - jako parametr bere seznam kartiček, který má vyfiltrovat
+            <ul>
+            <li>Projde seznam kartiček a na každou zavolá funkci <code>contains_similar_front(return_card_list, card.card_front)</code>. (V <code>return_card_list</code> jsou kartičky, které již byly zkontrolovány, nebo spojeny)</li>
+            <li>Pokud vrátí <code>true</code>, kartičky se spojí do jedné, aby nebyl problém při hledání správné odpovědi při kartičkách, které mají stejnou přední stranu, ale jiné zadní strany (synonyma).</li>
+            </ul></li>
+            <li><code>contains_similar_front(card_list, card_front)</code> - jako parametry bere seznam kartiček a přední stranu porovnávané kartičky
+            <ul>
+            <li>Projde všechny kartičky v seznamu a porovná jejich přední strany s přední stranou zadanou v parametrech.</li>
+            <li>Vrátí <code>[true, index]</code> nebo <code>[false, null]</code>.</li>
+            </ul></li>
+            </ul>
+            <h4 id="test-typu-browse">Test typu “Browse”</h4>
+            <ul>
+            <li><code>browse(all_cards, tag_id)</code> - jako parametry bere seznam kartiček a id okruhu
+            <ul>
+            <li>Funkce, která se stará o typ testu, kde se prochází všechny kartičky a otáčí se.</li>
+            <li>Na začátku se zavolá funkce <code>update_browse_progress_bar(current_index, count)</code> a <code>change_flipcard(all_cards[current_index].card_front, all_cards[current_index].card_back)</code>, které nastaví kartičku na první v seznamu a vynuluje ukazatel nahoře.</li>
+            <li>Podle počtu kartiček se rozhodne, jestli budou vidět tlačítka NEXT a PREVIOUS.</li>
+            <li>Po kliknutí na tlačítka s <code>id=browse_next</code> resp. <code>id=browse_previous</code>, znovu se zavolají funkce na aktualizování horního ukazatele a změnu hodnot na kartičce. Dále se znovu rozhodne o viditelnosti NEXT a PREVIOUS pomocí funkce <code>show_next_previous(current_index, count)</code>.</li>
+            <li>Kliknutím na kartičku se otočí a zobrazí druhou hodnotu.</li>
+            <li>Tlačítko <code>id=browse_back</code> znovu zavolá funkci <code>test_type()</code>.</li>
+            </ul></li>
+            <li><code>update_browse_progress_bar(current, max)</code> - jako parametr bere číslo aktuální kartičky a celkový počet
+            <ul>
+            <li>Upravuje Bootstrapový objekt (ukazuje kolikátá kartička je právě prohlížena), aby odpovídal aktuálním hodnotám</li>
+            </ul></li>
+            <li><code>change_flipcard(front, back)</code> - jako parametry bere nové hodnoty na přední a zadní stranu
+            <ul>
+            <li>Pokud byla kartička ponechána otočená, nejprve se otočí zpátky a až potom se změní hodnoty.</li>
+            <li>Poté dojde ke změně hodnot v HTML stránce.</li>
+            </ul></li>
+            <li><code>show_next_previous(current_index, max)</code> - jako parametry bere číslo kartičky a celkový počet
+            <ul>
+            <li>Zobrazuje a schovává tlačítka NEXT a PREVIOUS, aby nebyly vidět při první resp. poslední kartičce.</li>
+            </ul></li>
+            </ul>
+            <h4 id="test-typu-choices">Test typu “Choices”</h4>
+            <ul>
+            <li><code>choices(count, correct, wrong, answers, current_word_index, all_cards, tag_info)</code>
+            <ul>
+            <li>Jako parametry bere, celkový počet karet, kolik jich už bylo správně, kolik špatně, číslo momentální kartičky, seznam karet a informace o okruhu - pro další kartičku se zavolá znovu tato funkce, akorát s jinými hodnotami</li>
+            <li>Aktualizují se ukazatele správných/špatných odpovědí a zbývajících odpovědí pomocí funkce <code>update_write_choices_progress_bar("choices", correct, wrong, count)</code>.</li>
+            <li>Zobrazí se container se tímto typem testu, nahoře je přední strana kartičky, pod tím jsou čtyři možnosti odpovědí.</li>
+            <li>Funkce <code>get_random_choices(count, current_word_index, all_cards)</code> vybere indexy náhodných kartiček, které budou sloužit jako špatné odpovědi.</li>
+            <li>Funkce <code>get_random_index()</code> náhodně seřadí čísla od 0 do 3, což způsobí náhodné zamíchání možností mezi čtyři políčka.</li>
+            <li>Pomocí hodnot z těchto dvou funkcí se vyplní možnosti náhodně zvolenými zadními stranami kartiček.</li>
+            <li>Funkce <code>activate_one()</code> označí první možnost jako vybranou.</li>
+            <li>Funkce <code>choose()</code> sdružuje označování možností jako vybrané po kliknutí.</li>
+            <li>Kliknutím na tlačítko s <code>id="choices_check_answer</code> se porovná vybraná možnost se správnou.
+            <ul>
+            <li>Zvýší se počet <code>correct</code> případně <code>wrong</code>, číslo kartičky a uloží se odpověď.</li>
+            <li>Zobrazí se container, kde se ukáže správnost odpovědi a správná odpověď.</li>
+            </ul></li>
+            <li>Pokud je kartička poslední, zavolá se <code>summary(tag_info, correct, count, answers)</code>, jinak se zavolá funkce znovu se změněnými hodnotami</li>
+            </ul></li>
+            <li><code>get_random_choices(count, current_word_index, all_cards)</code>
+            <ul>
+            <li>Jako parametry bere počet kartiček, číslo aktuální kartičky a seznam všech kartiček.</li>
+            <li>Zavolá funkci <code>count_same_backs(all_cards)</code> - zredukuje počet karet o ty, které mají stejnou zadní stranu - aby nebylo více stejných možností.</li>
+            <li>Vrátí seznam max. čtyř indexů ze seznamu karet (když je seznam karet kratší než 4, je jich méně).</li>
+            </ul></li>
+            <li><code>count_same_backs(all_cards)</code> - jako parametr bere seznam karet
+            <ul>
+            <li>Vrátí číslo, které reprezentuje počet unikátních zadních stran v seznamu karet.</li>
+            </ul></li>
+            <li><code>get_random_index()</code> - nemá parametry
+            <ul>
+            <li>Zamíchá čísla od 0 do 3 v náhodném pořadí - podle toho se přiřazují možnosti.</li>
+            </ul></li>
+            <li><code>activate_one()</code> - nemá parametry
+            <ul>
+            <li>Odoznačí minulý výběr a označí vždy první možnost jako vybranou.</li>
+            </ul></li>
+            <li><code>choose()</code> - nemá parametry
+            <ul>
+            <li>Sdružuje <strong>click eventy</strong>, které označují vybranou možnost pomocí <code>one_choice(x)</code>.</li>
+            </ul></li>
+            <li><code>one_choice(index)</code> - nemá parametry
+            <ul>
+            <li>Odoznačí minulou možnost a označí tu která má v id <code>index</code>.</li>
+            </ul></li>
+            <li><code>update_write_choices_progress_bar(type, correct, wrong, max)</code> - jako parametry bere typ testu, počet správných a špatných odpovědí a celkový počet otázek.
+            <ul>
+            <li>Aktualizuje ukazatele zadaných hodnot.</li>
+            </ul></li>
+            </ul>
+            <h4 id="test-typu-write">Test typu “Write”</h4>
+            <ul>
+            <li><code>write(count, correct, wrong, answers, current_word_index, all_cards, tag_info)</code>
+            <ul>
+            <li>Jako parametry bere, celkový počet karet, kolik jich už bylo správně, kolik špatně, číslo momentální kartičky, seznam karet a informace o okruhu - pro další kartičku se zavolá znovu tato funkce, akorát s jinými hodnotami</li>
+            <li>Aktualizují se ukazatele správných/špatných odpovědí a zbývajících odpovědí pomocí funkce <code>update_write_choices_progress_bar("write", correct, wrong, count)</code>.</li>
+            <li>Po kliknutí na tlačítko s <code>id=check_write_answer</code> se uloží hodnota zapsaná do textového pole.</li>
+            <li>Pomocí funkce <code>check_magic(raw_answer, current_card.card_back.toLowerCase())</code> se zkontroluje výsledek.
+            <ul>
+            <li>Zvýší se počet správných/špatných odpovědí, číslo kartičky a uloží se odpověď.</li>
+            <li>Zobrazí se container, kde se ukáže správnost odpovědi a správná odpověď.</li>
+            </ul></li>
+            <li>Pokud je kartička poslední, zavolá se <code>summary(tag_info, correct, count, answers)</code>, jinak se zavolá funkce znovu se změněnými hodnotami</li>
+            </ul></li>
+            <li><code>update_write_choices_progress_bar(type, correct, wrong, max)</code> - jako parametry bere typ testu, počet správných a špatných odpovědí a celkový počet otázek.
+            <ul>
+            <li>Aktualizuje ukazatele zadaných hodnot.</li>
+            </ul></li>
+            <li><code>check_magic(raw_answer, correct_answer)</code> - jako argumenty bere zadanou odpověď v malém fontu a správnou odpověď
+            <ul>
+            <li>Správná odpověď se rozdělí podle čárek, v případě, že by bylo více možností (synonyma)</li>
+            <li>Pro každou možnou odpověď se vypočítá Levenshteinova vzdálenost pomocí funkce <code>levenshtein_distance(raw_input, answer)</code>.</li>
+            <li>Když funkce vrátí <code>true</code>, vyhodnotí se jako správná, jinak se vyhodnotí jako špatná.</li>
+            </ul></li>
+            <li><code>levenshtein_distance(string_1, string_2)</code> - jako parametr bere 2 stringy
+            <ul>
+            <li>Spočítá počet operací (přidání, vynechání, záměna), které je potřeba provést, aby se <code>string_1</code> změnil na<code>string_2</code></li>
+            <li>Když je (počet chyb)/(délka slova) &lt; 0.3, vyhodnotí se jako správná odpověď (tolerance překlepů).</li>
+            <li>Zvýrazní a doplní chyby ve <code>string_1</code>.</li>
+            <li>Vrací <code>[true/false, string se zvýrazněnými chybami]</code></li>
+            </ul></li>
+            </ul>
+            <h4 id="sumarizace-testu">Sumarizace testu</h4>
+            <ul>
+            <li><code>summary(tag_info, correct, count, answers)</code> - jako argumenty bere informace o okruhu, počet správných odpovědí, počet otázek, seznam všech odpovědí
+            <ul>
+            <li>Zobrazí container se zhodnocením testu.</li>
+            <li>Vypočítá procentuální úspěšnost a zlepšení/zhoršení oproti minulému testu stejného okruhu.</li>
+            <li>Nabízí seznam všech otázek se zadanými a správnými odpověďmi.</li>
+            <li>Pomocí <code>post_information("add_tag/", create_tag_object("test, ...))</code> uloží výsledek testu do databáze.</li>
+            <li>Zavolá funkci <code>test_type()</code> a uživatel může začít nový test.</li>
+            </ul></li>
+            </ul>
+            <h3 id="export">Export</h3>
+            <p>Funkce, která se spustí po kliknutí na tlačítko s <code>id=export_button</code> a které se nachází v navigační liště. Vypíše všechny kartičky a okruhy do <code>.csv</code> souboru včetně jejich spojení.</p>
+            <ul>
+            <li><code>export_data()</code> - nemá žádné parametry
+            <ul>
+            <li>Zobrazí container s polem, kam se vyplní název souboru bez koncovky.</li>
+            <li>Po stisknutí tlačítka s <code>id=confirm_export</code> se uloží obsah pole a zkontroluje se formát názvu (nesmí obsahovat speciální znaky a mezery).</li>
+            <li>Pokud splní všechny podmínky, zavolá se funkce <code>prepare_data(filename)</code>.</li>
+            </ul></li>
+            <li><code>contains_special_symbols(string)</code> - jako parametr bere jakýkoli string
+            <ul>
+            <li>Zkontroluje, že string neobsahuje žádný ze speciálních znaků.</li>
+            </ul></li>
+            <li><code>prepare_data(filename)</code> - jako parametr bere název souboru
+            <ul>
+            <li>Postupně pomocí <code>load_information("cards"/"tags")</code> načte všechny kartičky a okruhy z databáze a vytvoří list objektů.</li>
+            <li>Po načtení všeho zavolá funkci <code>write_file(filename, export_list)</code>.</li>
+            </ul></li>
+            <li><code>write_file(filename, export_list)</code> - jako parametry bere název souboru a seznam objektů
+            <ul>
+            <li>Pro každou položku seznamu vytvoří řádek.</li>
+            <li>Pomocí Node.js balíčku <code>fs</code> vytvoří ve složce <code>./export/</code> soubor <code>filename.csv</code>, kam uloží všechny vytvořené řádky.</li>
+            </ul></li>
+            </ul>
+            <h3 id="import">Import</h3>
+            <p>Funkce, která se spustí po kliknutí na tlačítko s <code>id=import_button</code> a které se nachází v navigační liště. Z <code>.csv</code> souboru načte kartičky a uloží je do databáze.</p>
+            <ul>
+            <li><code>import_data()</code> - nemá žádné parametry
+            <ul>
+            <li>Zobrazí container s tlačítkem, které zobrazí průzkumníka souborů, kde uživatel vybere soubor, který chce importovat.</li>
+            <li>Po kliknutí na tlačítko s <code>id=confirm_import</code> se přečte soubor a pomocí <code>post_information("import/", process_data(reader.result))</code> se uloží importovaná data do databáze.</li>
+            </ul></li>
+            <li><code>process_data(text)</code> - jako parametr je text, který obsahuje informace k importu
+            <ul>
+            <li>Text se rozdělí na řádky, které se pomocí <code>sort_tags_to_import(entries)</code> seřadí na karty a okruhy.</li>
+            <li>Vytvoří se JSON objekty karet a okruhů, přičemž se pomocí indexů seřazeného listu propojí příslušné okruhy a karty.</li>
+            <li>Vrací to list objektů, které projdou funkcí <code>filter_json(result)</code>.</li>
+            </ul></li>
+            <li><code>sort_tags_to_import(entries)</code> - jako parametr bere seznam řádků
+            <ul>
+            <li>Seřadí je tak, aby se karty a okruhy správně propojily.</li>
+            </ul></li>
+            <li><code>filter_json(json_list)</code> - jako parametr bere seznam JSON objektů
+            <ul>
+            <li>Projde seznam a vyfiltruje objekty, které jsou stejné, nebo obsahují nepovolená data (např. není tam přední strana kartičky, …).</li>
+            </ul></li>
+            </ul>
+            <h3 id="další-funkce">Další funkce</h3>
+            <ul>
+            <li><code>hide_all()</code> - skryje úplně vše, kromě navigační lišty (ta skrýt nelze).</li>
+            <li><code>reset()</code> - zavolá <code>hide_all()</code> a zviditelní titulní stranu</li>
+            <li><code>show_one_item(item)</code> - bere <code>id</code> objektu jako argument; zavolá <code>hide_all()</code> a zobrazí daný objekt</li>
+            <li><code>post_information(suffix, data)</code> - bere příponu za základní adresu k serveru, kam se pošle request, a data k odeslání (v JSON formátu) jako argumenty; vytvoří <strong>ajax POST</strong> request</li>
+            <li><code>load_information(suffix)</code> - bere příponu za základní adresu k serveru jako argument; vytvoří <strong>ajax GET</strong> request a vrátí příchozí data</li>
+            <li><code>create_card_object(type, id, card_front, card_back, tags)</code>
+            <ul>
+            <li>vytvoří string z JSON objektu (kartička) s hodnotami z argumentů</li>
+            </ul></li>
+            <li><code>create_tag_object(type, id, tag_name, success_rate, card_count, cards)</code>
+            <ul>
+            <li>vytvoří string z JSON objektu (okruh) s hodnotami z argumentů</li>
+            </ul></li>
+            </ul>
+            <h3 id="click-events">Click events</h3>
+            <ul>
+            <li>Každý <strong>click event</strong> musí mít za sebou metodu <code>.unbind()</code>, jinak by se příkazy sčítaly a po druhém zmáčknutí daného tlačítka by se funkce spustila dvakrát a tak dále.</li>
+            <li>Uvnitř každého <strong>click event</strong>u musí být zavolána funkce <code>event.preventDefault();</code>. Jelikož tato aplikace používá JQuery pro správu kliknutí, je potřeba zabránit HTML, aby se snažilo reagovat na kliknutí. Stránka by se obnovila, protože HTML by nevědělo, co dělat, a byla by vidět jen titulní strana.</li>
+            </ul>
+            <h2 id="package.json">package.json</h2>
+            <p>Soubor popisující aplikaci jako celek. Nalezneme zde název, popis, autora, licenci, … Dále se zde definují scripty, které usnadňují některé operace jako spouštění z terminálu nebo zabalení aplikace. Nejdůležitější jsou závislé položky, které se zahrnou do finálního package.</p>
+        </div>
+    </body>
+</html>

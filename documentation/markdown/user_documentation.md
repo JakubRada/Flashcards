@@ -1,5 +1,6 @@
 ---
 title: Flashcards
+subtitle: Uživatelská příručka
 ---
 
 # O aplikaci
