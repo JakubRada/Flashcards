@@ -1,6 +1,7 @@
 ---
 title: Flashcards
 subtitle: Uživatelská příručka
+user: true
 ---
 
 # O aplikaci
