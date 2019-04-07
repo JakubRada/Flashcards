@@ -4,7 +4,9 @@ subtitle: Použité zdroje a knihovny
 sources: true
 ---
 
-# Použité knihovny {-}
+# Zdroje
+
+## Použité knihovny
 
 - **npm 6.4.1** [www.npmjs.com](https://www.npmjs.com/)
 - **Electron 4.1** [www.electronjs.org](https://electronjs.org/)
@@ -16,7 +18,7 @@ sources: true
 - **LaTeX** [www.latex-project.org](https://www.latex-project.org/)
 - **JavaScript** [www.javascript.com](https://www.javascript.com)
 
-# Dokumentace {-}
+## Dokumentace
 
 - **Electron docs** [www.electronjs.org/docs](https://electronjs.org/docs)
 - **Django docs** [www.docs.djangoproject.com/en/2.1](https://docs.djangoproject.com/en/2.1/)
@@ -28,7 +30,7 @@ sources: true
 - **Pandoc** [www.pandoc.org](https://pandoc.org/)
 - **StackOverflow** [www.stackoverflow.com](https://stackoverflow.com/)
 
-# Ikony a obrázky {-}
+## Ikony a obrázky
 
 - **IconFinder** [www.iconfinder.com/search/?q=brain&price=free](https://www.iconfinder.com/search/?q=brain&price=free)
 - **Obrázek na titulní straně** [www.inspiregroup.co.nz/whats-happening/category/brain-science](http://www.inspiregroup.co.nz/whats-happening/category/brain-science/)
