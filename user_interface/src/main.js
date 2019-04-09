@@ -998,13 +998,8 @@ function sort_tags_to_import(entries) {
 
 // handles processing of data
 function process_data(text) {
-    var entries;
     // splits text to lines
-    try {
-        entries = text.split("\r\n");
-    } catch(exception) {
-        entries = text.split("\n");
-    }
+    var entries = text.split("\n");
     entries = sort_tags_to_import(entries);
     var count = entries.length;
     var entry;
@@ -1106,7 +1101,7 @@ function write_file(filename, export_list) {
         $("#response_text").text("Data successfully exported into ");
         $("#path").text(`/${filename}.csv`);
         $("#response").modal('toggle');
-        $("export_input").text("");
+        $("#export_input").val("");
     });
 }
 
