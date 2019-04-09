@@ -964,7 +964,8 @@ function import_data() {
                     post_information('import/', process_data(reader.result));
                     $("#loading").hide();
                     $("#response_title").text("Import");
-                    $("#response_text").text("Data imported SUCCESSFULLY");
+                    $("#response_text").text("Data imported");
+                    $("#path").text("SUCCESSFULLY");
                     $("#response").modal('toggle');
                 }
             } else {
