@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+# which views use, when request is sent to certain url
 urlpatterns = [
     path('', views.index, name='index'),
     path('tags/', views.tags, name='tags'),
