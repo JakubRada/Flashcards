@@ -8,6 +8,8 @@ user: true
 
 *Flashcards* je offline počítačová aplikace navržená pro zkoušení slovíček či jiné látky. Umožňuje vytváření a úpravu kartiček a jejich zařazování do okruhů. Okruhy pak lze vyzkoušet třemi typy testů. Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a import dat do/ze souboru.
 
+Webová stránka o této aplikaci: [*jakubrada.github.io/Flashcards*](https://jakubrada.github.io/Flashcards/)
+
 # Instalace a spuštění
 
 1. Nainstalujeme Python 3.7 (Linux z terminálu, Windows z *www.python.org/downloads/windows/*)

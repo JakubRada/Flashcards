@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage[a4paper, total={18cm, 25cm}]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[czech]{babel}
@@ -10,6 +10,8 @@
 \definecolor{codehighlight}{RGB}{203,75,22}
 \let\oldtexttt\texttt
 \renewcommand{\texttt}[1]{\oldtexttt{\textcolor{codehighlight}{#1}}}
+\let\oldverbatim\verbatim
+\renewcommand{\verbatim}[1]{\oldverbatim{\textcolor{codehighlight}{#1}}}
 
 \begin{document}
 \begin{center}
@@ -30,6 +32,9 @@ zařazování do okruhů. Okruhy pak lze vyzkoušet třemi typy testů.
 Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke
 zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a
 import dat do/ze souboru.
+
+Webová stránka o této aplikaci:
+\href{https://jakubrada.github.io/Flashcards/}{\emph{jakubrada.github.io/Flashcards}}
 
 \hypertarget{instalace-a-spuux161tux11bnuxed}{%
 \section{Instalace a spuštění}\label{instalace-a-spuux161tux11bnuxed}}

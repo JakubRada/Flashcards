@@ -7,6 +7,8 @@ subtitle: Vývojářská dokumentace
 
 Aplikace Flashcards má stejnou strukturu jako webová aplikace, hlavní části jsou naprogramovány s použitím HTML, CSS a Javascriptu, ale na rozdíl od ostatních webových aplikací se nevykresluje ve webovém prohlížeči, ale v Electronu. Data se ukládají do oddělené databáze, takže obě části aplikace běží nezávisle na sobě. O databázi se stará Django Framework (Python) a běží to na localhostu. Klient a server komunikují asynchronně skrz JSON requesty.
 
+Webová stránka o této aplikaci: [*jakubrada.github.io/Flashcards*](https://jakubrada.github.io/Flashcards/)
+
 # Použité knihovny
 
 Aplikace používá mnoho různých knihoven na usnadnění používání některých funkcí. Na serverové části je použito Django, které ovšem vyžaduje nainstalovaný Python 3 (je doporučeno používat nejnovější verzi). Na straně klienta je použit Electron, který renderuje všechny vizuální aspekty místo prohlížeče, a ten pro své fungování potřebuje Node.js. Pro hezčí vzhled je použit Bootstrap, skládá se ze tří souborů: `.css`, které je upravené kvůli sladění některých barev s celkovým vzhledem, `.js` a `popper.js`, které jsou potřeba pro některé funkce. Pro dynamické měnění obsahu na stránce a komunikaci se serverem je použita JQuery.
