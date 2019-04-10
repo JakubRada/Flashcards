@@ -94,11 +94,14 @@ def add_tag(request):
         elif data["type"] == "delete":
             tag = Tag.objects.get(pk=data['id'])
             # before deleting the tag it is better to destroy all connections with cards - it should work without it but this is safer
-            tag_cards = tag.cards.all()
-            for card in tag_cards:
-                card.remove_tag()
-                card.tags.remove(tag)
-                card.save()
+            try:
+                tag_cards = tag.cards.all()
+                for card in tag_cards:
+                    card.remove_tag()
+                    card.tags.remove(tag)
+                    card.save()
+            except:
+                print("no cards here")
             tag.delete()
         return HttpResponse("loaded")
     else:
@@ -145,11 +148,14 @@ def add_card(request):
         elif data['type'] == 'delete':
             card = Card.objects.get(pk=data['id'])
             # before deleting the card it is better to destroy all connections with tags - safer
-            tags = card.tags.all()
-            for tag in tags:
-                card.tags.remove(tag)
-                tag.remove_card()
-                tag.save()
+            try:
+                tags = card.tags.all()
+                for tag in tags:
+                    card.tags.remove(tag)
+                    tag.remove_card()
+                    tag.save()
+            except:
+                print("no tags here")
             card.delete()
         return HttpResponse("loaded")
     else:
