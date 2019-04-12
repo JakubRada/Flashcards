@@ -5,6 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
         <title>Uživatelská příručka</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            img {
+                border: 1px solid #343a40;
+                width: 1022px;
+                height: 749px;
+            }
+            figure {
+                text-align: center;
+            }
+        </style>
     </head>
     <body style="background-color: #c4c4c4; color: #37474f;">
         <h1 class="display-1 text-center mt-1 mb-5">Uživatelská příručka</h1>
@@ -20,6 +30,10 @@
         <div class="container mt-5 mb-5">
             <h1 id="o-aplikaci">O aplikaci</h1>
             <p><em>Flashcards</em> je offline počítačová aplikace navržená pro zkoušení slovíček či jiné látky. Umožňuje vytváření a úpravu kartiček a jejich zařazování do okruhů. Okruhy pak lze vyzkoušet třemi typy testů. Kartičky se slovíčky lze zařazovat do libovolného množství okruhů ke zkoušení. Pro urychlení vytváření kartiček aplikace nabízí export a import dat do/ze souboru.</p>
+            <p>Webová stránka o této aplikaci: <a href="https://jakubrada.github.io/Flashcards/"><em>jakubrada.github.io/Flashcards</em></a></p>
+            <figure>
+            <img src="../../../../assets/title_page.jpg" alt="Titulní strana" /><figcaption>Titulní strana</figcaption>
+            </figure>
             <h1 id="instalace-a-spuštění">Instalace a spuštění</h1>
             <ol type="1">
             <li>Nainstalujeme Python 3.7 (Linux z terminálu, Windows z <em>www.python.org/downloads/windows/</em>)</li>
@@ -55,6 +69,9 @@
             <li>Pod políčky jsou zobrazena zaškrtávací tlačítka pro všechny existující okruhy, kde označíme, do kterých okruhů chceme kartičku přidat.</li>
             <li>Tlačítkem <strong>Save</strong> uložíme kartičku, tlačítkem <strong>Cancel</strong> zahodíme všechny zadané hodnoty a kartička se neuloží.</li>
             </ol>
+            <figure>
+            <img src="../../../../assets/create_card.jpg" alt="Vytváření kartiček" /><figcaption>Vytváření kartiček</figcaption>
+            </figure>
             <h1 id="zobrazování-a-úprava-kartiček">Zobrazování a úprava kartiček</h1>
             <p>Funkce na úpravu existujících kartiček a zobrazení všech kartiček. Pokud budou obě upravované hodnoty změněné na již existující, aplikace upozorní uživatele a změny se neuloží.</p>
             <ol type="1">
@@ -69,6 +86,9 @@
             <li>Funguje stejně jako vytváření kartičky, s tím rozdílem, že políčka a zaškrtávací tlačítka jsou již předvyplněná momentálními hodnotami.</li>
             </ul></li>
             </ol>
+            <figure>
+            <img src="../../../../assets/list_cards.jpg" alt="Zobrazení kartiček" /><figcaption>Zobrazení kartiček</figcaption>
+            </figure>
             <h1 id="vytváření-okruhů">Vytváření okruhů</h1>
             <p>Funkce na vytváření nových okruhů. Pokud okruh se zadanou hodnotou již existuje, aplikace upozorní uživatele a nový okruh nevytvoří.</p>
             <ol type="1">
@@ -76,6 +96,9 @@
             <li>Vyplníme políčko <strong>Tag name</strong> textem, který bude sloužit jako název nového okruhu na zkoušení (maximální délka názvu je 100 znaků).</li>
             <li>Tlačítkem <strong>Save</strong> uložíme nový okruh, tlačítkem <strong>Cancel</strong> zahodíme vložený text a nový okruh se neuloží.</li>
             </ol>
+            <figure>
+            <img src="../../../../assets/create_tag.jpg" alt="Vytváření okruhů" /><figcaption>Vytváření okruhů</figcaption>
+            </figure>
             <h1 id="zobrazování-a-úprava-okruhů">Zobrazování a úprava okruhů</h1>
             <p>Funkce na úpravu existujících okruhů a zobrazení všech okruhů. Pokud bude vložený text názvem již existujícího okruhu, aplikace upozorní uživatele a změna se neuloží.</p>
             <ol type="1">
@@ -90,6 +113,9 @@
             <li>Funguje stejně jako vytváření okruhů, s tím rozdílem, že políčko <strong>Tag name</strong> je již předvyplněno momentální hodnotou.</li>
             </ul></li>
             </ol>
+            <figure>
+            <img src="../../../../assets/list_tag.jpg" alt="Zobrazení okruhů" /><figcaption>Zobrazení okruhů</figcaption>
+            </figure>
             <h1 id="testy">Testy</h1>
             <p>Funkce spravující všechny testy. Jsou zde obsažené tři typy testů: procházení kartiček (v aplikaci <strong>Browse</strong>), vybírání z možností (v aplikaci <strong>Choices</strong>) a psaní správné odpovědi (v aplikaci <strong>Write</strong>). V nich uživatel postupně prochází všechny kartičky zvoleného okruhu a podle typu testu odpovídá na otázky. Při výběru okruhu k testování si lze zvolit, kterým ,,směrem" budou kartičky zkoušeny. Po každé odpovědi se zobrazí, zda byla odpověď správná, či špatná. Pokud byla špatná, zobrazí se i správné řešení. V průběhu testu je zobrazen počet zbývajících otázek a počet správných a špatných odpovědí. Po zodpovězení všech otázek se zobrazí celková úspěšnost testovaného okruhu, která se uloží pro budoucí porovnání, a uživatel si může prohlédnout všechny své odpovědi.</p>
             <ol type="1">
@@ -105,6 +131,9 @@
             </ul></li>
             <li>Pro výběr typu testu klikneme na dané tlačítko.</li>
             </ol>
+            <figure>
+            <img src="../../../../assets/test_type.jpg" alt="Výběr typu testu" /><figcaption>Výběr typu testu</figcaption>
+            </figure>
             <h2 id="test---procházení-kartiček">Test - procházení kartiček</h2>
             <p>Tento test nevyžaduje žádné odpovědi, uživatel pouze postupně prochází všechny kartičky.</p>
             <ul>
@@ -113,6 +142,9 @@
             <li>Nad kartičkami je ukazatel, který ukazuje, kolikátá kartička z celkového počtu je právě vidět.</li>
             <li>Procházení ukončíme tlačítkem <strong>Back to test selection</strong>.</li>
             </ul>
+            <figure>
+            <img src="../../../../assets/browse.jpg" alt="Procházení kartiček" /><figcaption>Procházení kartiček</figcaption>
+            </figure>
             <h2 id="test---vybírání-z-možností">Test - vybírání z možností</h2>
             <p>Tento test spočívá ve vybírání správné ze čtyř možností, které aplikace nabídne. Po každé otázce aplikace zobrazí, zda byla vybraná odpověď správná a vybranou i správnou odpověď. Na konci testu je pak vyhodnocení úspěšnosti testu a seznam všech odpovědí vždy se správnou možností.</p>
             <ul>
@@ -122,6 +154,9 @@
             <li>Tlačítkem <strong>Check answer</strong> potvrdíme odpověď a zobrazí se zhodnocení.</li>
             <li>Na stránce se zhodnocením je jediné tlačítko <strong>Next question</strong>, kterým se posuneme na další otázku.</li>
             </ul>
+            <figure>
+            <img src="../../../../assets/choices.jpg" alt="Vybírání z možností" /><figcaption>Vybírání z možností</figcaption>
+            </figure>
             <p>Po poslední otázce se zobrazí stránka se sumarizací otázek.</p>
             <ul>
             <li>Je zde vypsán počet správných odpovědí, procentuální úspěšnost a jestli došlo ke zlepšení, nebo ke zhoršení.</li>
@@ -131,6 +166,9 @@
             </ul></li>
             <li>Tlačítkem <strong>Continue to test selection</strong> se vrátíme na stránku s výběrem typu testu.</li>
             </ul>
+            <figure>
+            <img src="../../../../assets/test_end.jpg" alt="Vyhodnocení testu" /><figcaption>Vyhodnocení testu</figcaption>
+            </figure>
             <h2 id="test---psaní-správné-odpovědi">Test - psaní správné odpovědi</h2>
             <p>Tento test spočívá v napsání správné odpovědi. Po každé otázce aplikace zobrazí, zda byla vybraná odpověď správná a vybranou i správnou odpověď. Aplikace toleruje překlepy podle délky slova (čím delší slovo, tím více chyb je uznáno). Taková odpověď je vyhodnocena jako správná, ale všechny chyby jsou zvýrazněny. Na konci testu je pak vyhodnocení úspěšnosti testu a seznam všech odpovědí vždy se správnou možností.</p>
             <ul>
@@ -140,6 +178,9 @@
             <li>Tlačítkem <strong>Check answer</strong> potvrdíme odpověď a zobrazí se zhodnocení.</li>
             <li>Na stránce se zhodnocením je jediné tlačítko <strong>Next question</strong>, kterým se posuneme na další otázku.</li>
             </ul>
+            <figure>
+            <img src="../../../../assets/write.jpg" alt="Psaní správné odpovědi" /><figcaption>Psaní správné odpovědi</figcaption>
+            </figure>
             <p>Po poslední otázce se zobrazí stránka se sumarizací otázek.</p>
             <ul>
             <li>Je zde vypsán počet správných odpovědí, procentuální úspěšnost a jestli došlo ke zlepšení, nebo ke zhoršení.</li>
@@ -149,6 +190,9 @@
             </ul></li>
             <li>Tlačítkem <strong>Continue to test selection</strong> se vrátíme na stránku s výběrem typu testu.</li>
             </ul>
+            <figure>
+            <img src="../../../../assets/write_halfcorrect.jpg" alt="Zvýrazňování překlepů" /><figcaption>Zvýrazňování překlepů</figcaption>
+            </figure>
             <h1 id="export">Export</h1>
             <p>Funkce umožňující export všech kartiček a okruhů, které jsou právě uložené v aplikaci. Export probíhá do <strong>.csv</strong> souboru, který je uložen do složky export, ta je ve stejné složce jako spouštěcí soubor aplikace.</p>
             <ol type="1">
@@ -161,6 +205,9 @@
             <li>Kliknutím na tlačítko <strong>Confirm export</strong> se zahájí export dat (může to chvíli trvat).</li>
             <li>Po exportování se zobrazí potvrzovací okénko, že export proběhl správně.</li>
             </ol>
+            <figure>
+            <img src="../../../../assets/export.jpg" alt="Export" /><figcaption>Export</figcaption>
+            </figure>
             <h1 id="import">Import</h1>
             <p>Funkce umožňující import kartiček a okruhů ze souboru s koncovkou <strong>.csv</strong>. Importovaná data musí být v přesně daném formátu (viz níže), jinak budou přeskočena. Pokud bude mezi importovanými daty již existující kartička, nebude se přepisovat, ani když bude v jiných okruzích než ta momentálně uložená v aplikaci.</p>
             <ol type="1">
@@ -170,6 +217,9 @@
             <li>Kliknutím na tlačítko <strong>Confirm export</strong> se zahájí import dat (může to chvíli trvat).</li>
             <li>Po importování se zobrazí potvrzovací okénko, že byl import dokončen.</li>
             </ol>
+            <figure>
+            <img src="../../../../assets/import.jpg" alt="Import kartiček ze souboru" /><figcaption>Import kartiček ze souboru</figcaption>
+            </figure>
             <p>Formát <strong>.csv</strong> souboru</p>
             <ul>
             <li>Okruh

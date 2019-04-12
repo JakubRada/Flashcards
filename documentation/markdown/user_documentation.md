@@ -10,6 +10,8 @@ user: true
 
 Webová stránka o této aplikaci: [*jakubrada.github.io/Flashcards*](https://jakubrada.github.io/Flashcards/)
 
+![Titulní strana](../../../../assets/title_page.jpg)
+
 # Instalace a spuštění
 
 1. Nainstalujeme Python 3.7 (Linux z terminálu, Windows z *www.python.org/downloads/windows/*)
@@ -46,6 +48,8 @@ Funkce na vytváření nových kartiček. Každá kartička může být uložena
 4. Pod políčky jsou zobrazena zaškrtávací tlačítka pro všechny existující okruhy, kde označíme, do kterých okruhů chceme kartičku přidat.
 5. Tlačítkem **Save** uložíme kartičku, tlačítkem **Cancel** zahodíme všechny zadané hodnoty a kartička se neuloží.
 
+![Vytváření kartiček](../../../../assets/create_card.jpg)
+
 # Zobrazování a úprava kartiček
 
 Funkce na úpravu existujících kartiček a zobrazení všech kartiček. Pokud budou obě upravované hodnoty změněné na již existující, aplikace upozorní uživatele a změny se neuloží.
@@ -57,6 +61,8 @@ Funkce na úpravu existujících kartiček a zobrazení všech kartiček. Pokud 
 4. Po kliknutí na tlačítko **Edit** se zobrazí formulář na úpravu.
     - Funguje stejně jako vytváření kartičky, s tím rozdílem, že políčka a zaškrtávací tlačítka jsou již předvyplněná momentálními hodnotami.
 
+![Zobrazení kartiček](../../../../assets/list_cards.jpg)
+
 # Vytváření okruhů
 
 Funkce na vytváření nových okruhů. Pokud okruh se zadanou hodnotou již existuje, aplikace upozorní uživatele a nový okruh nevytvoří.
@@ -64,6 +70,8 @@ Funkce na vytváření nových okruhů. Pokud okruh se zadanou hodnotou již exi
 1. Klikneme na tlačítko **Create tag** v menu liště.
 2. Vyplníme políčko **Tag name** textem, který bude sloužit jako název nového okruhu na zkoušení (maximální délka názvu je 100 znaků).
 3. Tlačítkem **Save** uložíme nový okruh, tlačítkem **Cancel** zahodíme vložený text a nový okruh se neuloží.
+
+![Vytváření okruhů](../../../../assets/create_tag.jpg)
 
 # Zobrazování a úprava okruhů
 
@@ -75,6 +83,8 @@ Funkce na úpravu existujících okruhů a zobrazení všech okruhů. Pokud bude
 3. Po kliknutí na tlačítko **Delete** se aplikace zeptá na potvrzení a poté okruh smaže. Kartičky v okruhu zůstanou zachovány.
 4. Po kliknutí na tlačítko **Edit** se zobrazí formulář na úpravu.
     - Funguje stejně jako vytváření okruhů, s tím rozdílem, že políčko **Tag name** je již předvyplněno momentální hodnotou.
+
+![Zobrazení okruhů](../../../../assets/list_tag.jpg)
 
 # Testy
 
@@ -90,6 +100,8 @@ Funkce spravující všechny testy. Jsou zde obsažené tři typy testů: proch�
     - Při přepnutém přepínači se aplikace bude ptát zadní stranou kartičky a bude očekávat odpověď přední stranou.
 7. Pro výběr typu testu klikneme na dané tlačítko.
 
+![Výběr typu testu](../../../../assets/test_type.jpg)
+
 ## Test - procházení kartiček
 
 Tento test nevyžaduje žádné odpovědi, uživatel pouze postupně prochází všechny kartičky.
@@ -98,6 +110,8 @@ Tento test nevyžaduje žádné odpovědi, uživatel pouze postupně prochází 
 - Kliknutím na tlačítko **Next** se zobrazí další kartička, tlačítko **Previous** zobrazí předchozí kartičku.
 - Nad kartičkami je ukazatel, který ukazuje, kolikátá kartička z celkového počtu je právě vidět.
 - Procházení ukončíme tlačítkem **Back to test selection**.
+
+![Procházení kartiček](../../../../assets/browse.jpg)
 
 ## Test - vybírání z možností
 
@@ -109,12 +123,16 @@ Tento test spočívá ve vybírání správné ze čtyř možností, které apli
 - Tlačítkem **Check answer** potvrdíme odpověď a zobrazí se zhodnocení.
 - Na stránce se zhodnocením je jediné tlačítko **Next question**, kterým se posuneme na další otázku.
 
+![Vybírání z možností](../../../../assets/choices.jpg)
+
 Po poslední otázce se zobrazí stránka se sumarizací otázek.
 
 - Je zde vypsán počet správných odpovědí, procentuální úspěšnost a jestli došlo ke zlepšení, nebo ke zhoršení.
 - Kliknutím na tlačítko **Show answers** se zobrazí seznam všech odpovědí.
     - Správné odpovědi jsou zvýrazněny zeleně, špatné červeně.
 - Tlačítkem **Continue to test selection** se vrátíme na stránku s výběrem typu testu.
+
+![Vyhodnocení testu](../../../../assets/test_end.jpg)
 
 ## Test - psaní správné odpovědi
 
@@ -126,12 +144,16 @@ Tento test spočívá v napsání správné odpovědi. Po každé otázce aplika
 - Tlačítkem **Check answer** potvrdíme odpověď a zobrazí se zhodnocení.
 - Na stránce se zhodnocením je jediné tlačítko **Next question**, kterým se posuneme na další otázku.
 
+![Psaní správné odpovědi](../../../../assets/write.jpg)
+
 Po poslední otázce se zobrazí stránka se sumarizací otázek.
 
 - Je zde vypsán počet správných odpovědí, procentuální úspěšnost a jestli došlo ke zlepšení, nebo ke zhoršení.
 - Kliknutím na tlačítko **Show answers** se zobrazí seznam všech odpovědí.
     - Správné odpovědi jsou zvýrazněny zeleně, špatné červeně.
 - Tlačítkem **Continue to test selection** se vrátíme na stránku s výběrem typu testu.
+
+![Zvýrazňování překlepů](../../../../assets/write_halfcorrect.jpg)
 
 # Export
 
@@ -144,6 +166,8 @@ Funkce umožňující export všech kartiček a okruhů, které jsou právě ulo
 3. Kliknutím na tlačítko **Confirm export** se zahájí export dat (může to chvíli trvat).
 4. Po exportování se zobrazí potvrzovací okénko, že export proběhl správně.
 
+![Export](../../../../assets/export.jpg)
+
 # Import
 
 Funkce umožňující import kartiček a okruhů ze souboru s koncovkou **.csv**. Importovaná data musí být v přesně daném formátu (viz níže), jinak budou přeskočena. Pokud bude mezi importovanými daty již existující kartička, nebude se přepisovat, ani když bude v jiných okruzích než ta momentálně uložená v aplikaci.
@@ -153,6 +177,8 @@ Funkce umožňující import kartiček a okruhů ze souboru s koncovkou **.csv**
 3. V průzkumníkovi najdeme soubor, který chceme importovat.
 4. Kliknutím na tlačítko **Confirm export** se zahájí import dat (může to chvíli trvat).
 5. Po importování se zobrazí potvrzovací okénko, že byl import dokončen.
+
+![Import kartiček ze souboru](../../../../assets/import.jpg)
 
 Formát **.csv** souboru
 
