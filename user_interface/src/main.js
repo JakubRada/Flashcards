@@ -479,11 +479,12 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
 // show summary of tested  tag
 function summary(tag_info, correct, count, answers) {
     var success_rate = Math.round((correct / count) * 100);
-    show_one_item("tag_summary");
     $("#tag_summary_headline").text(tag_info.tag_name);
     $("#success_rate").text(success_rate + "%");
     $("#total_summary").text(count);
     $("#correct_summary").text(correct);
+    $("#answers").collapse("hide");
+    show_one_item("tag_summary");
     var difference = success_rate - tag_info.success_rate;
     if (difference < 0) {
         $("#improvement").hide();
@@ -510,7 +511,6 @@ function summary(tag_info, correct, count, answers) {
     });
     post_information("add_tag/", create_tag_object("test", tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
     $("#summary_back").unbind().click(function() {
-        $("#answers").collapse("hide");
         show_one_item("test_type");
     });
 }
