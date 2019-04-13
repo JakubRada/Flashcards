@@ -101,6 +101,7 @@ function create_tag_object(type, id, tag_name, success_rate, card_count, cards) 
 // choose tag to test
 function test_main() {
     $("#test_tags_buttons").empty();
+    // loads tags from server and creates button and click event for each of them
     load_information("tags").done(function(all_tags) {
         for (let tag of all_tags) {
             $(
@@ -110,6 +111,7 @@ function test_main() {
             }).appendTo("#test_tags_buttons");
         }
     });
+    // page is shown after loading
     show_one_item("test_main");
 }
 
@@ -126,6 +128,7 @@ function is_reversed() {
 function test_type(tag_id, tag_name) {
     $("#tag_test").text(tag_name);
     show_one_item("test_type");
+    // click events for each type of test and back button - after is called load_cards() with test type as first parameter
     $("#browse_button").unbind().click(function() {
         load_cards("browse", tag_id, is_reversed());
     });
@@ -144,7 +147,9 @@ function test_type(tag_id, tag_name) {
 function update_browse_progress_bar(current, max) {
     current += 1;
     let perc = Number(Math.round((current / max) * 100));
+    // changes length of highlighted part of bar
     $("#positive_progress").attr("style", "width: " + perc + "%");
+    // writes which card is shown inside the bar
     $("#positive_progress").text(current + " / " + max);
 }
 
@@ -163,10 +168,12 @@ function change_flipcard(front, back) {
 
 // handles visibility of next and previous button in browse test type
 function show_next_previous(current_index, max) {
+    // if there is one card, neither of the buttons is needed
     if (max == 1) {
         $("#browse_previous").hide();
         $("#browse_next").hide()
     } else {
+        // for first and last card only one button is shown; for middle ones both are visible
         if (current_index == 0) {
             $("#browse_previous").hide();
             $("#browse_next").show();
@@ -213,6 +220,7 @@ function browse(all_cards, tag_id) {
         }
         show_next_previous(current_index, count);
     });
+    // returns back to type of test selection
     $("#browse_back").unbind().click(function() {
         test_type(tag_id);
     });
@@ -222,7 +230,7 @@ function browse(all_cards, tag_id) {
     });
 }
 
-// loads all cards from specified tag
+// loads all cards from specified tag - it's asynchronous so everything else has to be in .done block
 function load_cards(type, tag_id, is_reversed) {
     var all_cards = new Array();
     var index = 0;
@@ -239,9 +247,11 @@ function load_cards(type, tag_id, is_reversed) {
                 }
                 all_cards[index] = card_info;
                 index += 1;
+                // if all cards loaded, start selected test type
                 if (index == all_card_ids.length) {
-                    // if all cards loaded, start selected test type
+                    // merges similar cards into one
                     all_cards = group_similar_cards(all_cards);
+                    // by the type calls appropriate function with initial values
                     if (type == "browse"){
                         browse(all_cards, tag_id);
                     } else if (type == "choices") {
@@ -261,7 +271,7 @@ function group_similar_cards(all_cards) {
     for (let card of all_cards) {
         let contains_front = contains_similar_front(return_card_list, card.card_front);
         if(contains_front[0]) {
-            // if they have same front, it groups their backs
+            // if they have same front, it merges their backs into one string (separated with comma)
             return_card_list[contains_front[1]].card_back += (", " + card.card_back);
         } else {
             return_card_list.push(card);
@@ -311,16 +321,18 @@ function choose() {
 // random set of answers for choose test type
 function get_random_choices(max, without, all_cards) {
     var value;
-    var impossible = [without];
+    var impossible = [without]; // list containing already selected cards
     var return_list = [null, null, null];
-    var same_back = count_same_backs(all_cards);
+    var same_back = count_same_backs(all_cards); // counts cards with same backs so they are counted as one only
     var cycles = 3;
+    // number of choices to be selected when there are less than four cards in a tag
     if ((max - same_back) < 4) {
         cycles = max - 1;
         cycles -= same_back;
     }
     for (let i = 0; i < cycles; i += 1) {
         value = without;
+        // generates random numbers; if it was already generated, makes another one
         while (impossible.includes(value)) {
             value = Math.floor(Math.random() * Math.floor(max));
             if (is_in_generated_list(impossible, value, all_cards)) {
@@ -416,6 +428,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
     var other_choices_indexes = get_random_choices(count, current_word_index, all_cards);
     var options = get_random_index();
     var selected;
+    // binds click events to randomly shuffled buttons (values are shuffled, not the buttons literally)
     for (let i = 0; i < 4; i += 1) {
         if (options[i] == 0) {
             $("#option_" + (i + 1)).text(current_card.card_back);
@@ -442,6 +455,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
             $("#correct_wrong_answer").empty();
             $("#correct_wrong_answer").text(current_card.card_back);
             $("#correct_answer").show();
+            // adds answer to list (useful in summary)
             answers.push([
                 true,
                 current_card.card_front,
@@ -456,6 +470,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_wrong_answer").text(selected);
             $("#wrong_answer").show();
+            // adds answer to list (useful in summary)
             answers.push([
                 false,
                 current_card.card_front,
@@ -478,6 +493,7 @@ function choices(count, correct, wrong, answers, current_word_index, all_cards, 
 
 // show summary of tested  tag
 function summary(tag_info, correct, count, answers) {
+    // resets window from previous test
     var success_rate = Math.round((correct / count) * 100);
     $("#tag_summary_headline").text(tag_info.tag_name);
     $("#success_rate").text(success_rate + "%");
@@ -485,6 +501,7 @@ function summary(tag_info, correct, count, answers) {
     $("#correct_summary").text(correct);
     $("#answers").collapse("hide");
     show_one_item("tag_summary");
+    // shows if it was improvement or not and writes the difference in %
     var difference = success_rate - tag_info.success_rate;
     if (difference < 0) {
         $("#improvement").hide();
@@ -495,9 +512,11 @@ function summary(tag_info, correct, count, answers) {
         $("#improvement").text("+" + difference + "%");
         $("#improvement").show();
     }
+    // when clicked, added all answers to a list
     $("#answers_button").unbind().click(function() {
         let color;
         $("#answers_table tbody").empty();
+        // for each answer colors the row - green==correct, red==wrong
         for (let answer of answers) {
             if (answer[0]) {
                 color = "table-success";
@@ -509,7 +528,9 @@ function summary(tag_info, correct, count, answers) {
             ).appendTo("#answers_table tbody");
         }
     });
+    // saves success rate to appropriate tag
     post_information("add_tag/", create_tag_object("test", tag_info.id, tag_info.tag_name, success_rate, tag_info.card_count, tag_info.cards));
+    // back button, returns to selection of type of test
     $("#summary_back").unbind().click(function() {
         show_one_item("test_type");
     });
@@ -533,12 +554,14 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
     $("#write_answer").val("");
     show_one_item('test_write');
     $("#check_write_answer").unbind().click(function(event) {
-        // evaluating answer
         event.preventDefault();
+        // transforming answer into comparable format (lowercase and all spaces before and after are cut)
         var raw_answer = $("#write_answer").val().trim().toLowerCase();
         current_word_index += 1;
         $("#test_write").hide();
+        // evaluating answer
         var checked = check_magic(raw_answer, current_card.card_back.toLowerCase());
+        // showing appropriate page based of the result of evaluation
         if (checked[0]) {
             // correct answer
             correct += 1;
@@ -547,6 +570,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
             $("#correct_wrong_answer").append(checked[1]);
             $("#correct_correct_answer").text(current_card.card_back);
             $("#correct_answer").show();
+            // adds answer to list (for summary)
             answers.push([
                 true,
                 current_card.card_front,
@@ -561,6 +585,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
             $("#wrong_wrong_answer").append(checked[1]);
             $("#wrong_correct_answer").text(current_card.card_back);
             $("#wrong_answer").show();
+            // adds answer to list (for summary)
             answers.push([
                 false,
                 current_card.card_front,
@@ -568,6 +593,7 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
                 current_card.card_back
             ]);
         }
+        // after click proceeds to next word
         $(".dismiss").unbind().click(function() {
             if (current_word_index == count) {
                 // if last word, show summary of test
@@ -580,8 +606,9 @@ function write(count, correct, wrong, answers, current_word_index, all_cards, ta
     });
 }
 
-// determines whether
+// determines whether written answer was correct or not
 function check_magic(raw_input, correct_answer) {
+    // in case of card with same front creates list of possible answers
     var possible_answers = correct_answer.split(", ");
     var dist;
     // for multiple answer question, if user enters one of possibilities
@@ -601,17 +628,18 @@ function check_magic(raw_input, correct_answer) {
 
 // calculates levenshtein distance between two strings and returns correct answer or answer with corrected mistakes
 function levenshtein_distance(string_1, string_2) {
-    // set up variables
+    // initialize necessary variables
     var str_1_len = string_1.length;
     var str_2_len = string_2.length;
     var cost;
     var matrix = new Array();
     var changes = [0];
     var return_str = "";
+    // html tags for individual letters green==correct letter, red==wrong or missing letter
     var correct_span = "<span class='text-success'>";
     var wrong_span = "<span class='text-danger'>";
     var end_span = "</span>";
-    // fill matrix with values for substitution, deletion, insertion
+    // fill matrix with values for substitution, deletion, insertion - important values are 'diagonally' in the matrix
     matrix[0] = new Array();
     for (let i = 0; i < str_2_len + 1; i += 1) {
         matrix[0][i] = i;
@@ -632,12 +660,14 @@ function levenshtein_distance(string_1, string_2) {
     }
     // highlight wrong answer or typos in partly correct answer
     var ratio = (matrix[str_1_len][str_2_len]) / str_2_len;
+    // trying to highlight only when mistakes over letter count is lower than 0.3
     if (ratio < 0.3) {
         var x = 0;
         var y = 0;
         var x_increment = 1;
         var y_increment = 1;
         let max = Math.max(str_1_len, str_2_len)
+        // when compared words have different lengths - increment of index in matrix in x/y direction can be 0
         for (let i = 0; i < max; i += 1) {
             if (i >= str_1_len) {
                 y_increment = 0;
@@ -649,7 +679,9 @@ function levenshtein_distance(string_1, string_2) {
                 x += 1;
                 y += 1;
             }
+            // saving mistakes into changes (for case of insertion or deletion)
             changes.push(matrix[y][x]);
+            // highlighting if there are only substitutions
             if (str_1_len == str_2_len) {
                 if (matrix[y][x] <= matrix[y - y_increment][x - x_increment]) {
                     return_str += (correct_span + string_2[x - 1] + end_span);
@@ -660,11 +692,13 @@ function levenshtein_distance(string_1, string_2) {
         }
         changes.push(matrix[y][x]);
         var longer;
+        // determining which string is longer
         if (str_1_len < str_2_len) {
             longer = string_2;
         } else if (str_1_len > str_2_len) {
             longer = string_1;
         }
+        // realizing if it was insertion or more mistakes after (when is insertion, the next koeficient in matrix is also higher even if the letter is correct)
         if (str_1_len != str_2_len) {
             for (let i = 1; i <= max; i += 1) {
                 if (changes[i] <= changes[i - 1]) {
@@ -723,19 +757,23 @@ function list_cards_to_edit() {
             $(
                 '<tr id=c' + i + '></tr>'
             ).appendTo("#table_of_cards tbody");
-            // for each card in database create line in table
+            // for each card in database creates line in table and two buttons with click events
             load_information("cards/" + card.id).done(function(card_info) {
                 $(
                     '<th scope="row">' + (i + 1) + '</th><td>' + card_info.card_front + '</td><td>' + card_info.card_back + '</td><td><span class="badge badge-dark">' + card_info.tag_count + '</span></td><td><button type="button" class="btn btn-warning" id="edit_card_' + card_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_card_' + card_info.id + '">Delete</button></td>'
                 ).appendTo("#c" + i);
+                // edit card
                 $("#edit_card_" + card_info.id).unbind().click(function() {
                     edit_card(card_info);
                 });
+                // delete card
                 $("#delete_card_" + card_info.id).unbind().click(function() {
                     $("#delete_conf").modal("toggle");
                     $("#yes").unbind().click(function() {
                         $("#delete_conf").modal("toggle");
+                        // removing card from database
                         post_information("add_card/", create_card_object("delete", card_info.id, card_info.card_front, card_info.card_back, card_info.tags));
+                        // reloading the page after deletion
                         list_cards_to_edit();
                     });
                 });
@@ -746,6 +784,7 @@ function list_cards_to_edit() {
 
 // handles edit of a card
 function edit_card(card) {
+    // fills fields with card values
     $("#card_list").hide();
     $("#front_side_edit").val(card.card_front);
     $("#back_side_edit").val(card.card_back);
@@ -779,10 +818,11 @@ function edit_card(card) {
                     checked[index] = $(this).attr("id").split("_")[0];
                     index += 1;
                 });
-                // creates JSON object
+                // creates JSON object and saves it into database
                 post_information("add_card/", create_card_object("update", card.id, front_input, back_input, checked));
                 $("#created").modal("toggle");
                 show_one_item("card_list");
+                // reloads list after editing
                 list_cards_to_edit();
             }
         });
@@ -797,19 +837,25 @@ function list_tags_to_edit() {
         tag_list = sort_tag_list(tag_list);
         for (let i = 0; i < tag_list.length; i += 1) {
             var tag = tag_list[i];
+            // preparing row in table for every tag in alphabetical order (response from server is different for each item - the order could change)
             $('<tr id=t' + i + '></tr>').appendTo("#table_of_tags tbody");
+            // fills appropriate line with more information about the tag
             load_information("tags/" + tag.id).done(function(tag_info) {
                 $(
                     '<th scope="row">' + (i + 1) + '</th><td>' + tag_info.tag_name + '</td><td><span class="badge badge-dark">' + tag_info.card_count + '</span></td><td>' + tag_info.success_rate + '%</td><td><button type="button" class="btn btn-warning" id="edit_tag_' + tag_info.id + '">Edit</button> <button type="button" class="btn btn-danger" id="delete_tag_' + tag_info.id + '">Delete</button></td>'
                 ).appendTo("#t" + i);
+                // click event for editing
                 $("#edit_tag_" + tag_info.id).unbind().click(function() {
                     edit_tag(tag_info);
                 });
+                // click event for deleting
                 $("#delete_tag_" + tag_info.id).unbind().click(function() {
                     $("#delete_conf").modal("toggle");
                     $("#yes").unbind().click(function() {
                         $("#delete_conf").modal("toggle");
+                        // removes tag from database
                         post_information("add_tag/", create_tag_object("delete", tag_info.id, tag_info.tag_name, tag_info.success_rate, tag_info.card_count, tag_info.cards));
+                        // reloads list after deletion
                         list_tags_to_edit();
                     });
                 });
@@ -827,6 +873,7 @@ function edit_tag(tag) {
         event.preventDefault();
         list_tags_to_edit();
     });
+    // reads new values from fields on click
     $("#save_tag_changes").unbind().click(function(event) {
         var name_input = $("#tag_name_edit").val().trim();
         var all_tags_names = new Array();
@@ -834,6 +881,7 @@ function edit_tag(tag) {
         if (name_input !== "") {
             event.preventDefault();
             load_information("tags/").done(function(all_tags) {
+                // checks if the tag already exists
                 for (let tagg of all_tags) {
                     if (tag.tag_name !== tagg.tag_name) {
                         all_tags_names[index] = tagg.tag_name;
@@ -844,8 +892,10 @@ function edit_tag(tag) {
                     $("#wrong_tag").modal("toggle");
                     $("#tag_name_create").val("");
                 } else {
+                    // if tag is unique, it is saved into database
                     post_information("add_tag/", create_tag_object("update", tag.id, name_input, tag.success_rate, tag.card_count, tag.cards));
                     $("#created").modal("toggle");
+                    // reload of list after editing
                     list_tags_to_edit();
                 }
             });
@@ -888,7 +938,7 @@ function create_card() {
                         checked[index] = $(this).attr("id").split("_")[0];
                         index += 1;
                     });
-                    // creates JSON object
+                    // creates JSON object and saves it into database
                     post_information("add_card/", create_card_object("new", "", front_input, back_input, checked));
                     create_card();
                     $("#created").modal("toggle");
@@ -920,6 +970,7 @@ function create_tag() {
         event.preventDefault();
         reset();
     });
+    // reads name of the tag on click
     $("#save_new_tag").unbind().click(function(event) {
         var name_input = $("#tag_name_create").val().trim();
         var all_tags_names = new Array();
@@ -927,6 +978,7 @@ function create_tag() {
         if (name_input !== "") {
             event.preventDefault();
             load_information("tags/").done(function(all_tags) {
+                // checks if the tag already exists
                 for (let tag of all_tags) {
                     all_tags_names[index] = tag.tag_name;
                     index += 1;
@@ -935,8 +987,9 @@ function create_tag() {
                     $("#wrong_tag").modal("toggle");
                     $("#tag_name_create").val("");
                 } else {
-                    var tag_object = create_tag_object("new", "", name_input, 0, 0, []);
-                    post_information("add_tag/", tag_object);
+                    // if it is unique, it is saved into database
+                    post_information("add_tag/", create_tag_object("new", "", name_input, 0, 0, []));
+                    // reload window
                     create_tag();
                     $("#created").modal("toggle");
                 }
@@ -1007,6 +1060,7 @@ function process_data(text) {
     var result = [[], []];
     var object;
     var tags;
+    // creates card and tag objects which are meant ot be sent into database
     for (let i = 0; i < count; i += 1) {
         entry = entries[i];
         if (entry[0] == "card") {
@@ -1024,7 +1078,7 @@ function process_data(text) {
     return filter_json(result);
 }
 
-// filters out jsons which contain invalid values
+// filters out jsons which contain invalid values (blank values, success rate > 100, ...)
 function filter_json(json_list) {
     let length = json_list[0].length;
     let json;
@@ -1061,7 +1115,9 @@ function export_data() {
     show_one_item('export');
     $("#confirm_export").unbind().click(function() {
         $("#loading").show();
+        // reading inputted name of file to export to
         var filename = $("#export_input").val().trim();
+        // checking if the name contains invalid characters
         if (filename == "") {
             wrong_export_format("Filename cannot be an empty string!");
         } else if (filename.includes(" ")) {
@@ -1078,6 +1134,7 @@ function export_data() {
 function write_file(filename, export_list) {
     var complete_string = "";
     var tag_list;
+    // creating string from all objects
     for (let item of export_list[0]) {
         complete_string += (`tag, ${item.number}, ${item.tag_name}\n`);
     }
@@ -1092,6 +1149,7 @@ function write_file(filename, export_list) {
         }
         complete_string += (`card, ${item.card_front}, ${item.card_back}, ${tag_list.join("|")}\n`);
     }
+    // using node module opening creating file on local drive and writing the string there
     const file = require('fs');
     if (!file.stat("export", function(err, stats) {})) {
         file.mkdir("export", {recursive: true}, function(err) {});
@@ -1111,6 +1169,7 @@ function prepare_data(filename) {
     var count = 0;
     var export_list = [[], []];
     var length;
+    // loads all tags and cards from database and creates appropriate JSON objects
     load_information("tags").done(function(tag_list) {
         length = tag_list.length;
         for (let tag of tag_list) {
@@ -1146,6 +1205,7 @@ function prepare_data(filename) {
 
 // determines if string contains special symbols and cannot be used for file name
 function contains_special_symbols(string) {
+    // special symbols which cannot be in name of file
     var charlist = '!@#$%^&*()=+[{}];:\'"\\|,<.>/?'.split("");
     for (let char of charlist) {
         if (string.includes(char)) {
