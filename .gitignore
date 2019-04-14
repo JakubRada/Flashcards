@@ -10,3 +10,4 @@ TODO.md
 *.nav
 *.snm
 *.cpython-37.pyc
+/release_builds/*
