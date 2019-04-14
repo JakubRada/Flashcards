@@ -3,7 +3,7 @@
   "productName": "Flashcards",
   "description": "user interface for flashcards app",
   "author": "Jakub Rada",
-  "license": "ISC",
+  "license": "MIT",
   "version": "1.0.0",
   "main": "src/render.js",
   "scripts": {
