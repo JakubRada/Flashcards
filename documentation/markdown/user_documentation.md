@@ -190,6 +190,18 @@ Formát **.csv** souboru
     - například: `card, One, Jedna, 1|2|3`
 - Každý záznam píšeme na samostatný řádek
 
+Ukázkový soubor s daty k importu
+
+        tag, 1, Numbers
+        tag, 2, Fruit
+        tag, 3, Colours
+        card, Five, Pět, 1
+        card, Banana, Banán, 2
+        card, Four, Čtyři, 1
+        card, Apple, Jablko, 2
+        card, White, Bílá, 3
+        card, Blue, Modrá, 3
+
 # Nápověda
 
 Kliknutím na tlačítko **Help** v menu liště se zobrazí rychlá nápověda v angličtině.

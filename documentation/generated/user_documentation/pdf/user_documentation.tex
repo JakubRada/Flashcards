@@ -13,8 +13,6 @@
 \definecolor{codehighlight}{RGB}{203,75,22}
 \let\oldtexttt\texttt
 \renewcommand{\texttt}[1]{\oldtexttt{\textcolor{codehighlight}{#1}}}
-\let\oldverbatim\verbatim
-\renewcommand{\verbatim}[1]{\oldverbatim{\textcolor{codehighlight}{#1}}}
 
 \begin{document}
 \begin{center}
@@ -560,6 +558,20 @@ Formát \textbf{.csv} souboru
 \item
   Každý záznam píšeme na samostatný řádek
 \end{itemize}
+
+Ukázkový soubor s daty k importu
+
+\begin{verbatim}
+    tag, 1, Numbers
+    tag, 2, Fruit
+    tag, 3, Colours
+    card, Five, Pět, 1
+    card, Banana, Banán, 2
+    card, Four, Čtyři, 1
+    card, Apple, Jablko, 2
+    card, White, Bílá, 3
+    card, Blue, Modrá, 3
+\end{verbatim}
 
 \hypertarget{nuxe1povux11bda}{%
 \section{Nápověda}\label{nuxe1povux11bda}}
