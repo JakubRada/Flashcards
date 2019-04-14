@@ -429,28 +429,41 @@ Například se stará o viditelnost obsahu, získává input od uživatele a
 posílá a příjímá requesty z databáze. Všechny jeho funkce jsou popsány v
 některé z dalších kapitol.
 
-\hypertarget{instalace-electronu}{%
-\subsubsection{Instalace Electronu}\label{instalace-electronu}}
+\hypertarget{instalace}{%
+\subsubsection{Instalace}\label{instalace}}
 
-~~~~\texttt{npm\ install\ electron\ -\/-save-dev}
+Pro instalaci potřebujeme mít nainstalovaný \emph{npm}.
 
-\begin{itemize}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  spuštěno v hlavni složce projektu
-\end{itemize}
+  Naklonujeme Github repozitář
 
-\hypertarget{instalace-electron-packageru}{%
-\subsubsection{Instalace
-Electron-packageru}\label{instalace-electron-packageru}}
-
-~~~~\texttt{npm\ install\ electron-packager\ -\/-save-dev}
-
-\begin{itemize}
-\tightlist
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{git\ clone\ https://github.com/JakubRada/Flashcards.git}
+  \end{itemize}
 \item
-  spuštěno ve složce, ve které jsou node-modules
-\end{itemize}
+  Přesuneme se do příslušné složky
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{cd\ Flashcards/user\_interface/}
+  \end{itemize}
+\item
+  Nainstalujeme dependencies
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{npm\ install}
+  \end{itemize}
+\item
+  Až vše doběhne, máme nainstalováno vše potřebné pro klienta
+\end{enumerate}
 
 \hypertarget{spuux161tux11bnuxed-klienta-z-terminuxe1lu}{%
 \subsubsection{Spuštění klienta z

@@ -146,17 +146,17 @@ Vzhled HTML stránky je vylepšen Bootstrapem. Do `mainWindow.html` jsou nalinko
 
 Do `mainWindow.htlm` je také nalinkován `main.js` soubor, který tvoří jádro aplikace a obsahuje všechny hlavní funkce aplikace. Například se stará o viditelnost obsahu, získává input od uživatele a posílá a příjímá requesty z databáze. Všechny jeho funkce jsou popsány v některé z dalších kapitol.
 
-### Instalace Electronu
+### Instalace
 
-&nbsp;&nbsp;&nbsp;&nbsp;`npm install electron --save-dev`
+Pro instalaci potřebujeme mít nainstalovaný *npm*.
 
-- spuštěno v hlavni složce projektu
-
-### Instalace Electron-packageru
-
-&nbsp;&nbsp;&nbsp;&nbsp;`npm install electron-packager --save-dev`
-
-- spuštěno ve složce, ve které jsou node-modules
+1. Naklonujeme Github repozitář
+    - `git clone https://github.com/JakubRada/Flashcards.git`
+2. Přesuneme se do příslušné složky
+    - `cd Flashcards/user_interface/`
+3. Nainstalujeme dependencies
+    - `npm install`
+4. Až vše doběhne, máme nainstalováno vše potřebné pro klienta
 
 ### Spuštění klienta z terminálu
 

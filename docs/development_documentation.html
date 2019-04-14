@@ -176,16 +176,23 @@
             <p>Tento soubor vytvoří okno a načte do něj <code>mainWindow.html</code>, který určuje rozložení a vzhled stránky. Aplikace je postavena jako jednostránková aplikace, to znamená, že všechny části jsou na jedné stránce, ale většina je skrytá a zobrazuje se jen ta momentálně potřebná část. O viditelnost se stará Javascriptový soubor.</p>
             <p>Vzhled HTML stránky je vylepšen Bootstrapem. Do <code>mainWindow.html</code> jsou nalinkovány <code>.css</code> soubory, které jsou upravené oproti těm oficiálním o některé barvy, <code>.js</code> soubory a <code>popper.js</code>, které jsou potřebné pro některé funkce Bootstrapu.</p>
             <p>Do <code>mainWindow.htlm</code> je také nalinkován <code>main.js</code> soubor, který tvoří jádro aplikace a obsahuje všechny hlavní funkce aplikace. Například se stará o viditelnost obsahu, získává input od uživatele a posílá a příjímá requesty z databáze. Všechny jeho funkce jsou popsány v některé z dalších kapitol.</p>
-            <h3 id="instalace-electronu">Instalace Electronu</h3>
-            <p>    <code>npm install electron --save-dev</code></p>
+            <h3 id="instalace">Instalace</h3>
+            <p>Pro instalaci potřebujeme mít nainstalovaný <em>npm</em>.</p>
+            <ol type="1">
+            <li>Naklonujeme Github repozitář
             <ul>
-            <li>spuštěno v hlavni složce projektu</li>
-            </ul>
-            <h3 id="instalace-electron-packageru">Instalace Electron-packageru</h3>
-            <p>    <code>npm install electron-packager --save-dev</code></p>
+            <li><code>git clone https://github.com/JakubRada/Flashcards.git</code></li>
+            </ul></li>
+            <li>Přesuneme se do příslušné složky
             <ul>
-            <li>spuštěno ve složce, ve které jsou node-modules</li>
-            </ul>
+            <li><code>cd Flashcards/user_interface/</code></li>
+            </ul></li>
+            <li>Nainstalujeme dependencies
+            <ul>
+            <li><code>npm install</code></li>
+            </ul></li>
+            <li>Až vše doběhne, máme nainstalováno vše potřebné pro klienta</li>
+            </ol>
             <h3 id="spuštění-klienta-z-terminálu">Spuštění klienta z terminálu</h3>
             <p>    <code>npm start</code></p>
             <ul>
