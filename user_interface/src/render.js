@@ -1,4 +1,4 @@
-// required dependencies
+// required dependencies from node modules
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
@@ -10,6 +10,7 @@ let mainWindow;
 app.on('ready', function() {
     // creating main window
     mainWindow = new BrowserWindow({
+        // setting properties of the window
         width: 1200,
         minWidth: 800,
         height: 900,
