@@ -16,6 +16,7 @@ app.on('ready', function() {
         height: 900,
         minHeight: 600,
         title: 'Flashcards',
+        icon: path.join(__dirname, '../assets/icons/linux-icon.png'),
         center: true,
         webPreferences: {
             nodeIntegration: true,
