@@ -1,9 +1,11 @@
-\documentclass[9pt]{beamer}
+\documentclass[11pt, xcolor=table]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[czech]{babel}
 \usepackage{graphicx}
 \usepackage{pifont}
 \usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
 
 \beamertemplatenavigationsymbolsempty
 
@@ -12,110 +14,134 @@
 \usetheme{Madrid}
 \usecolortheme{seagull}
 
-\title{Maturitní projekt}
+\title{Flashcards}
+\subtitle{Maturitní práce}
 \author{Jakub Rada O8.B}
 \institute{Gymnázium Nad Alejí}
-\date{28.02.2019}
+\date{16. května 2019}
 
 \begin{document}
+%title page
     \frame{\titlepage}
+%about project
     \begin{frame}
         \frametitle{O aplikaci}
-        Aplikace na vytváření, úpravy a učení se slovíček nebo jiné látky
+        Flashcards je aplikace na učení a testování slovíček či jiné látky
         \begin{itemize}
-            \item<1-> vytváření kartiček \ding{219} dvojice slov / vět
-            \item<1-> vytváření okruhů (tagů), do kterých lze přidávat kartičky
-            \item<1-> 3 typy testů
-            \begin{enumerate}
-                \item<1-> procházení kartiček bez zadávání odpovědi
-                \item<1-> vybírání z možností
-                \item<1-> psaní správné odpovědi
-            \end{enumerate}
-            \item<1-> import, export kartiček a okruhů
+            \item Vytváření kartiček, které se dají zařadit do okruhů ke zkoušení
+            \item Tři typy testů z okruhů
+            \begin{itemize}
+                \item Procházení a otáčení kartiček
+                \item Vybírání správné možnosti
+                \item Psaní správné odpovědi
+            \end{itemize}
+            \item Rychlejší vytváření kartiček a sdílení mezi zařízeními
+            \begin{itemize}
+                \item Import do .csv souboru
+                \item Export z .csv souboru do aplikace
+            \end{itemize}
         \end{itemize}
     \end{frame}
+%motivation frame
     \begin{frame}
-        \frametitle{Použité jazyky}
+        \frametitle{Motivace}
         \begin{itemize}
-            \item<1-> Python Django
-            \item<1-> Html, Css (Bootstrap)
-            \item<1-> Javascript
-            \item<1-> Electron
+            \item Několik podobných aplikací existuje (např. Quizlet) \ding{219} všechny online
+            \item Tato vytvořená aplikace nevyžaduje připojení k internetu
+            \item Sdílení dat lze uskutečnit skrze .csv soubory
         \end{itemize}
-        \begin{figure}
-            \centering
-            \includegraphics[width=0.6\linewidth]{logos.jpg}
-        \end{figure}
+        \vfill
+        \begin{center}
+            \url{https://quizlet.com/}
+        \end{center}
     \end{frame}
-    \begin{frame}
-        \frametitle{Problémy a úspěchy}
-        \textbf{Problémy}
-        \begin{itemize}
-            \item odpovědi z databáze nepřichází ve stejném pořadí jako odešly
-            \begin{itemize}
-                \item každá \textit{query} trvá jinak dlouho
-                \item při testech lepší, problém při řazení položek v seznamu
-            \end{itemize}
-            \item test vybírání z možností při malém počtu kartiček ($< 4$)
-            \begin{itemize}
-                \item nesprávné odpovědi se vybírají z daného okruhu (1 kartička v okruhu \ding{219} ve výběru je pouze 1 možnost)
-            \end{itemize}
-        \end{itemize}
-        \textbf{Úspěchy}
-        \begin{itemize}
-            \item porovnávání odpovědí při psacím testu
-            \begin{itemize}
-                \item implementace \textit{Levenshteinovy vzdálenosti}
-            \end{itemize}
-            \item kartičky se stejnou jednou stranou (jedno slovíčko má více překladů)
-            \begin{itemize}
-                \item stejná přední strana \ding{219} odpovědi se spojí do jedné
-                \item stejná zadní strana \ding{219} automaticky se vygeneruje jiná odpověď
-            \end{itemize}
-        \end{itemize}
-    \end{frame}
-    \begin{frame}
-        \frametitle{Import a export}
-        Import i export ve formátu \texttt{.yml}
-        \begin{figure}
-            \centering
-            \includegraphics[width=0.5\linewidth]{yml_example.jpg}
-        \end{figure}
-    \end{frame}
+%show slide
     \begin{frame}
         \frametitle{Ukázka}
     \end{frame}
+%levenshtein distance
     \begin{frame}
-        \frametitle{Další vylepšení}
+        \frametitle{Jak najít chyby v psané odpovědi?}
+        Levenshteinova vzdálenost
         \begin{itemize}
-            \item<1-> Změnit barvy
-            \item<1-> Řazení kartiček podle názvu
-            \begin{itemize}
-                \item<1-> Seřazený list se netiskne správně
-            \end{itemize}
-            \item<1-> Vylepšit hodnocení správnosti
-            \begin{itemize}
-                \item<1-> Zatím stačí mít 1/2 slova správně
-            \end{itemize}
-            \item<1-> Opravit zvýrazňování chyb u kratších slov než je správná odpověď
+            \item porovnáváme 2 textové řetězce
+            \item tři možné operace - přidání znaku, vynechání znaku, záměna znaku
         \end{itemize}
-        \begin{columns}
-            \column{0.5\linewidth}
-            \begin{figure}
-                \centering
-                \includegraphics[width=\linewidth]{highlight-error_1.jpg}
-            \end{figure}
-            \column{0.5\linewidth}
-            \begin{figure}
-                \centering
-                \includegraphics[width=\linewidth]{highlight-error_2.jpg}
-            \end{figure}
-        \end{columns}
+        \begin{table}
+            \centering
+            \label{tab:1}
+            \begin{tabular}{ | c | c | c | c | c | c | c | }
+                \hline
+                &   & j & e & d & n & a \\
+                \hline
+                & \cellcolor{lightgray}0 & 1 & 2 & 3 & 4 & 5 \\
+                \hline
+                j & 1 & \cellcolor{lightgray}0 & 1 & 2 & 3 & 4 \\
+                \hline
+                e & 2 & 1 & \cellcolor{lightgray}0 & 1 & 2 & 3 \\
+                \hline
+                m & 3 & 2 & 1 & \cellcolor{lightgray}1 & 2 & 3 \\
+                \hline
+                n & 4 & 3 & 2 & 2 & \cellcolor{lightgray}1 & 2 \\
+                \hline
+                a & 5 & 4 & 3 & 3 & 2 & \cellcolor{lightgray}1 \\
+                \hline
+            \end{tabular}
+        \end{table}
+    \end{frame}
+%card collision frame
+    \begin{frame}
+        \frametitle{Kartičky, které mají stejnou jednu stranu}
+        Kartičky se stejnou přední stranou
         \begin{itemize}
-            \item<1-> Název, titulní strana, dokumentace a nápověda
+            \item Kartičky se po dobu testu spojí do jedné
+            \begin{itemize}
+                \item Ve vybírání odpovědí vznikne jedna možnost
+                \item V psaní odpovědi stačí odpovědět jakoukoli částí
+            \end{itemize}
+            \bigskip
+            $$\frac{orange}{oranzova}\, a\,\frac{orange}{pomeranc}\,\rightarrow\,\frac{orange}{oranzova, pomeranc}$$
         \end{itemize}
     \end{frame}
+%import slide
+    \begin{frame}[fragile]
+        \frametitle{Import a export}
+        \begin{itemize}
+            \item Formát zápisu dat do .csv souboru
+            \begin{lstlisting}
+card, lic, rub, cislo_okruhu|cislo_okruhu
+tag, cislo_okruhu, nazev_okruhu
+            \end{lstlisting}
+            \vfill
+            \item Ukázkový soubor
+            \begin{lstlisting}
+tag, 1, cisla
+tag, 2, anglictina
+card, jedna, one, 1|2
+card, dva, two, 1|2
+card, tri, tres, 1
+            \end{lstlisting}
+        \end{itemize}
+    \end{frame}
+%sources
     \begin{frame}
+        \frametitle{Použité knihovny}
+        Knihovny
+        \begin{itemize}
+            \item server - Python 3, Django
+            \item klient - Electron, Bootstrap, JQuery
+            \item NPM
+        \end{itemize}
+        Dokumentace
+        \begin{itemize}
+            \item Electron docs
+            \item Django docs
+            \item Bootstrap docs
+        \end{itemize}
+    \end{frame}
+%end page
+    \begin{frame}
+        \frametitle{Konec}
         \begin{block}{}
             \centering
             {\Huge Děkuji za pozornost}
